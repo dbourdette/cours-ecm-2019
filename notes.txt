@@ -1,3 +1,6 @@
+OLD ONES
+https://dbourdette.github.io/cours-ecm/
+https://dbourdette.github.io/prezjava/
 
 reveal doc https://revealjs.com/#/
 https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js -> https://highlightjs.org ?
