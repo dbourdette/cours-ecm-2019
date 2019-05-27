@@ -1,0 +1,248 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link href="../../common/prez/style.css" rel="stylesheet" media="screen">
+
+    <title>Mise en place de l'environnement</title>
+</head>
+<body>
+<div class="container ">
+    <h1>Mise en place de l'environnement</h1>
+
+    <p>Afin de pouvoir développer, nous avons besoin de quelques outils :</p>
+
+    <ul>
+        <li>Environnement java (jdk)</li>
+        <li>Outil de build (gradle)</li>
+        <li>Spring boot CLI (client line interface)</li>
+    </ul>
+
+    <h2>SDKMAN!</h2>
+
+    <p>Le plus simple est passer par <a href="https://sdkman.io/" target="_blank">SDKMAN!</a></p>
+
+    <p>Cet outils permet de gérer les différentes versions d'autres logiciels de l'environnement de développement.</p>
+
+    <p>➤ Installez sdkman en suivant le <a href="https://sdkman.io/install" target="_blank">guide d'installation</a></p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Windows</h5>
+
+        <p>Sur Windows, l'installation est plus douloureuse. Voici ce que je propose :</p>
+
+        <ul>
+            <li>installer <a href="https://git-scm.com/download/win" target="_blank">Git Bash for Windows</a></li>
+            <li>installer la commande zip via <a href="https://sourceforge.net/projects/gnuwin32/files/">https://sourceforge.net/projects/gnuwin32/files/</a>
+                (lire <a href="https://ranxing.wordpress.com/2016/12/13/add-zip-into-git-bash-on-windows/">add-zip-into-git-bash-on-windows</a>)
+            </li>
+        </ul>
+
+        <p>Sur ma machine, les fichiers zip.exe et bzip2.lib vont dans C:\Program Files\Git\usr\bin</p>
+    </div>
+
+    <pre class="terminal">$ curl -s "https://get.sdkman.io" | bash
+
+                                -+syyyyyyys:
+                            `/yho:`       -yd.
+                         `/yh/`             +m.
+                       .oho.                 hy                          .`
+                     .sh/`                   :N`                `-/o`  `+dyyo:.
+                   .yh:`                     `M-          `-/osysoym  :hs` `-+sys:      hhyssssssssy+
+                 .sh:`                       `N:          ms/-``  yy.yh-      -hy.    `.N-````````+N.
+               `od/`                         `N-       -/oM-      ddd+`     `sd:     hNNm        -N:
+              :do`                           .M.       dMMM-     `ms.      /d+`     `NMMs       `do
+            .yy-                             :N`    ```mMMM.      -      -hy.       /MMM:       yh
+          `+d+`           `:/oo/`       `-/osyh/ossssssdNMM`           .sh:         yMMN`      /m.
+         -dh-           :ymNMMMMy  `-/shmNm-`:N/-.``   `.sN            /N-         `NMMy      .m/
+       `oNs`          -hysosmMMMMydmNmds+-.:ohm           :             sd`        :MMM/      yy
+      .hN+           /d:    -MMMmhs/-.`   .MMMh   .ss+-                 `yy`       sMMN`     :N.
+     :mN/           `N/     `o/-`         :MMMo   +MMMN-         .`      `ds       mMMh      do
+    /NN/            `N+....--:/+oooosooo+:sMMM:   hMMMM:        `my       .m+     -MMM+     :N.
+   /NMo              -+ooooo+/:-....`...:+hNMN.  `NMMMd`        .MM/       -m:    oMMN.     hs
+  -NMd`                                    :mm   -MMMm- .s/     -MMm.       /m-   mMMd     -N.
+ `mMM/                                      .-   /MMh. -dMo     -MMMy        od. .MMMs..---yh
+ +MMM.                                           sNo`.sNMM+     :MMMM/        sh`+MMMNmNm+++-
+ mMMM-                                           /--ohmMMM+     :MMMMm.       `hyymmmdddo
+ MMMMh.                  ````                  `-+yy/`yMMM/     :MMMMMy       -sm:.``..-:-.`
+ dMMMMmo-.``````..-:/osyhddddho.           `+shdh+.   hMMM:     :MmMMMM/   ./yy/` `:sys+/+sh/
+ .dMMMMMMmdddddmmNMMMNNNNNMMMMMs           sNdo-      dMMM-  `-/yd/MMMMm-:sy+.   :hs-      /N`
+  `/ymNNNNNNNmmdys+/::----/dMMm:          +m-         mMMM+ohmo/.` sMMMMdo-    .om:       `sh
+     `.-----+/.`       `.-+hh/`         `od.          NMMNmds/     `mmy:`     +mMy      `:yy.
+           /moyso+//+ossso:.           .yy`          `dy+:`         ..       :MMMN+---/oys:
+         /+m:  `.-:::-`               /d+                                    +MMMMMMMNh:`
+        +MN/                        -yh.                                     `+hddhy+.
+       /MM+                       .sh:
+      :NMo                      -sh/
+     -NMs                    `/yy:
+    .NMy                  `:sh+.
+   `mMm`               ./yds-
+  `dMMMmyo:-.````.-:oymNy:`
+  +NMMMMMMMMMMMMMMMMms:`
+    -+shmNMMMNmdy+:`
+
+
+                                                                 Now attempting installation...
+
+
+Looking for a previous installation of SDKMAN...
+Looking for unzip...
+Looking for zip...
+Looking for curl...
+Looking for sed...
+Installing SDKMAN scripts...
+Create distribution directories...
+Getting available candidates...
+Prime the config file...
+Download script archive...
+######################################################################## 100,0%
+Extract script archive...
+Install scripts...
+Set version to 5.7.3+337 ...
+Attempt update of interactive bash profile on regular UNIX...
+Added sdkman init snippet to /c/Users/jaad/.bashrc
+Attempt update of zsh profile...
+Updated existing /c/Users/jaad/.zshrc
+
+
+
+All done!
+
+
+Please open a new terminal, or run the following in the existing one:
+
+    source "/c/Users/jaad/.sdkman/bin/sdkman-init.sh"
+
+Then issue the following command:
+
+    sdk help
+
+Enjoy!!!</pre>
+
+    <p>Puis</p>
+
+    <pre class="terminal">$ source "/c/Users/jaad/.sdkman/bin/sdkman-init.sh"
+
+</pre>
+
+    <p>Et enfin</p>
+
+    <pre class="terminal">$ sdk version
+==== BROADCAST =================================================================
+* 2019-05-24: Vertx 3.7.1 released on SDKMAN! #vertx
+* 2019-05-23: Springboot 2.1.5.RELEASE released on SDKMAN! #springboot
+* 2019-05-20: Micronaut 1.1.2 released on SDKMAN! #micronautfw
+================================================================================
+
+SDKMAN 5.7.3+337
+    </pre>
+
+    <h2>Les outils</h2>
+
+    <p>Pour chaque outil, il est possible de savoir quelles sont les versions disponibles</p>
+
+    <pre class="terminal">$ sdk list java
+================================================================================
+Available Java Versions
+================================================================================
+     19.0.0-grl          11.0.2-zulufx
+     13.ea.22-open       10.0.2-zulu
+     12.0.1-sapmchn      10.0.2-open
+     12.0.1-zulu         9.0.7-zulu
+     12.0.1-open         9.0.4-open
+     12.0.1.j9-adpt      8.0.212-zulu
+     12.0.1.hs-adpt      8.0.212-amzn
+     12.0.1-librca       8.0.212.j9-adpt
+     11.0.3-sapmchn      8.0.212.hs-adpt
+     11.0.3-zulu         8.0.212-librca
+     11.0.3-amzn         8.0.202-zulufx
+     11.0.3.j9-adpt      7.0.222-zulu
+     11.0.3.hs-adpt      6.0.119-zulu
+     11.0.3-librca
+     11.0.2-open
+
+================================================================================
++ - local version
+* - installed
+> - currently in use
+================================================================================</pre>
+
+    <p>➤ Installez les outils suivants à l'aide du guide <a href="https://sdkman.io/usage" target="_blank">https://sdkman.io/usage</a></p>
+
+    <table class="table table-dark table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <td>outils</td>
+                <td>version</td>
+                <td>utilité</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>java</td>
+                <td>11.0.x-zulu</td>
+                <td>pouvoir compiler et exécuter du java</td>
+            </tr>
+            <tr>
+                <td>springboot</td>
+                <td>2.1.x.RELEASE</td>
+                <td>pouvoir créer et lancer des applications spring boot</td>
+            </tr>
+            <tr>
+                <td>gradle</td>
+                <td>5.4.x</td>
+                <td>gestion avancée des dépendances du projet</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>➤ Testez la bonne installation des outils</p>
+
+    <pre class="terminal">$ java -version
+openjdk version "11.0.2" 2019-01-15
+OpenJDK Runtime Environment 18.9 (build 11.0.2+9)
+OpenJDK 64-Bit Server VM 18.9 (build 11.0.2+9, mixed mode)</pre>
+
+    <pre class="terminal">$ spring --version
+Spring CLI v2.1.5.RELEASE
+</pre>
+
+    <pre class="terminal">$ gradle -version
+
+------------------------------------------------------------
+Gradle 5.4.1
+------------------------------------------------------------
+
+Build time:   2019-04-26 08:14:42 UTC
+Revision:     261d171646b36a6a28d5a19a69676cd098a4c19d
+
+Kotlin:       1.3.21
+Groovy:       2.5.4
+Ant:          Apache Ant(TM) version 1.9.13 compiled on July 10 2018
+JVM:          11.0.2 (Oracle Corporation 11.0.2+9)
+OS:           Windows 10 10.0 amd64
+
+</pre>
+
+    <p>Nous avons désormais de quoi commencer à coder</p>
+
+    <a href="../../index.html" class="home">🏠 home</a>
+</div>
+<!-- presentation -->
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- google code-prettify -->
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+</body>
+</html>
