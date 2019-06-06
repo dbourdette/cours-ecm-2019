@@ -70,6 +70,10 @@ pre.terminal {
     border: 2px #695c5d solid;
 }
 
+pre code {
+    border: 2px #bbb solid;
+}
+
 @media (min-width: 1200px) {
     .container {
         max-width: 900px;

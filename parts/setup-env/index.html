@@ -7,6 +7,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="../../common/highlightjs/styles/a11y-dark.css">
+
     <!-- Custom CSS -->
     <link href="../../common/prez/style.css" rel="stylesheet" media="screen">
 
@@ -47,7 +50,7 @@
         <p>Sur ma machine, les fichiers zip.exe et bzip2.lib vont dans C:\Program Files\Git\usr\bin</p>
     </div>
 
-    <pre class="terminal">$ curl -s "https://get.sdkman.io" | bash
+    <pre ><code class="console">$ curl -s "https://get.sdkman.io" | bash
 
                                 -+syyyyyyys:
                             `/yho:`       -yd.
@@ -123,17 +126,17 @@ Then issue the following command:
 
     sdk help
 
-Enjoy!!!</pre>
+Enjoy!!!</code></pre>
 
     <p>Puis</p>
 
-    <pre class="terminal">$ source "/c/Users/jaad/.sdkman/bin/sdkman-init.sh"
+    <pre><code class="console">$ source "/c/Users/jaad/.sdkman/bin/sdkman-init.sh"
 
-</pre>
+</code></pre>
 
     <p>Et enfin</p>
 
-    <pre class="terminal">$ sdk version
+    <pre><code class="console">$ sdk version
 ==== BROADCAST =================================================================
 * 2019-05-24: Vertx 3.7.1 released on SDKMAN! #vertx
 * 2019-05-23: Springboot 2.1.5.RELEASE released on SDKMAN! #springboot
@@ -141,13 +144,13 @@ Enjoy!!!</pre>
 ================================================================================
 
 SDKMAN 5.7.3+337
-    </pre>
+    </code></pre>
 
     <h2>Les outils</h2>
 
     <p>Pour chaque outil, il est possible de savoir quelles sont les versions disponibles</p>
 
-    <pre class="terminal">$ sdk list java
+    <pre><code class="console">$ sdk list java
 ================================================================================
 Available Java Versions
 ================================================================================
@@ -171,7 +174,7 @@ Available Java Versions
 + - local version
 * - installed
 > - currently in use
-================================================================================</pre>
+================================================================================</code></pre>
 
     <p>➤ Installez les outils suivants à l'aide du guide <a href="https://sdkman.io/usage" target="_blank">https://sdkman.io/usage</a></p>
 
@@ -204,16 +207,16 @@ Available Java Versions
 
     <p>➤ Testez la bonne installation des outils</p>
 
-    <pre class="terminal">$ java -version
+    <pre><code class="console">$ java -version
 openjdk version "11.0.2" 2019-01-15
 OpenJDK Runtime Environment 18.9 (build 11.0.2+9)
-OpenJDK 64-Bit Server VM 18.9 (build 11.0.2+9, mixed mode)</pre>
+OpenJDK 64-Bit Server VM 18.9 (build 11.0.2+9, mixed mode)</code></pre>
 
-    <pre class="terminal">$ spring --version
+    <pre><code class="console">$ spring --version
 Spring CLI v2.1.5.RELEASE
-</pre>
+</code></pre>
 
-    <pre class="terminal">$ gradle -version
+    <pre><code class="console">$ gradle -version
 
 ------------------------------------------------------------
 Gradle 5.4.1
@@ -228,7 +231,7 @@ Ant:          Apache Ant(TM) version 1.9.13 compiled on July 10 2018
 JVM:          11.0.2 (Oracle Corporation 11.0.2+9)
 OS:           Windows 10 10.0 amd64
 
-</pre>
+</code></pre>
 
     <p>Nous avons désormais de quoi commencer à coder</p>
 
@@ -241,8 +244,9 @@ OS:           Windows 10 10.0 amd64
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-<!-- google code-prettify -->
-<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+<!-- highlight.js -->
+<script src="../../common/highlightjs/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 </body>
 </html>
