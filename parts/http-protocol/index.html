@@ -1,0 +1,234 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- font awesome -->
+    <link href="../../common/fontawesome-free-5.9.0-web/css/all.css" rel="stylesheet">
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="../../common/highlightjs/styles/a11y-dark.css">
+
+    <!-- Custom CSS -->
+    <link href="../../common/prez/style.css" rel="stylesheet" media="screen">
+
+    <title>Protocol HTTP</title>
+</head>
+<body>
+<div class="container ">
+    <h1>Le protocole HTTP</h1>
+
+    <p>Il permet d'échanger des données avec des serveurs</p>
+
+    <p>Avec un navigateur web, il permet principalement de lire des pages web</p>
+
+    <img src="request-response.png" alt="" class="img-thumbnail mx-auto d-block">
+
+    <p>Une page web contient de références vers des dizaines d'autres ressources (images, scripts, feuilles de style...)</p>
+
+    <h2>Une reqête HTTP</h2>
+
+    <p>Une requête HTTP contient :</p>
+
+    <ul>
+        <li>une ligne de requête : composé d'une <strong>méthode</strong>, le <strong>chemin</strong> et la version du protocole.</li>
+        <li>des <strong>en-têtes</strong> : des clés / valeurs donnant des indications supplémentaires.</li>
+        <li>un <strong>corps</strong> : des blocs de données supplémentaires utiles pour envoyer du contenu.</li>
+    </ul>
+
+    <pre>GET /actualites HTTP/1.1
+Host: www.rtl.fr
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; fr; rv:1.9.2.12) Gecko/20101026 Firefox/3.6.12
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+Accept-Encoding: gzip,deflate
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+Keep-Alive: 115
+Connection: keep-alive
+Referer: http://www.rtl.fr/</pre>
+
+    <p>La première ligne contient la méthode : c'est l'action demandée par le client sur la ressource</p>
+
+    <table class="table table-dark table-striped table-sm">
+        <thead class="thead-dark">
+            <tr>
+                <td>méthode</td>
+                <td>description</td>
+                <td style="text-align:center;">sûre</td>
+                <td style="text-align:center;">idempotente</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GET</td>
+                <td>Le client demande une ressource</td>
+                <td style="text-align:center;"><img src="ok.png" alt=""></td>
+                <td style="text-align:center;"><img src="ok.png" alt=""></td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>Le client demande la création d'une ressource</td>
+                <td style="text-align:center;"><img src="no.png" alt=""></td>
+                <td style="text-align:center;"><img src="no.png" alt=""></td>
+            </tr>
+            <tr>
+                <td>PUT</td>
+                <td>Le client envoie une ressource vers une url</td>
+                <td style="text-align:center;"><img src="no.png" alt=""></td>
+                <td style="text-align:center;"><img src="ok.png" alt=""></td>
+            </tr>
+            <tr>
+                <td>DELETE</td>
+                <td>Le client demande la suppression d'une ressource</td>
+                <td style="text-align:center;"><img src="no.png" alt=""></td>
+                <td style="text-align:center;"><img src="ok.png" alt=""></td>
+            </tr>
+            <tr>
+                <td>HEAD</td>
+                <td>Le client demande des informations sur la ressource, sans la demander elle-même</td>
+                <td style="text-align:center;"><img src="ok.png" alt=""></td>
+                <td style="text-align:center;"><img src="ok.png" alt=""></td>
+            </tr>
+            <tr>
+                <td>OPTIONS</td>
+                <td>Permet d'obtenir les options de communication d'une ressource ou du serveur en général</td>
+                <td style="text-align:center;"><img src="ok.png" alt=""></td>
+                <td style="text-align:center;"><img src="ok.png" alt=""></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Seuls GET et POST sont possibles depuis un navigateur</p>
+
+    <p>Les headers permettent d'ajouter de l'information sur la nature de la requête</p>
+
+    <h2>Une réponse HTTP</h2>
+
+    <p>Une réponse HTTP contient :</p>
+
+    <ul>
+        <li>une ligne de statut : la version du protocole, le <strong>code de retour</strong> avec son libellé associé</li>
+        <li>des <strong>en-têtes</strong> : des clés / valeurs donnant des indications supplémentaires</li>
+        <li>un corps : la ressource demandée</li>
+    </ul>
+
+    <pre>HTTP/1.1 200 OK
+Content-Type: text/html;charset=UTF-8
+Content-Language: fr-FR
+Content-Length: 57366
+Date: Wed, 03 Nov 2010 21:42:30 GMT
+Connection: keep-alive
+
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr"&gt;
+   &lt;head&gt;…&lt;/head&gt;
+   &lt;body&gt;
+      …
+   &lt;/body&gt;
+&lt;/html&gt;</pre>
+
+    <p>Le <a href="https://fr.wikipedia.org/wiki/Liste_des_codes_HTTP" target="_blank">code de retour</a> résume le résultat de l'éxécution de la requête</p>
+
+    <table class="table table-dark table-striped table-sm">
+        <thead class="thead-dark">
+            <tr>
+                <td>code</td>
+                <td>signification</td>
+                <td>description</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2xx</td>
+                <td>Succès</td>
+                <td>Tous les codes de succès</td>
+            </tr>
+            <tr>
+                <td>200</td>
+                <td>OK</td>
+                <td>Le corps contient le document demandé</td>
+            </tr>
+            <tr>
+                <td>3xx</td>
+                <td>Redirection</td>
+                <td>Le client est rédirigé</td>
+            </tr>
+            <tr>
+                <td>301</td>
+                <td>Move permanently</td>
+                <td>Document déplacé de façon permanente</td>
+            </tr>
+            <tr>
+                <td>302</td>
+                <td>Found (Moved temporarly)</td>
+                <td>Document déplacé de façon temporaire</td>
+            </tr>
+            <tr>
+                <td>304</td>
+                <td>Not modified</td>
+                <td>Document non modifié depuis la dernière requête</td>
+            </tr>
+            <tr>
+                <td>4xx</td>
+                <td>Erreur du client</td>
+                <td>La requête ne peut aboutir à cause du client</td>
+            </tr>
+            <tr>
+                <td>400</td>
+                <td>Bad Request</td>
+                <td>La syntaxe de la requête est erronée</td>
+            </tr>
+            <tr>
+                <td>401</td>
+                <td>Unauthorized</td>
+                <td>Une authentification est nécessaire</td>
+            </tr>
+            <tr>
+                <td>404</td>
+                <td>Not found</td>
+                <td>Document non trouvé</td>
+            </tr>
+            <tr>
+                <td>5xx</td>
+                <td>Erreur du serveur</td>
+                <td>Le serveur n'a pu répondre correctement</td>
+            </tr>
+            <tr>
+                <td>500</td>
+                <td>Internal server error</td>
+                <td>Erreur interne du serveur</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Outils</h2>
+
+    <p>Le navigateur web est l'outils le plus courant pour faire du HTTP</p>
+
+    <p>Mais si il permet de navigueur entre les pages, il ne permet pas de facilement modeler des requêtes</p>
+
+    <h3>curl</h3>
+
+    <h3>Postman</h3>
+
+    <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
+</div>
+<!-- presentation -->
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- highlight.js -->
+<script src="../../common/highlightjs/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script src="../../common/prez/prez.js"></script>
+
+</body>
+</html>
