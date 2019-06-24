@@ -1,13 +1,10 @@
-<!doctype html>
+<h1>Web services</h1><!doctype html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
 
     <title>Web services</title>
-
-    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
-    <meta name="author" content="Hakim El Hattab">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -33,26 +30,86 @@
     <!--[if lt IE 9]>
     <script src="lib/js/html5shiv.js"></script>
     <![endif]-->
+
+    <!-- font awesome -->
+    <link href="../../common/fontawesome-free-5.9.0-web/css/all.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../../common/prez/slides.css" rel="stylesheet" media="screen">
 </head>
 
 <body>
     <div class="reveal">
         <div class="slides">
-            <section>
-                <h2>Web services</h2>
-                <p>
-                    (HTTP, soap, rest, rpc, HATEOAS, CORS (exemple header http)...)
-                </p>
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
+                    <h1>Web services</h1>
+                </div>
             </section>
 
             <section>
-                <h2>Web services</h2>
+                <p>Ce sont des services disponibles sur le réseau</p>
+            </section>
+
+            <section>
+                <p>Historiquement, c'est SOAP (Simple Object Access Protocol) qui a été le premier support pour la démocratisation des web services</p>
+            </section>
+
+            <section>
+                <p>SOAP repose exclusivement sur le XML et peut fonctionnre par dessus plusieurs protocoles d'échange: HTTP, SMTP...</p>
+            </section>
+
+            <section>
+                <p>En pratique, SOAP est lourd et complexe.</p>
+            </section>
+
+            <section>
+                <p>Il est remplacé par des services plus légers</p>
+
+                <ul>
+                    <li>uniquement HTTP</li>
+                    <li>le json est le format privilégié</li>
+                </ul>
+
+                <p>Une bonne connaissance du HTTP est donc essentielle</p>
+            </section>
+
+            <section>
+                <p>Il existe 2 types de services</p>
+
+                <ul>
+                    <li>RPC (comme SOAP)</li>
+                    <li>REST</li>
+                </ul>
+            </section>
+
+            <section>
+                <p>4 opérations du REST</p>
+
+                <ul>
+                    <li>POST</li>
+                    <li>PUT</li>
+                    <li>GET</li>
+                    <li>DELETE</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Naviagtion dans les services REST</h2>
+
+                <p>HATEOAS</p>
+            </section>
+
+            <section>
+                <h2>Sécurité</h2>
                 <p>
-                    wdfds fds dsf sdf sd
+                    Auth, CORS (exemple header http), OAuth
                 </p>
             </section>
         </div>
     </div>
+
+    <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 
     <script src="../../common/reveal/js/reveal.js"></script>
     <script>

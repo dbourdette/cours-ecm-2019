@@ -357,7 +357,7 @@ Hello CURL!</code></pre>
 class Hello {
     @GetMapping("/")
     String home() {
-        "Hello CURL!"
+        "Hello Postman!"
     }
 }</code></pre>
     
@@ -367,7 +367,43 @@ class Hello {
         <img src="postman-get.png" alt="" class="img-thumbnail mx-auto d-block">
     </a>
 
-    <p>tests : params, path, body</p>
+    <h3>json</h3>
+
+    <p>Très couramment on utilise du <a href="https://www.json.org/" target="_blank">json</a> comme format de données</p>
+
+    <p>C'est un format assez simple à lire et écrire et surtout, il est compatible avec beaucoup de d'environnement</p>
+
+    <p>➤ Tester le code suivant avec Postman</p>
+
+    <pre><code class="groovy">@RestController
+class Hello {
+    @GetMapping("/")
+    Map home() {
+        [action: 'Hello', name: 'Postman']
+    }
+}</code></pre>
+
+    <p>➤ Quelle est la valeur du header <code>Content-Type</code> en retour ?</p>
+
+    <p>Repassons en POST afin de pouvoir envoyer des données dans le corps de la requête</p>
+
+    <p>➤ Chnagez le code pour le suivant</p>
+
+    <pre><code class="groovy">@RestController
+class Hello {
+    @PostMapping("/")
+    Map home(@RequestBody Map params) {
+        [action: 'Hello', name: params.name]
+    }
+}</code></pre>
+
+    <p>➤ Et tester avec un appel en POST contenant du json</p>
+
+    <a data-fancybox="gallery" href="postman-post-json.png">
+        <img src="postman-post-json.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>➤ Quelle est la valeur du header <code>Content-Type</code> dans la requête ?</p>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>
