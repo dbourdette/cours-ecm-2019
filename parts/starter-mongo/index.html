@@ -25,19 +25,211 @@
 <div class="container ">
     <h1>Starter mongo</h1>
 
-    <p>brief mongo db</p>
+    <p><a href="https://www.mongodb.com/" target="_blank">Mongodb</a> est une base de données orientée document</p>
 
-    <p>install robomongo</p>
+    <p>Les données sont stockées en Binary JSON (BSON).</p>
 
-    <p>play with online db</p>
+    <h2>Les documents</h2>
 
-    <p>spring starters (convention over configuration)</p>
+    <p>Les documents Mongo db sont des structures arborescentes (du json) pouvant contenir des listes et des tableaux associatifs.</p>
 
-    <p>configure mongo connexion</p>
+    <pre><code class="json">{
+   _id: ObjectId("5099803df3f4948bd2f98391"),
+   name: { first: "Alan", last: "Turing" },
+   birth: new Date('Jun 23, 1912'),
+   death: new Date('Jun 07, 1954'),
+   contribs: [ "Turing machine", "Turing test", "Turingery" ],
+   views : NumberLong(1250000)
+}</code></pre>
 
-    <p>setup /programs with mongo template</p>
+    <p>L'attribut _id contient une clé unique générée au moment de l'insertion en base.</p>
 
-    <p>build data model</p>
+    <h2>Les collections</h2>
+
+    <p>Les documents sont rangés dans des collections (l’équivalent des tables en sql).</p>
+
+    <p>Les collections sont beaucoup moins rigides que les tables : il n’y a pas de schéma et donc chaque document peut avoir sa propre structure.</p>
+
+    <p>Pour la performance, il est tout a fait possible de placer des index comment dans une base SQL.</p>
+
+    <h2>Requêtes</h2>
+
+    <p>Les requêtes sont écrite en javascript</p>
+
+    <img src="mongo-shell.png" alt="" class="img-thumbnail mx-auto d-block">
+
+    <p>L’<a href="https://docs.mongodb.com/manual/reference/method/" target="_blank">api mongo</a> est riche et bien documentée.</p>
+
+    <p>Par exemple, pour rechercher les documents de type 'food' avec un prix inférieur à 9.95 dans la collection 'inventory'</p>
+
+    <pre><code class="json">db.inventory.find( { type: 'food', price: { $lt: 9.95 } } )</code></pre>
+
+    <h2>Pourquoi mongodb ?</h2>
+
+    <p>Lors du développement, le coté sans schéma permet de prototyper rapidement. Pas la suite, le modèle peut aussi évoluer sans friction.</p>
+
+    <p>
+        Mongodb dispose aussi de solution afin de scaler la performance et la tolérance à la panne.
+        Mongodb semble avoir été conçu pour l'age du cloud.
+    </p>
+
+    <p>
+        Cependant, les bases SQL ont aussi leurs atouts, ne serait que l'expertise en place dans les entreprises.
+        Il est parfaitement possible de partager les données entre plusieurs base en fonction des contraintes de chaque projet.
+    </p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Not Only SQL (wikipedia)</h5>
+
+        <p>
+            En informatique, NoSQL (Not only SQL en anglais) désigne une catégorie de systèmes de gestion de base de données (SGBD)
+            qui n’est plus fondée sur l’architecture classique des bases relationnelles.
+            L’unité logique n’y est plus la table, et les données ne sont en général pas manipulées avec SQL.</p>
+    </div>
+
+    <h2>Installer MongoDB</h2>
+
+    <p>
+        L'installation de mongodb est assez simple mais pour gagner du temps, nous allons utiliser une instance sur
+        <a href="https://www.mongodb.com/cloud/atlas" target="_blank">MongoDB Atlas</a>
+    </p>
+
+    <h2>Installer MongoDB Compass</h2>
+
+    <p>
+        ➤ Téléchargez et installez <a href="https://www.mongodb.com/download-center/compass" target="_blank">MongoDB Compass</a> Community Edition.
+        Compass est le client officiel.
+    </p>
+
+    <p>➤ Connectez vous à la base données avec les informations suivantes (le mot de passe est iwantsomedata)</p>
+
+    <a data-fancybox="gallery" href="compass.png">
+        <img src="compass.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Robo 3T</h5>
+
+        <p>Il existe un autre produit pour se connecter à une base MongoDB, <a href="https://robomongo.org/" target="_blank">Robo 3T</a></p>
+
+        <p>Robo 3T (version gratuite de Studio 3T) est très simple d'utilisation.</p>
+    </div>
+
+    <p>Une fois connecté, vous pouvez naviguer dans la base <b>program</b></p>
+
+    <p>Ce client permettra de comparer ce qu'il a en base et ce que notre application va manipuler.</p>
+
+    <h2>Spring starter mongo</h2>
+
+    <p>➤ Ajoutez la dépendance <b>spring-boot-starter-data-mongodb</b> au <code>build.gradle</code> </p>
+
+    <pre><code class="console">implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'</code></pre>
+
+    <p>➤ Il faut également configurer la connexion à la base dans le fichier <code>gradle.properties</code></p>
+
+    <pre><code class="console">#mongodb
+spring.data.mongodb.uri=mongodb://etudiant:iwantsomedata@cours-ecm-shard-00-00-7wynn.mongodb.net:27017,cours-ecm-shard-00-01-7wynn.mongodb.net:27017,cours-ecm-shard-00-02-7wynn.mongodb.net:27017/test?ssl=true&replicaSet=cours-ecm-shard-0&authSource=admin&retryWrites=true&w=majority
+spring.data.mongodb.database=program</code></pre>
+
+    <p>L'application à maintenant tout ce qu'il faut afin de se connecter à la base de données.</p>
+
+    <p>➤ Il faut quand même relancer l'application (<code>./gradlew bootRun</code>) afin que cette nouvelle configuration soit prise en compte.</p>
+
+    <h2>Repository et Modèle de données</h2>
+
+    <p>Nous allons faire un Controller qui affiche les programmes de la journée</p>
+
+    <p>On commence par le modèle de données.</p>
+
+    <p>➤ Créez la classe <code>Program</code> dans le package <code>com.monsite.coursecm.domain</code>.</p>
+
+    <pre><code class="groovy">package com.monsite.coursecm.domain
+
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
+
+import java.time.LocalDateTime
+
+@Document(collection = "program")
+class Program {
+    @Id
+    String id
+
+    String name
+    LocalDateTime from, to
+
+    List&lt;String&gt; hosts
+}</code></pre>
+
+    <p>
+        La famille de librairies spring data (à laquelle appartient spring data mongo) permet de faire des requêtes aux base de données
+        en définissant simplement une interface java.
+    </p>
+
+    <p>Comme nous voulons les programmes de la journée, il va suffire de définir une méthode qui permet de récupérer les programmes entre 2 dates.</p>
+
+    <p>➤ Créez l'interface <code>ProgramRepository</code> dans le package <code>com.monsite.coursecm.repository</code>.</p>
+
+    <pre><code class="groovy">package com.monsite.coursecm.repository
+
+import com.monsite.coursecm.domain.Program
+import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.mongodb.repository.Query
+
+import java.time.LocalDateTime
+
+interface ProgramRepository extends MongoRepository&lt;Program, String&gt; {
+    @Query(sort = "{ from : 1 }")
+    List&lt;Program&gt; findByToGreaterThanAndFromLessThan(LocalDateTime from, LocalDateTime to)
+}</code></pre>
+
+    <p>
+        Le nom de cette méthode est déjà bien long et il est difficile d'être certain qu'elle fait exactement ce qu'elle doit.
+        Nous reviendrons sur ce point un peu plus tard.
+    </p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Query Methods</h5>
+
+        <p>
+            Les méthodes des repositories ne sont pas la seule façon de travailler avec la base mongo.
+            Cependant, pour des cas simples, c'est très facile à mettre en place.
+        </p>
+
+        <p>voir <a href="https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongodb.repositories.queries" target="_blank">https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongodb.repositories.queries</a></p>
+    </div>
+
+    <h2>ProgramController</h2>
+
+    <p>➤ On peut maintenant ajouter un <code>ProgramController</code> à coté de notre <code>IndexController</code></p>
+
+    <pre><code class="groovy">package com.monsite.coursecm.controller
+
+import com.monsite.coursecm.domain.Program
+import com.monsite.coursecm.repository.ProgramRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
+
+import java.time.LocalDate
+import java.time.LocalDateTime
+
+@RestController
+class ProgramControler {
+    @Autowired
+    ProgramRepository programRepository
+
+    @GetMapping('/programs')
+    List&gt;Program&lt; programs() {
+        LocalDate today = LocalDate.now()
+        LocalDateTime from = today.atStartOfDay()
+        LocalDateTime to = today.atStartOfDay().plusDays(1)
+
+        programRepository.findByToGreaterThanAndFromLessThan(from, to)
+    }
+}</code></pre>
+
+    <p>➤ et vérifier que cela fonctionne <a href="http://localhost:8080/programs" target="_blank">http://localhost:8080/programs</a></p>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>
