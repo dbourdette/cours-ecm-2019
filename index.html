@@ -31,9 +31,7 @@
 
     <p>Dans tout le document, une flèche ➤ indique une action à faire de votre part.</p>
 
-    <h2>Mais qu'est ce qu'un web service ?</h2>
-
-    <p>Commençons par construire une toute petite application</p>
+    <h2>Hello world</h1>
 
     <div class="card bg-light">
         <div class="card-body">
@@ -46,27 +44,47 @@
         </div>
     </div>
 
+    <h2>Spring boot</h2>
+
+    <div class="card bg-light">
+        <div class="card-body">
+            <ol>
+                <li><a href="parts/spring-init/index.html">Spring init</a></li>
+                <li><a href="parts/starter-mongo/index.html">Mongo starter</a></li>
+                <li><a href="parts/program-tdd/index.html">Test driven development</a></li>
+                <li><a href="parts/navigation-hateoas/index.html">navigation vers /person/{name} (HATEOAS)</a></li>
+                <li><a href="">prez : navigation, HATEOAS</a></li>
+            </ol>
+        </div>
+    </div>
+
+    <h2>Spring cloud</h2>
+
+    <div class="card bg-light">
+        <div class="card-body">
+            <ol>
+                <li><a href="">actuators : health (monitoring), metrics...</a></li>
+                <li><a href="">microservices : eureka, ribbon, config, gateway...</a></li>
+                <li><a href="">securite avec jwt</a></li>
+                <li><a href="">deploy on AWS</a></li>
+                <li><a href="">prez : edge services, scalabilité (netflix death star), sécurité</a></li>
+            </ol>
+        </div>
+    </div>
+
     <h2>Le projet</h2>
 
     <ul>
-        <li>retrieve sandbox app (github) : grille des programmes (/programs/year/week/day, /programs?from=xxx&to=yyy support many formats) (/persons/id getFullname())</li>
-        <li>Tech Stack : intellij, spring boot, gradle, groovy, mongo</li>
-        <li>play with mongo</li>
-        <li>a word on style, naming and TDD</li>
-    </ul>
-
-    <h2>Tripalium</h2>
-
-    <ul>
+        <li>retrieve sandbox app (github) : grille des programmes (/schedule/year/week/day, /schedule?from=xxx&amp;to=yyy support many formats) (/persons/id getFullname())</li>
+        <li>prez : a word on style, naming and TDD</li>
         <li>fix bugs : starting and ending program</li>
         <li>add features : caching</li>
     </ul>
 
-    <h2>Cloudification</h2>
+    <h2>Annexes</h2>
 
     <ul>
-        <li>microservices : eureka, ribbon, config, gateway...</li>
-        <li>deploy on AWS</li>
+        <li>groovy en 5 minutes</li>
     </ul>
 
     <p>Ce site a été réalisé avec <a href="https://getbootstrap.com/">Bootstrap</a>, the most popular HTML, CSS, and JS library in the world.</p>

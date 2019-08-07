@@ -1,0 +1,414 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- font awesome -->
+    <link href="../../common/fontawesome-free-5.9.0-web/css/all.css" rel="stylesheet">
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="../../common/highlightjs/styles/a11y-dark.css">
+
+    <!-- lightbox -->
+    <link rel="stylesheet" href="../../common/fancybox/dist/jquery.fancybox.min.css" />
+
+    <!-- Custom CSS -->
+    <link href="../../common/prez/style.css" rel="stylesheet" media="screen">
+
+    <title>Spring init</title>
+</head>
+<body>
+<div class="container ">
+    <h1>Spring init</h1>
+
+    <p>Nous avons été capable de faire une toute petite application.</p>
+
+    <p>Spring boot permet de construire rapidement des applications plus complexes</p>
+
+    <p>Cependant, il se focalise encore davantage sur les microservices dont nous reparlerons plus tard</p>
+
+    <p>Pour le moment, nous allons bootstraper une application un tout petit peu plus riche</p>
+
+    <h2>Spring Initializr</h2>
+
+    <p>
+        Le service <a href="https://start.spring.io/" target="_blank">start.spring.io</a> permet de bootstraper
+        une application en choisissant parmis de nombreux modules (web, base de données, sécurité...)
+    </p>
+
+    <p>➤ Nous allons commencer très simplement en prenant le module web.</p>
+
+    <a data-fancybox="gallery" href="spring-init.png">
+        <img src="spring-init.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>Nous avons donc un projet gradle + groovy + spring boot avec le module web. Pour le package et le nom du module, vous pouvez mettre ce que vous voulez.</p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Gradle</h5>
+
+        <p><a href="https://gradle.org/" target="_blank">Gradle</a> est un outils de build</p>
+
+        <p>Il permet de gérer les dépendances (librairies) du projet et pilote la compilcation afin d'obtenir notre exécutable.</p>
+
+        <p>Afin de lancer le build, il suffit de taper <code>./gradlew build</code></p>
+    </div>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Spring init</h5>
+
+        <p>Il est également possible de faire la même chose en ligne de commande</p>
+
+        <pre><code class="console">$ spring init --dependencies=web,data-jpa my-project
+Using service at https://start.spring.io
+Project extracted to '/Users/developer/example/my-project'
+        </code></pre>
+
+        <p>ref : <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/cli-using-the-cli.html" target="_blank">https://docs.spring.io/spring-boot/docs/current/reference/html/cli-using-the-cli.html</a></p>
+    </div>
+
+    <h2>Layout du projet</h2>
+
+    <p>➤ Cliquez sur <img src="explore.png" alt=""> en bas de la page et vous devriez avoir l'affichage suivant :</p>
+
+    <a data-fancybox="gallery" href="layout.png">
+        <img src="layout.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>Les répertoires et fichiers visibles sont les suivants :</p>
+
+    <ul>
+        <li><b>settings.gradle</b> : fichier optionnel dans le cas d'un projet simple, il permet de définir les répertoires avec les sous modules pour un project plus complexe.</li>
+        <li><b>gradle</b> : répertoire qui contient le bnaire de l'outils de build</li>
+        <li><b>gradlew.bat</b> et gradlew : l'exécutable (wrapper) de gradle</li>
+        <li><b>src/main</b> : les sources</li>
+        <li><b>src/main/groovy</b> : le code groovy</li>
+        <li><b>src/main/resources</b> : les fichiers statiques</li>
+        <li><b>src/main/resources/application.properties</b> : le fichier de configuration</li>
+        <li><b>src/main/resources/templates</b> : les templates afin de générer des pages</li>
+        <li><b>src/main/resources/static</b> : les fichiers statiques (images, css, js...)</li>
+        <li><b>src/test</b> : les sources de test</li>
+        <li><b>src/test/groovy</b> : les tests en groovy</li>
+        <li><b>HELP.md</b> : une petite doc spring boot</li>
+        <li><b>.gitignore</b> : règles d'exclusion pour git</li>
+    </ul>
+
+    <p>Cette structure mélange des conventions classiques du monde java, des conventions gradle et des conventions spring boot</p>
+
+    <p>Même sur des projets non spring boot ou non gradle, vous retrouveriez ce genre d'arborescence.</p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Convention over configuration</h5>
+
+        <p>
+            C'est un principe de construction de frameworks et librairie visant a diminuer, voire éliminer, le besoin d'écrire des configuration.
+            En effet, si on décide que répertoire de source est <code>src</code>, plus besoin de le préciser.
+        </p>
+
+        <p>
+            Il reste possible de le faire, mais cela devient du travail en plus, qui aurait pu être évité.
+            Lorsque l'on passe ainsi d'un projet à un autre, d'une entreprise à une autre, on retrouve alors les mêmes conventions.
+        </p>
+
+        <p>C'est un principe popularisé par le framework <a href="https://rubyonrails.org/" target="_blank">Ruby on Rails</a> et très largement repris par spring boot.</p>
+    </div>
+
+    <h2>Gradle</h2>
+
+    <p>➤ Téléchargez le zip du projet et ouvrez le dans votre répertoires de projets</p>
+
+    <p>Le fichier <code>build.gradle</code> a le contenu suivant (avec mes commentaires en plus)</p>
+
+    <pre><code class="groovy">plugins {
+    id 'org.springframework.boot' version '2.1.7.RELEASE' // la version du plugin spring boot
+    id 'groovy' // la possibilité de faire du groovy en plus du java
+}
+
+// Permet a spring boot de prendre la main sur la résolution des numéros de version des librairies
+apply plugin: 'io.spring.dependency-management'
+
+// les propriétés de mon projets
+group = 'com.monsite'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+// où aller chercher les librairies ? 
+repositories {
+    mavenCentral() // sur maven central https://repo.maven.apache.org/maven2/
+}
+
+// les librairies pour mon projet
+dependencies {
+    // la configuration 'implementation' indique une dépendance qui va servir dans le projet final
+    implementation 'org.springframework.boot:spring-boot-starter-web' // spring boot pour le web
+    implementation 'org.codehaus.groovy:groovy' // groovy
+
+    // la configuration 'testImplementation' indique une dépendance qui sert uniquement pendant les tests
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' // spring boot pour les tests
+}
+</code></pre>
+
+    <p>Au fil des besoins, on pourra donc rajouter des librairies dans la section <code>dependencies</code></p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Gradle wrapper</h5>
+
+        <p>
+            Les fichiers <b>gradlew</b>, <b>gradlew.bat</b> et le répertoire <b>gradle</b> constitue le wrapper.
+            Il permettent de lancer le build sans avoir à installer préalablement gradle.<br>
+            C’est pratique pour de l’intégration continue et sur sa machine : pas besoin d'installer gradle.
+        </p>
+
+        <img src="wrapper.png" alt="" class="img-thumbnail mx-auto d-block">
+
+        <p>source <a href="https://docs.gradle.org/current/userguide/gradle_wrapper.html" target="_blank">https://docs.gradle.org/current/userguide/gradle_wrapper.html</a></p>
+    </div>
+
+    <h2>./gradlew build</h2>
+
+    <p>➤ Il est temps de lancer un build</p>
+
+    <pre><code class="console">$ ./gradlew build
+Downloading https://services.gradle.org/distributions/gradle-5.4.1-bin.zip
+...................................................................................
+
+Welcome to Gradle 5.4.1!
+
+Here are the highlights of this release:
+ - Run builds with JDK12
+ - New API for Incremental Tasks
+ - Updates to native projects, including Swift 5 support
+
+For more details see https://docs.gradle.org/5.4.1/release-notes.html
+
+Starting a Gradle Daemon (subsequent builds will be faster)
+
+> Task :test
+2019-08-07 10:14:29.972  INFO 4638 --- [       Thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+
+BUILD SUCCESSFUL in 1m 35s
+5 actionable tasks: 5 executed</code></pre>
+
+    <p>Normalement, vous avez vu gradle télécharger le binaire de gradle puis les dépendances.</p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Dépendances transitives</h5>
+
+        <p>
+            Il y a 3 dépendances dans notre projet mais gradle en a récupéré bien plus...<br>
+            Simplement parce nos dépendances ont elles aussi des dépendances. On dit que les dépendances sont transitives.
+        </p>
+
+        <p>➤ Vous pouvez les voir en tapant <code>./gradlew dependencies</code></p>
+    </div>
+
+    <p>Enfin, il a exécuté les tests et produit le binaire de notre projet. Tout est rangé dans le répertoire build</p>
+
+    <pre><code class="console">$ tree build
+build
+├── classes
+│   └── groovy
+│       ├── main
+│       │   └── com
+│       │       └── monsite
+│       │           └── coursecm
+│       │               └── CoursecmApplication.class
+│       └── test
+│           └── com
+│               └── monsite
+│                   └── coursecm
+│                       └── CoursecmApplicationTests.class
+├── generated
+│   └── sources
+│       └── annotationProcessor
+│           └── groovy
+│               ├── main
+│               └── test
+├── libs
+│   └── coursecm-0.0.1-SNAPSHOT.jar
+├── reports
+│   └── tests
+│       └── test
+│           ├── classes
+│           │   └── com.monsite.coursecm.CoursecmApplicationTests.html
+│           ├── css
+│           │   ├── base-style.css
+│           │   └── style.css
+│           ├── index.html
+│           ├── js
+│           │   └── report.js
+│           └── packages
+│               └── com.monsite.coursecm.html
+├── resources
+│   └── main
+│       ├── application.properties
+│       ├── static
+│       └── templates
+├── test-results
+│   └── test
+│       ├── TEST-com.monsite.coursecm.CoursecmApplicationTests.xml
+│       └── binary
+│           ├── output.bin
+│           ├── output.bin.idx
+│           └── results.bin
+└── tmp
+    ├── bootJar
+    │   └── MANIFEST.MF
+    ├── compileGroovy
+    │   └── groovy-java-stubs
+    └── compileTestGroovy
+        └── groovy-java-stubs
+
+37 directories, 15 files</code></pre>
+
+    <h2>Oui mais...</h2>
+
+    <p>➤ Que fait notre projet ?</p>
+
+    <pre><code class="console">$ ./gradlew bootRun
+
+> Task :bootRun
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.7.RELEASE)
+
+2019-08-07 10:28:52.697  INFO 5017 --- [           main] c.monsite.coursecm.CoursecmApplication   : Starting CoursecmApplication on jaadtwo.local with PID 5017 (/Users/dbourdette/projects-ecm/coursecm-spring-init/build/classes/groovy/main started by dbourdette in /Users/dbourdette/projects-ecm/coursecm-spring-init)
+2019-08-07 10:28:52.702  INFO 5017 --- [           main] c.monsite.coursecm.CoursecmApplication   : No active profile set, falling back to default profiles: default
+2019-08-07 10:28:54.706  INFO 5017 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2019-08-07 10:28:54.808  INFO 5017 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-08-07 10:28:54.808  INFO 5017 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.22]
+2019-08-07 10:28:54.983  INFO 5017 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-08-07 10:28:54.984  INFO 5017 --- [           main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2180 ms
+2019-08-07 10:28:55.498  INFO 5017 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-08-07 10:28:55.864  INFO 5017 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2019-08-07 10:28:55.869  INFO 5017 --- [           main] c.monsite.coursecm.CoursecmApplication   : Started CoursecmApplication in 3.882 seconds (JVM running for 5.015)
+2019-08-07 10:29:11.452  INFO 5017 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-08-07 10:29:11.452  INFO 5017 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-08-07 10:29:11.461  INFO 5017 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 9 ms
+<==========---> 80% EXECUTING [1m 18s]
+> :bootRun</code></pre>
+
+    <p>A peu près rien. C'est une <a href="http://localhost:8080" target="_blank">application web</a> qui ne répond que des 404.</p>
+
+    <img src="404-default.png" alt="" class="img-thumbnail mx-auto d-block">
+
+    <h2>Intellij</h2>
+
+    <p>Nous allons avoir besoin d'un éditeur de code afin de commencer à pouvoir modifier confortablement notre projet.</p>
+
+    <p>➤ Ouvrez le projet dans intellij (Import Project, puis sélectionez le fichier build.gradle)</p>
+
+    <img src="intellij.png" alt="" class="img-thumbnail mx-auto d-block">
+
+    <p>➤ Configurez le projet gradle (en prenant soin de déselectionner <b>create separate module per source set</b>)</p>
+
+    <a data-fancybox="gallery" href="gradle-import.png">
+        <img src="gradle-import.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>Intellij va re télécharger les dépendances et prendre un peu de temps pour indexer les fichiers du projet.</p>
+
+    <p>Enfin, le projet doit ressembler à ça</p>
+
+    <a data-fancybox="gallery" href="intellij-project.png">
+        <img src="intellij-project.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <h2>404</h2>
+
+    <p>On va commencer par mettre une 404 un peu plus accueillante</p>
+
+    <p>
+        Pour remplacer la 404, il suffit de mettre un fichier 404.html dans <code>src/main/resources/static/error</code><br>
+        Je vous propose la page suivante
+    </p>
+
+    <pre><code class="html">&lt;!doctype html&gt;
+&lt;html lang="fr"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge"&gt;
+    &lt;title&gt;Erreur 404&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;pre&gt;
+\|/          (__)
+     `\------(oo)   404
+       ||    (__)--/
+       ||w--||     \|/
+   \|/
+&lt;/pre&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+    <p>➤ Mettez en place la page 404 que vous souhaitez (Il y a des animaux sympas sur <a href="https://www.asciiart.eu/animals" target="_blank">https://www.asciiart.eu/animals</a>)</p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Hot swapping</h5>
+
+        <p>
+            Pour mettre à jour cette page, vous dévez redemarrer à chaque fois le serveur.<br>
+            Cela est dû à la nature des applications java : optimisées pour la performance en production mais elle n'aiment pas trop le remplacement à chaud
+            (<a href="https://docs.spring.io/spring-boot/docs/current/reference/html/howto-hotswapping.html" target="_blank">Hot swapping</a>).
+        </p>
+
+        <p>
+            <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-devtools.html" target="_blank">Spring boot devtools</a> permet
+            de rendre cela un peu moins pénible. Rajoutez la configuration suivante dans votre build.gradle
+        </p>
+
+        <pre><code class="groovy">configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+}
+dependencies {
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+}</code></pre>
+
+        <p>➤ Relancez ensuite <code>./gradle bootRun</code></p>
+
+        <p>Depuis Intellij, pour informer spring boot qu'il y a eu une modification, il faut faire un build du projet
+            (icône <img src="build.png" alt=""> ou menu Build &gt; Build Project)</p>
+    </div>
+
+    <h2>Index</h2>
+
+    <p>Nous aurions pu aussi commencer par la page d'index...</p>
+
+    <p>➤ Mettez en place un <code>IndexController</code> dans un package <code>controller</code> qui réponde un message de bienvenue sur <code>/</code></p>
+
+    <p>Nous allons maintenant pouvoir nous connecter à une base de données.</p>
+
+    <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
+</div>
+<!-- presentation -->
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- highlight.js -->
+<script src="../../common/highlightjs/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- lightbox -->
+<script src="../../common/fancybox/dist/jquery.fancybox.min.js"></script>
+
+<script src="../../common/prez/prez.js"></script>
+
+</body>
+</html>
