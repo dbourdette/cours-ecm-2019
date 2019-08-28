@@ -54,7 +54,7 @@
 
     <h2>Requêtes</h2>
 
-    <p>Les requêtes sont écrite en javascript</p>
+    <p>Les requêtes sont écrites en javascript</p>
 
     <img src="mongo-shell.png" alt="" class="img-thumbnail mx-auto d-block">
 
@@ -158,7 +158,7 @@ class Program {
     String name
     LocalDateTime from, to
 
-    List&lt;String&gt; hosts
+    List&lt;String&gt; hosts = []
 }</code></pre>
 
     <p>
@@ -192,8 +192,9 @@ interface ProgramRepository extends MongoRepository&lt;Program, String&gt; {
         <h5>Query Methods</h5>
 
         <p>
-            Les méthodes des repositories ne sont pas la seule façon de travailler avec la base mongo.
-            Cependant, pour des cas simples, c'est très facile à mettre en place.
+            Les interfaces qui étendent MongoRepository ne sont pas la seule façon de travailler avec la base mongo.
+            Il est possible de construire ses requêtes comme on ferait du SQL.
+            Cependant, pour des cas simples, c'est beaucoup plus facile à mettre en place.
         </p>
 
         <p>voir <a href="https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongodb.repositories.queries" target="_blank">https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongodb.repositories.queries</a></p>
@@ -220,7 +221,7 @@ class ProgramControler {
     ProgramRepository programRepository
 
     @GetMapping('/programs')
-    List&gt;Program&lt; programs() {
+    List&ltProgram&gt; programs() {
         LocalDate today = LocalDate.now()
         LocalDateTime from = today.atStartOfDay()
         LocalDateTime to = today.atStartOfDay().plusDays(1)
@@ -230,6 +231,14 @@ class ProgramControler {
 }</code></pre>
 
     <p>➤ et vérifier que cela fonctionne <a href="http://localhost:8080/programs" target="_blank">http://localhost:8080/programs</a></p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Affichage du JSON</h5>
+
+        <p>Pour visualiser du JSON dans chrome, je conseille de mettre un plugin afin qu'il soit bien formatté.</p>
+
+        <p>Par exemple <a href="https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa?hl=fr" target="_blank">JSON Formatter</a></p>
+    </div>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>

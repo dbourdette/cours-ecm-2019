@@ -23,17 +23,323 @@
 </head>
 <body>
 <div class="container ">
-    <h1>Program TDD</h1>
+    <h1>Test driven development</h1>
 
-    <p>test driven develoment (red, green, refactor)</p>
+    <p>La méthode <code>List&lt;Program&gt; findByToGreaterThanAndFromLessThan(LocalDateTime from, LocalDateTime to)</code> semble faire tout ce qu'il faut.</p>
 
-    <p>le code fait précédemment dans la partie mongo ne marche pas bien... comment être sûr que ce qu'on a fait fonctionne ?</p>
+    <p>Mais comment en être sûr ? Comment savoir que la personne qui va remonter un bug en production n'est qu'un sale menteur ?</p>
 
-    <p>Utiliser @DataJpaTest ???</p>
+    <h2>Le développement par les tests</h2>
 
-    <p>-> ensure /programs works as espected</p>
+    <p>
+        C'est une technique de développement assez contre intuitive au départ,
+        qui consiste à écrire des tests afin de conduire le développement.
+        Elle présente de multiples intérêts :</p>
 
-    <p>ajout de /programs/{name}</p>
+    <ul>
+        <li>le code est évidemment testé et donc plus fiable,</li>
+        <li>on aboutit à une design plus simple,</li>
+        <li>en cas de bug, il est souvent simple de le reproduire en test et de le corriger,</li>
+        <li>et on limite ainsi grandement les risques de régression</li>
+    </ul>
+
+    <p>Le cycle du TDD est le suivant (Red, Green, Refactor).</p>
+
+    <a data-fancybox="gallery" href="tdd_flow.png">
+        <img src="tdd_flow.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <h2>jUnit</h2>
+
+    <p><a href="https://en.wikipedia.org/wiki/Kent_Beck" target="_blank">Kent Beck</a> est à l’origine du TDD et des frameworks xUnit (jUnit en java).</p>
+
+    <p>En version 4, un test s’écrit avec des annotations :</p>
+
+    <pre><code class="java">import org.junit.*;
+import static org.junit.Assert.*;
+import java.util.*;
+
+public class ArrayListTest { // le nom de la classe testée suffixée par Test
+
+    private ArrayList list;
+
+    @Before
+    public void setUp() { // exécuté avant chaque test
+        list = new ArrayList();
+    }
+
+    @After
+    public void tearDown() { // exécuté après chaque test
+    }
+
+    @Test
+    public void empty() { // un test
+        assertTrue(list.isEmpty());
+    }
+
+    @Test
+    public void add() { // un test
+        collection.add("itemA");
+        assertEquals(1, list.size());
+    }
+}
+    </code></pre>
+
+    <h2>Test de ProgramRepository</h2>
+
+    <p>On commence par générer la classe de test pour <code>ProgramRepository</code></p>
+
+    <p>
+        ➤ Créez la classe <code>com.monsite.coursecm.repository.ProgramRepository</code> dans src/main/test
+        (il est possible d'utiliser le raccourci atl entrée quand le curseur est sur le nom de la classe).
+    </p>
+
+    <a data-fancybox="gallery" href="add-test.png">
+        <img src="add-test.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a> 
+
+    <p>➤ Choisissez ensuite un test en groovy sans Superclass.</p>
+
+    <a data-fancybox="gallery" href="new-test.png">
+        <img src="new-test.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>Et on obtient donc</p>
+
+    <pre><code class="groovy">package com.monsite.coursecm.repository
+
+class ProgramRepositoryTest {
+}</code></pre>
+
+    <h2>Un test spring boot</h2>
+
+    <p>jUnit est extensible. Avec Spring, il est possible de manipuler notre Repository.</p>
+
+    <p>➤ Ajoutez le code suivant afin d'obtenir un premier test.</p>
+
+    <pre><code class="groovy">package com.monsite.coursecm.repository
+
+import org.junit.runner.RunWith
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.junit4.SpringRunner
+
+@RunWith(SpringRunner) // faire tourner le test avec le plugin spring
+@SpringBootTest // charger tous les composants de l'application
+class ProgramRepositoryTest {
+    @Autowired // injection du repository
+    ProgramRepository programRepository
+
+    @Test
+    void count() {
+        println programRepository.count() // un test pas très intéressant
+    }
+}</code></pre>
+
+    <p>➤ Exécutez le test, le nombre d'éléments en base devrait s'afficher dans votre console.</p>
+
+    <h2>Base de test</h2>
+
+    <p>Afin de tester que la méthode fonctionne bien, il faudrait mettre la base dans un état connu.</p>
+
+    <p>On pourrait alors savoir ce que doit retourner notre service.</p>
+
+    <p>Oui mais...</p>
+
+    <p>Il n'y a qu'une seule base. Si tout le monde écrit en même temps, personne n'aura ce qu'il souhaite.</p>
+
+    <p>Il serait donc mieux que chacun ait sa propre base.</p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Embedded mongo</h5>
+
+        <p>Il serait possible de démarrer une base mongodb en local, à la volée.</p>
+
+        <p>Spring boot se chargerait alors de démarrer la base et l'arrêter après les tests.</p>
+
+        <p>Voir l'exemple sur <a href="https://www.baeldung.com/spring-boot-embedded-mongodb" target="_blank">Spring Boot Integration Testing with Embedded MongoDB</a></p>
+    </div>
+
+    <h2>Spring profiles</h2>
+
+    <p>Nous allons profiter de 2 atouts</p>
+
+    <ul>
+        <li>Spring permet d'éxécuter les tests avec une configuration différente de l'application,</li>
+        <li>et mongo permet de créer des bases à la volée.</li>
+    </ul>
+
+    <p>➤ Rajoutez l'annotation <code>@ActiveProfiles</code> à notre classe de test.</p>
+
+    <pre><code class="groovy">package com.monsite.coursecm.repository
+
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.junit4.SpringRunner
+
+@RunWith(SpringRunner)
+@SpringBootTest
+@ActiveProfiles('test') // le test va tourner avec un profil 'test'
+class ProgramRepositoryTest {
+    @Autowired
+    ProgramRepository programRepository
+
+    @Test
+    void count() {
+        println programRepository.count()
+    }
+}
+</code></pre>
+
+    <p>➤ Dans <code>src/main/resources</code>, ajoutez un second fichier <code>application-test.properties</code> en choisissant le nom de votre base.</p>
+
+    <pre><code class="properties">#mongodb
+spring.data.mongodb.database=program-[votre nom]
+</code></pre>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Profils spring</h5>
+
+        <p>Les profils ne servent pas que pour les tests.</p>
+
+        <p>Par exemple, il est possible de configurer l'application différement afin de la faire tourner en local, dans un environnement d'intégration ou en production.</p>
+    </div>
+
+    <h2>Un premier test</h2>
+
+    <p>➤ Mettez en place le test suivant</p>
+
+    <pre><code class="groovy">package com.monsite.coursecm.repository
+
+import com.monsite.coursecm.domain.Program
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.junit4.SpringRunner
+
+import java.time.LocalDate
+
+@RunWith(SpringRunner)
+@SpringBootTest
+@ActiveProfiles('test')
+class ProgramRepositoryTest {
+    @Autowired
+    ProgramRepository programRepository
+
+    LocalDate today = LocalDate.now()
+
+    @Before
+    @After
+    void clean() {
+        // on vide la base avant et après chaque test
+        programRepository.deleteAll()
+    }
+
+    @Test
+    void save() {
+        programRepository.save(new Program(
+                name: 'Météo',
+                from: today.atTime(1, 45),
+                to: today.atTime(1, 50))
+        )
+
+        assert programRepository.count() == 1
+        assert programRepository.findAll()[0].name == 'Météo'
+    }
+}
+</code></pre>
+
+    <p>Les <code>assert</code> sont des <a href="https://www.groovy-lang.org/testing.html">power assert</a> groovy, assez explicites en cas d'erreur.</p>
+
+    <p>Le code précédent devrait passer sans soucis.</p>
+
+    <h2>findByToGreaterThanAndFromLessThan</h2>
+
+    <p>Afin de tester cette méthode, je propose le code suivant :</p>
+
+    <pre><code class="groovy">@Test
+void findByToGreaterThanAndFromLessThan() {
+    programRepository.save(new Program(
+            name: 'Météo',
+            from: today.atTime(12, 40),
+            to: today.atTime(12, 45))
+    )
+    programRepository.save(new Program(
+            name: 'Le 1245',
+            from: today.atTime(12, 45),
+            to: today.atTime(13, 25))
+    )
+
+    List&lt;Program&gt; programs = programRepository.findByToGreaterThanAndFromLessThan(today.atTime(12, 40), today.atTime(13, 25))
+
+    assert programs.size() == 2
+    assert programs[0].name == 'Météo'
+    assert programs[1].name == 'Le 1245'
+}</code></pre>
+
+    <p>➤ Recopiez et exécutez ce code. Il devrait passer également.</p>
+
+    <h2>Refactor</h2>
+
+    <p>Nous avons 2 tests en place et on voit bien que la sauvegarde des programmes en base prend de la place et n'est pas très lisible</p>
+
+    <p>Je propose de pouvoir écrire</p>
+
+    <pre><code class="groovy">programRepository.save(parse('01:45|01:50|Météo'))</code></pre>
+
+    <p>Ainsi, le premier test devient</p>
+
+    <pre><code class="groovy">@Test
+void save() {
+    programRepository.save(parse('01:45|01:50|Météo'))
+
+    assert programRepository.count() == 1
+    assert programRepository.findAll()[0].name == 'Météo'
+}</code></pre>
+
+    <p>➤ Réécrivez les 2 tests de cette façon en s'aidant des méthodes suivantes.</p>
+
+    <pre><code class="groovy">Program parse(String input) {
+    def tokens = input.tokenize('|')
+
+    new Program(from: todayAt(tokens[0]), to: todayAt(tokens[1]), name: tokens[2])
+}
+
+LocalDateTime todayAt(String input) {
+    today.atTime(time(input))
+}
+
+LocalTime time(String input) {
+    LocalTime.parse(input, DateTimeFormatter.ofPattern("HH:mm"))
+}</code></pre>
+
+    <p>Le refactoring vaut tout autant pour les classes testées que pour les classes de test.</p>
+
+    <h2>Conditions aux limites</h2>
+
+    <p>Que se passe t il si notre intervalle commence au milieu d'une émission ?</p>
+
+    <pre><code class="groovy">@Test
+void 'findByToGreaterThanAndFromLessThan when from in the middle of a program'() {
+    programRepository.save(parse('12:40|12:45|Météo'))
+    programRepository.save(parse('12:45|13:25|Le 1245'))
+
+    List&lt;Program&gt; programs = programRepository.findByToGreaterThanAndFromLessThan(todayAt('12:42'), todayAt('13:25'))
+
+    // assert ????
+}</code></pre>
+
+    <p>Que se passe t il si notre intervalle termine au milieu d'une émission ?</p>
+
+    <p>Que se passe t il si notre intervalle commence sur la fin d'un émission ?</p>
+
+    <p>➤ Mettez en place ces 3 tests afin de vérifier le bon fonctionnement de notre repository.</p>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>
