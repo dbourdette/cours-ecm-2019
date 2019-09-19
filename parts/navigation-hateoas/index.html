@@ -23,19 +23,314 @@
 </head>
 <body>
 <div class="container ">
-    <h1>Spring HATEOAS</h1>
+    <h1>Navigation dans les services REST</h1>
 
-    <p>Dans program, il y a un champs hosts</p>
+    <p>Dans program, il y a un champs hosts qui représente la liste des présentateurs.</p>
 
-    <p>Comment afficher les personnes dans json de program et mettre des hyperliens ?</p>
+    <p>Nous allons rajouter un <code>Controller</code> qui permet de venir lire les informations concernant un présentateur.</p>
 
-    <p>Mettre en place le PersonRepository et faire un test de save / find</p>
+    <p>Puis nous améliorerons notre <code>ProgramController</code> existant.</p>
 
-    <p>Mettre en place le PersonController et faire 2 tests /persons et /persons/{id}</p>
+    <h2>La classe du domaine Host</h2>
 
-    <p>Ajouter le fullname de la personne par les tests</p>
+    <p>➤ Pour commencer créez la classe <code>Host</code> qui contient les données d'un présentateur :</p>
 
-    <p>Modifier ProgramControler pour avoir le fullname et un lien vers persons/{id}</p>
+    <pre><code class="groovy">@Document(collection = "host")
+class Host {
+    @Id
+    String id
+
+    String firstname
+
+    String lastname
+}</code></pre>
+    
+    <h2>HostRepository</h2>
+
+    <p>➤ Puis créez un <code>HostRepository</code> à l'image du <code>ProgramRepository</code></p>
+
+    <pre><code class="groovy">interface HostRepository extends MongoRepository&lt;Host, String&gt; {
+    // les méthodes findById et findAll sont déjà disponibles
+}</code></pre>
+
+    <p>➤ Écrivez les tests save(), findAll() et findById()</p>
+
+    <pre><code class="groovy">@RunWith(SpringRunner)
+@SpringBootTest
+@ActiveProfiles('test')
+class HostRepositoryTest {
+    @Autowired
+    HostRepository hostRepository
+
+    @Before
+    @After
+    void clean() {
+        hostRepository.deleteAll()
+    }
+
+    ...
+}</code></pre>
+
+    <h2>HostController</h2>
+
+    <p>➤ Mettez en place le <code>HostController</code> qui utilise ce repository et qui répond sur /hosts et /hosts/{id}</p>
+
+    <p>Pour la méthode qui renvoie un présentateur, vous pouvez utiliser la synthaxe suivante :</p>
+
+    <pre><code class="groovy">hostRepository.findById(id).orElseThrow({ new NotFoundException() })</code></pre>
+
+    <p>Avec la classe <code>NotFoundException</code> définie comme suit.</p>
+
+    <pre><code class="groovy">import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ResponseStatus
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+class NotFoundException extends RuntimeException {
+    NotFoundException() {
+    }
+
+    NotFoundException(String message) {
+        super(message)
+    }
+
+    NotFoundException(String message, Throwable throwable) {
+        super(message, throwable)
+    }
+
+    NotFoundException(Throwable throwable) {
+        super(throwable)
+    }
+}</code></pre>
+
+    <p>
+        On pilote ici le code de retour grâce à l'annotation <code>@ResponseStatus</code>
+        (voir <a href="https://www.baeldung.com/spring-response-status" target="_blank">Using Spring @ResponseStatus to Set HTTP Status Code</a>).
+    </p>
+
+    <p>On obtient alors une 404 si l'id ne correspond à rien en base.</p>
+
+    <p>➤ Allez sur <a href="http://localhost:8080/hosts" target="_blank">http://localhost:8080/hosts</a> pour vérifier que tout fonctionne.</p>
+
+    <h2>Fullname</h2>
+
+    <p>On souhaiterait avoir le nom complet du présentateur directement dans le retour json.</p>
+
+    <p>Le plus simple est d'ajouter une méthode <code>getFullname()</code> sur la classe <code>Host</code>.</p>
+
+    <p>➤ Ajoutez cette méthode en commançant par écrire un test unitaire.</p>
+
+    <p>➤ Pensez aux cas aux limites, que faire si la personne n'a pas spécifié son nom de famille ou son prénom ?</p>
+
+    <h2>Présentation</h2>
+
+    <p>Jusqu'à présent, notre <code>ProgramController</code> présente notre modèle de données <code>Program</code> de façon assez brute.</p>
+
+    <p>La liste des présentateurs est la liste de leurs ids.</p>
+
+    <p>Nous allons plutôt y mettre le nom de ces personnes.</p>
+
+    <p>➤ Rajoutez les classes de présentation <code>ProgramResource</code> et <code>HostResource</code></p>
+
+    <pre><code class="groovy">class ProgramResource {
+    String name
+
+    LocalDateTime from, to
+
+    List&lt;HostResource&gt; hosts = []
+}</code></pre>
+
+    <pre><code class="groovy">class HostResource {
+    String fullname
+}</code></pre>
+
+    <p>Ce modèle va servir à donner une meilleure tête à nos réponses dans les controllers.</p>
+
+    <h2>Spring HATEOAS</h2>
+
+    <p>
+        Nous pourrions avancer sans aide extérieur pour débuter, mais comme nous allons vouloir mettre en place des liens dans notre json,
+        le mieux est d'aller chercher <code>spring-hateoas</code> dès à présent.
+    </p>
+
+    <p>➤ Ajoutez la dépendance <b>spring-boot-starter-hateoas</b> au <code>build.gradle</code> (et pensez a rafraîchir votre projet dans intellij).</p>
+
+    <pre><code class="groovy">implementation 'org.springframework.boot:spring-boot-starter-hateoas'</code></pre>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>HATEOAS</h5>
+
+        <p>HATEOAS est un principe de conception pour les API REST.</p>
+
+        <a data-fancybox="gallery" href="hateoas.png">
+            <img src="hateoas.png" alt="" class="img-thumbnail mx-auto d-block">
+        </a>
+
+        <p>source <a href="https://fr.wikipedia.org/wiki/HATEOAS">https://fr.wikipedia.org/wiki/HATEOAS</a></p>
+    </div>
+
+    <h2>Mise en place</h2>
+
+    <p>➤ Pour commencer, ajouter l'annotation <code>@EnableHypermediaSupport</code> sur votre application.</p>
+
+    <pre><code class="groovy">import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.hateoas.config.EnableHypermediaSupport
+
+@SpringBootApplication
+@EnableHypermediaSupport(type = [EnableHypermediaSupport.HypermediaType.HAL])
+class CoursecmApplication {
+    ...
+}</code></pre>
+
+    <p>Cela va activer tout le support pour ce que nous allons faire après.</p>
+
+    <h3>Resources</h3>
+
+    <p>➤ Ensuite, étendez <b>ResourceSupport</b> depuis les classes de resources</p>
+
+    <pre><code class="groovy">import org.springframework.hateoas.ResourceSupport
+
+class HostResource extends ResourceSupport {
+    ...
+}</code></pre>
+
+    <pre><code class="groovy">import org.springframework.hateoas.ResourceSupport
+
+class ProgramResource extends ResourceSupport {
+        ...
+}</code></pre>
+
+    <p>Cela va rajouter une liste de liens pour chacune de nos ressources.</p>
+
+    <h3>Assemblers</h3>
+
+    <p>Le rôle des <code>Assemblers</code> va être de convertir nos objets du domaine en resources.</p>
+
+    <p>➤ Les voici :</p>
+
+    <pre><code class="groovy">import com.monsite.coursecm.domain.Host
+import com.monsite.coursecm.domain.HostResource
+import org.springframework.hateoas.mvc.ResourceAssemblerSupport
+import org.springframework.stereotype.Component
+
+@Component
+class HostResourceAssembler extends ResourceAssemblerSupport&lt;Host, HostResource&gt; {
+    HostResourceAssembler() {
+        super(HostController, HostResource)
+    }
+
+    @Override
+    HostResource toResource(Host entity) {
+        HostResource resource = instantiateResource(entity)
+
+        resource.fullname = entity.fullname // on ne prend que le fullname
+
+        resource
+    }
+}</code></pre>
+
+    <pre><code class="groovy">import com.monsite.coursecm.domain.Program
+import com.monsite.coursecm.domain.ProgramResource
+import com.monsite.coursecm.repository.HostRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.hateoas.mvc.ResourceAssemblerSupport
+import org.springframework.stereotype.Component
+
+@Component
+class ProgramResourceAssembler extends ResourceAssemblerSupport&lt;Program, ProgramResource&gt; {
+    @Autowired
+    HostRepository hostRepository
+
+    @Autowired
+    HostResourceAssembler hostResourceAssembler
+
+    ProgramResourceAssembler() {
+            super(ProgramController, ProgramResource)
+    }
+
+    @Override
+    ProgramResource toResource(Program entity) {
+        List&lt;Host&gt; hosts = entity.hosts.collect { hostRepository.findById(it).orElse(null) }.findAll()
+
+        ProgramResource resource = instantiateResource(entity)
+
+        resource.name = entity.name
+        resource.from = entity.from
+        resource.to = entity.to
+        resource.hosts = hostResourceAssembler.toResources(hosts) // conversion des hosts
+
+        resource
+    }
+}</code></pre>
+
+    <h3>Controllers</h3>
+
+    <p>➤ Il ne reste plus que le <code>ProgramController</code> à mettre à jour.</p>
+
+    <pre><code class="groovy">@RestController
+class ProgramController {
+    @Autowired
+    ProgramRepository programRepository
+
+    @Autowired
+    ProgramResourceAssembler programResourceAssembler
+
+    // il faut forcer le produces pour que cela donne du json dans un navigateur
+    @GetMapping(value = '/programs', produces = "application/json; charset=UTF-8")
+    Resources&lt;ProgramResource&gt; programs() {
+        LocalDate today = LocalDate.now()
+        LocalDateTime from = today.atStartOfDay()
+        LocalDateTime to = today.atStartOfDay().plusDays(1)
+
+        List&lt;Program&gt; programs = programRepository.findByToGreaterThanAndFromLessThan(from, to)
+
+        new Resources&lt;&gt;(programResourceAssembler.toResources(programs)) // conversion en resources
+    }
+}</code></pre>
+
+    <h3>Résultat</h3>
+
+    <p>Si tout va bien, le résultat devrait être le suivant sur <a href="http://localhost:8080/programs" target="_blank">http://localhost:8080/programs</a> :</p>
+
+    <a data-fancybox="gallery" href="resources.png">
+        <img src="resources.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>Les ids ont disparus et on ne voit que le fullname des présentateurs.</p>
+
+    <p>On a par contre des propriétés <code>_embedded</code> et <code>programResourceList</code> à la racine du json.</p>
+
+    <p>Cette structure permet de gérer les données, les éléments embeddés et les liens. Voir <a href="http://stateless.co/hal_specification.html" target="_blank">hal_specification.html</a></p>
+
+    <a data-fancybox="gallery" href="hal.png">
+        <img src="hal.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <h2>Navigation</h2>
+
+    <p>Nous pouvons à présent rajouter un lien depuis la liste des programmes vers la resource du présentateur.</p>
+
+    <p>➤ Dans le <code>HostResourceAssembler</code>, on rajoute le lien, après l'affectation du fullname :</p>
+
+    <pre><code class="groovy">resource.fullname = entity.fullname
+resource.add(new Link("/hosts/$entity.id"))</code></pre>
+
+    <p>Ce qui donne :</p>
+
+    <a data-fancybox="gallery" href="hal-links.png">
+        <img src="hal-links.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>➤ Faites de même pour le service sur /hosts</p>
+
+    <p>On conserve le /hosts/{id} en l'état afin d'avoir accès a toutes les données à cet endroit.</p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>REST, HATEOAS et HAL</h5>
+
+        <p>Rien n'oblige à faire du REST et encore moins du HATEOAS avec du HAL.</p>
+
+        <p>Cependant il existe peu de standards autour des web services. Connaitre ceux ci permet de ne pas réinventer la roue si possible.</p>
+    </div>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>

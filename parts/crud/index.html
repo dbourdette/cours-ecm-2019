@@ -25,17 +25,198 @@
 <div class="container ">
     <h1>CRUD</h1>
 
-    <p>On a des GET mais comment modifier les données ?</p>
+    <p>Pour le moment, nous n'avons fait que lire en base.</p>
 
-    <p>Équivalent CRUD en REST = POST, GET, PUT et DELETE</p>
+    <p>Il est temps d'écrire et supprimer des données.</p>
 
-    <p>Faire des tests sur les Controllers</p>
+    <h2>Tester un Controller</h2>
 
-    <p>Ajout POST, PUT et DELETE sur PersonController</p>
+    <p>Tester un Controller est un tout petit peu plus compliqué que tester un service mais spring offre de bonnes facilités</p>
 
-    <p>Comment gérer une personne qui est dans un programme mais que l'on delete ?</p>
+    <p>➤ Mettez en place le test suivant :</p>
 
-    <p>Comment gérer un ajout de program alors qu'il y a déjà un programme sur ce créneau ?</p>
+    <pre><code class="groovy">import com.monsite.coursecm.domain.Host
+import com.monsite.coursecm.repository.HostRepository
+import org.hamcrest.CoreMatchers
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+
+@RunWith(SpringRunner)
+@SpringBootTest // test complet avec le contexte spring
+@AutoConfigureMockMvc // charge un context de test mvc
+@ActiveProfiles('test') // on cible toujours la base de test
+class HostControllerTest {
+    @Autowired
+    MockMvc mockMvc // permet de faire les appels http
+
+    @Autowired
+    HostRepository hostRepository
+
+    @Before
+    @After
+    void clean() {
+        hostRepository.deleteAll()
+    }
+
+    @Test
+    void get() {
+        Host host = new Host(firstname: 'Kareen', lastname: 'Guiock')
+
+        hostRepository.save(host) // sauver la donnée de test
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/hosts/$host.id")
+            .andExpect(MockMvcResultMatchers.status().isOk()) // code HTTP 200
+            .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.jsonPath('$.firstname', CoreMatchers.is("Kareen"))) // test du contenu
+    }
+}</code></pre>
+
+    <p>La complexité vient surtout de la nature de l'appel et des attentes (andExpect...)</p>
+
+    <p>➤ Vérifiez que ce test passe.</p>
+
+    <h2>PUT</h2>
+
+    <p>La méthode PUT sert à mettre à jour les données </p>
+
+    <p>➤ Ajoutez le test suivant</p>
+
+    <pre><code class="groovy">@Test
+void put() {
+    Host host = new Host(firstname: 'Kareen', lastname: 'Guiock')
+
+    hostRepository.save(host)
+
+    mockMvc.perform(MockMvcRequestBuilders.put("/hosts/$host.id")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content('{"firtname": "Kareen", "lastname": "Guiock mis à jour"}'))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+
+    assert hostRepository.findById(host.id).get().lastname == 'Guiock mis à jour'
+}</code></pre>
+
+    <p>Si vous lancez le test, vous devriez avoir la trace suivante :</p>
+
+    <pre><code>MockHttpServletRequest:
+      HTTP Method = PUT
+      Request URI = /hosts/5d7b926ae16540199f0dd23e
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8"]
+             Body = {"firtname": "Kareen", "lastname": "Guiock mis à jour"}
+    Session Attrs = {}
+
+Handler:
+             Type = null
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = org.springframework.web.HttpRequestMethodNotSupportedException
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 405
+    Error message = Request method 'PUT' not supported
+          Headers = [Allow:"GET"]
+     Content type = null
+             Body =
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []</code></pre>
+
+    <p>La partie importante est le 405 (Request method 'PUT' not supported) : nous n'avons que du GET coté Controller pour le moment.</p>
+
+    <h3>Implémentation</h3>
+
+    <p>Avec l'aide d'une classe HostForm</p>
+
+    <pre><code class="groovy">class HostForm {
+    String firstname
+
+    String lastname
+}</code></pre>
+    
+    <p>➤ Ajoutez la méthode update dans le <code>HostController</code> et faites passer le test</p>
+
+    <pre><code class="groovy">void update(@PathVariable String id, @RequestBody HostForm form)</code></pre>
+
+    <h2>POST et DELETE</h2>
+
+    <p>La méthode POST ajoute une nouvelle entrée en base.</p>
+
+    <p>La méthode DELETE supprime une entrée de la base.</p>
+
+    <p>➤ Ajoutez les méthodes add et delete dans le <code>HostController</code> en commençant par les tests.</p>
+
+    <h2>Validation</h2>
+
+    <p>
+        Pour le moment, on n'impose aucune restriction sur les champs firstname et lastname.
+        Cela autorise de finir avec des valeurs vides en base, ce qui n'est pas une bonne idée ici.
+    </p>
+
+    <p>➤ Faites passer le test suivant</p>
+
+    <pre><code class="groovy">@Test
+void 'put with missing lastname'() {
+    Host host = new Host(firstname: 'Kareen', lastname: 'Guiock')
+
+    hostRepository.save(host)
+
+    mockMvc.perform(MockMvcRequestBuilders.put("/hosts/$host.id")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content('{"firtname": "Kareen"}'))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(MockMvcResultMatchers.jsonPath('$.lastname', CoreMatchers.is("Lastname is mandatory")))
+}</code></pre>
+
+    <p>En s'aidant des éléments suivants :</p>
+
+    <ul>
+        <li><a href="https://www.baeldung.com/spring-boot-bean-validation" target="_blank">https://www.baeldung.com/spring-boot-bean-validation</a></li>
+        <li>l'annotation <code>@Valid</code></li>
+        <li>l'annotation <code>@NotEmpty</code></li>
+        <li>l'annotation <code>@ExceptionHandler</code></li>
+    </ul>
+
+    <h2>Références perdues</h2>
+
+    <p>Mongodb a beaucoup de qualités mais clairement pas la gestion de l'intégrité référentielle.</p>
+
+    <p>Dans beaucoup de cas on peut vivre sans et le gain de performance est souvent plus important sur le web.</p>
+
+    <p>Comment gérer la suppression d'une personne alors qu'elle est référencée dans un programme ?</p>
+
+    <p>Peut être est elle présente dans un programme très ancien qui n'a plus d'importance mais peut on quand même la supprimée ?</p>
+
+    <p>➤ Comment gèreriez vous ce genre de situation ?</p>
+
+    <h2>Validations métier</h2>
+
+    <p>➤ Que doit il se passer si j'essaye de sauver un programme sur une plage de temps déjà occupée ?</p>
+
+    <p>Le modèle de données est pour le moment assez simple, et pourtant, la liste des problèmes à résoudre risque de s'allonger rapidement.</p>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>
