@@ -19,7 +19,7 @@
     <!-- Custom CSS -->
     <link href="../../common/prez/style.css" rel="stylesheet" media="screen">
 
-    <title>Spring init</title>
+    <title>CRUD</title>
 </head>
 <body>
 <div class="container ">
@@ -100,7 +100,7 @@ void put() {
 
     mockMvc.perform(MockMvcRequestBuilders.put("/hosts/$host.id")
             .contentType(MediaType.APPLICATION_JSON)
-            .content('{"firtname": "Kareen", "lastname": "Guiock mis à jour"}'))
+            .content('{"firstname": "Kareen", "lastname": "Guiock mis à jour"}'))
             .andExpect(MockMvcResultMatchers.status().isOk())
 
     assert hostRepository.findById(host.id).get().lastname == 'Guiock mis à jour'
@@ -113,7 +113,7 @@ void put() {
       Request URI = /hosts/5d7b926ae16540199f0dd23e
        Parameters = {}
           Headers = [Content-Type:"application/json;charset=UTF-8"]
-             Body = {"firtname": "Kareen", "lastname": "Guiock mis à jour"}
+             Body = {"firstname": "Kareen", "lastname": "Guiock mis à jour"}
     Session Attrs = {}
 
 Handler:
@@ -185,7 +185,7 @@ void 'put with missing lastname'() {
 
     mockMvc.perform(MockMvcRequestBuilders.put("/hosts/$host.id")
             .contentType(MediaType.APPLICATION_JSON)
-            .content('{"firtname": "Kareen"}'))
+            .content('{"firstname": "Kareen"}'))
             .andExpect(MockMvcResultMatchers.status().isBadRequest())
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(MockMvcResultMatchers.jsonPath('$.lastname', CoreMatchers.is("Lastname is mandatory")))

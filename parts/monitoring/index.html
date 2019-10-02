@@ -1,0 +1,326 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- font awesome -->
+    <link href="../../common/fontawesome-free-5.9.0-web/css/all.css" rel="stylesheet">
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="../../common/highlightjs/styles/a11y-dark.css">
+
+    <!-- lightbox -->
+    <link rel="stylesheet" href="../../common/fancybox/dist/jquery.fancybox.min.css" />
+
+    <!-- Custom CSS -->
+    <link href="../../common/prez/style.css" rel="stylesheet" media="screen">
+
+    <title>Monitoring</title>
+</head>
+<body>
+<div class="container ">
+    <h1>Monitoring</h1>
+
+    <p>Avec encore quelques jours devant nous, il n'est pas impossible que notre applicaton finisse par grossir et devenir utile.</p>
+
+    <p>Elle finira en production où elle commencera une deuxième vie, loin de nous... vraiment ?</p>
+
+    <h2>Continuous</h2>
+
+    <p>Le cycle de construction et de livraison de logiciel évolue constamment.</p>
+
+    <p>
+        Il y a longtemps, on livrait sur un support physique (disquette, CD...).<br>
+        L'intégration (l'assemblage de toutes les parties du produit final) pouvait prendre des semaines, voire des mois.
+    </p>
+
+    <p>
+        L'<b>intégration continue</b> est une pratique qui vise a produire le logiciel très régulièrement,
+        potentiellement après chaque commit.
+    </p>
+
+    <p>Le <b>déploiement continu</b> vise à mettre en production chaque incrément logiciel.</p>
+
+    <p>A peine notre code sera mis en production que de nouvelles demandes émaneront pour le faire évoluer.</p>
+
+    <p>Il n'y aura donc pas une mise en production mais de nombreuses mises en production.</p>
+
+    <h2>DevOps</h2>
+
+    <p>Habituellement, le cycle de vie d'un logiciel est divisé en 2 :</p>
+
+    <ul>
+        <li>Le build : la construction du code</li>
+        <li>Le run : la surveillance du code qui tourne</li>
+    </ul>
+
+    <p>Cela correspond à 2 philosophies différentes : apporter du changement vs garantir la stabilité.</p>
+
+    <p>Pourtant, ces 2 approches doivent collaborer afin de répondre aux besoins.</p>
+
+    <p>La construction d'une culture commune entre les devs et les ops se nomme <b>DevOps</b>.</p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>DevOps</h5>
+
+        <p>
+            Apparu autour de 2007 en Belgique avec Patrick Debois, le mouvement Devops se caractérise principalement
+            par la promotion de l'automation et du suivi (monitoring) de toutes les étapes de la création d'un
+            logiciel, depuis le développement, l'intégration, les tests, la livraison jusqu'au déploiement,
+            l'exploitation et la maintenance des infrastructures. Les principes Devops soutiennent des
+            cycles de développement plus courts, une augmentation de la fréquence des déploiements et des
+            livraisons continues, pour une meilleure atteinte des objectifs économiques de l'entreprise.
+        </p>
+    </div>
+
+    <p>On représente alors le cycle de vie d'un logiciel, non plus comme une chaîne de montage, mais un mouvement continu.</p>
+
+    <a data-fancybox="gallery" href="devops.png">
+        <img src="devops.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p></p>
+
+    <p>En livrant un travail de qualité, les développeurs simplifient le travail des ops.</p>
+
+    <h2>Actuators</h2>
+
+    <p>Le monitoring vise à connaitre, en permanence, l'état de fonctionnement des applications.</p>
+
+    <p>Une première approche consiste à interroger l'application elle même sur son état.</p>
+
+    <p>Dans ce cadre, spring boot propose les actuators :</p>
+
+    <a data-fancybox="gallery" href="actuators.png">
+        <img src="actuators.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p></p>
+
+    <p>➤ Commencez par rajouter la dépendance <code>spring-boot-starter-actuator</code></p>
+
+    <pre><code>implementation 'org.springframework.boot:spring-boot-starter-actuator'</code></pre>
+
+    <p>Par défaut, seuls /actuator/health and /actuator/info sont activés</p>
+
+    <p>➤ Redemarrez l'application</p>
+
+    <p>A la racine <a href="http://localhost:8080/actuator" target="_blank">/actuator</a> permet de voir les endpoints disponibles.</p>
+
+    <p>Les 2 endpoints suivants sont disponibles :</p>
+
+    <ul>
+        <li><a href="http://localhost:8080/actuator/health" target="_blank">/health</a> : l'état de santé de l'application</li>
+        <li><a href="http://localhost:8080/actuator/info" target="_blank">/info</a> : information générales sur l'application</li>
+    </ul>
+
+    <p>Pour le moment, ces 2 endpoints ne sont pas très bavards.</p>
+
+    <h3>Tous les endpoints</h3>
+
+    <p>Voici tous les endpoints possibles de base</p>
+
+    <ul>
+        <li><em>/auditevents – </em>lists security audit-related events such as user login/logout. Also, we can filter by principal or type among others fields</li>
+        <li><em>/beans – r</em>eturns all available beans in our <em>BeanFactory</em>. Unlike <em>/auditevents</em>, it doesn't support filtering</li>
+        <li><em>/conditions – </em>formerly known as /<em>autoconfig</em>, builds a report of conditions around auto-configuration</li>
+        <li><em>/configprops – </em>allows us to fetch all <em>@ConfigurationProperties </em>beans</li>
+        <li><em>/env – </em>returns the current environment properties. Additionally, we can retrieve single properties</li>
+        <li><em>/flyway – </em>provides details about our Flyway database migrations</li>
+        <li><em>/health – </em>summarises the health status of our application</li>
+        <li><em>/heapdump – </em>builds and returns a heap dump from the JVM used by our application</li>
+        <li><em>/info – </em>returns general information. It might be custom data, build information or details about the latest commit</li>
+        <li><em>/liquibase – </em>behaves like <em>/flyway </em>but for Liquibase</li>
+        <li><em>/logfile – </em>returns ordinary application logs</li>
+        <li><em>/loggers – </em>enables us to query and modify the logging level of our application</li>
+        <li><em>/metrics – </em>details metrics of our application. This might include generic metrics as well as custom ones</li>
+        <li><em>/prometheus – </em>returns metrics like the previous one, but formatted to work with a Prometheus server</li>
+        <li><em>/scheduledtasks – </em>provides details about every scheduled task within our application</li>
+        <li><em>/sessions – </em>lists HTTP sessions given we are using Spring Session</li>
+        <li><em>/shutdown – </em>performs a graceful shutdown of the application</li>
+        <li><em>/threaddump – </em>dumps the thread information of the underlying JVM</li>
+    </ul>
+
+    <p>Il est possible de choisir les endpoint actifs un par un, mais pour aller vite, on aussi tous les activer.</p>
+
+    <p>➤ Activez tous les endoints</p>
+
+    <pre><code>management.endpoints.web.exposure.include=*</code></pre>
+
+    <p>Vous pouvez aller notamment voir les suivants :</p>
+
+    <ul>
+        <li><a href="http://localhost:8080/actuator/beans" target="_blank">beans</a> : tous les beans de l'application</li>
+        <li><a href="http://localhost:8080/actuator/configprops" target="_blank">configprops</a> : toute la configuration</li>
+        <li><a href="http://localhost:8080/actuator/metrics" target="_blank">metrics</a> : des metrics sur l'application</li>
+        <li><a href="http://localhost:8080/actuator/metrics/jvm.memory.used" target="_blank">/metrics/jvm.memory.used</a> : notamment la mémoire actuellement utilisée</li>
+    </ul>
+
+    <p>
+        La plupart des données retournées par ces services sont destinées à être exploitées par des applications tierces.<br>
+        Par exemple, le endpoint /prometheus (qui nécessite une dépendance micrometer-registry-prometheus) permet d'alimenter un serveur <a href=" https://prometheus.io/" target="_blank">prometheus</a>.
+    </p>
+
+    <h3>Custom Health Indicator</h3>
+
+    <p>Le endpoint /health est extensible, on peut lui rajouter nos informations.</p>
+
+    <p>➤ Ajoutez le <code>HealthIndicator</code> suivant dans notre application :</p>
+
+    <pre><code class="groovy">@Component
+class RandomHealthIndicator implements HealthIndicator {
+    @Override
+    Health health() {
+        int value = Random.newInstance().nextInt(2)
+
+        value == 1 ? Health.up().build() : Health.down().withDetails(['reason': 'pas de chance']).build()
+    }
+}</code></pre>
+
+    <p>A présent notre application sur <a href="http://localhost:8080/actuator/health" target="_blank">/health</a> est UP par intermittence.</p>
+
+    <p>Mais où est passé notre message quand l'application est DOWN ?</p>
+
+    <p>L'endpoint a trois modes :</p>
+    
+    <ul>
+        <li>NEVER : on affiche jamais les détails</li>
+        <li>WHEN_AUTHORIZED : uniquement si on est connecté et autorisé</li>
+        <li>ALWAYS : on affiche toujours les détails</li>
+    </ul>
+
+    <p>➤ Configurer l'endpoint afin d'afficher toutes les informations :</p>
+
+    <pre><code>management.endpoint.health.show-details=always</code></pre>
+
+    <p>Cette fois on a tout.</p>
+
+    <a data-fancybox="gallery" href="health.png">
+        <img src="health.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>On voit même l'état du disque et celui du connecteur mongodb.</p>
+
+    <p>Pour la suite, vous pouvez supprimer ce composant.</p>
+
+    <h2>javamelody</h2>
+
+    <p><a href="https://github.com/javamelody/javamelody/wiki" target="_blank">javamelody</a> est un outils qui permet de visualiser les métriques de l'application.</p>
+
+    <p>Cela n'a aucun rapport avec les actuators spring mais javamelody est plus visuel rapidement.</p>
+
+    <p>➤ Ajoutez le starter javamelody</p>
+
+    <pre><code>implementation 'net.bull.javamelody:javamelody-spring-boot-starter:1.79.0'</code></pre>
+
+    <p>L'interface est disponible par défaut sur <a href="http://localhost:8080/monitoring" target="_blank">/monitoring</a></p>
+
+    <p>➤ Faites quelques requêtes sur les services et ensuite vous pouvez voir les appels sous javamelody.</p>
+
+    <p>Voici ce que cela donne sur rtl.fr par exemple.</p>
+
+    <a data-fancybox="gallery" href="javamelody.png">
+        <img src="javamelody.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <div class="bd-callout bd-callout-warning">
+        <p>Chez moi, l'ajout de javamelody plante les tests, je rajoute donc la ligne suivante dans <code>application-test.properties</code></p>
+
+        <pre><code>spring.autoconfigure.exclude=net.bull.javamelody.JavaMelodyAutoConfiguration</code></pre>
+    </div>
+
+    <h2>Logging</h2>
+
+    <p>Une autre facette du monitoring concerne les logs.</p>
+
+    <p>Pour les logs, spring boot utilise <a href="https://logback.qos.ch/" target="_blank">logback</a>.</p>
+
+    <p>La configuration de logback se fait au travers d'un fichier <code>logback-spring.xml</code>.</p>
+
+    <p>➤ Ajouter le fichier suivant dans <code>src/main/resources</code></p>
+
+    <pre><code class="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;configuration&gt;
+
+    &lt;property name="LOGS" value="./logs" /&gt;
+
+    &lt;!-- impression dans le terminal --&gt;
+    &lt;appender name="Console" class="ch.qos.logback.core.ConsoleAppender"&gt;
+        &lt;layout class="ch.qos.logback.classic.PatternLayout"&gt;
+            &lt;Pattern&gt;
+                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+            &lt;/Pattern&gt;
+        &lt;/layout&gt;
+    &lt;/appender&gt;
+
+    &lt;!-- impression dans un fichier roulant (10MB par fichier) --&gt;
+    &lt;appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender"&gt;
+        &lt;file&gt;${LOGS}/spring-boot-logger.log&lt;/file&gt;
+        &lt;encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"&gt;
+            &lt;Pattern&gt;%d %p %C{1.} [%t] %m%n&lt;/Pattern&gt;
+        &lt;/encoder&gt;
+
+        &lt;rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"&gt;
+            &lt;fileNamePattern&gt;${LOGS}/archived/spring-boot-logger-%d{yyyy-MM-dd}.%i.log
+            &lt;/fileNamePattern&gt;
+            &lt;timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"&gt;
+                &lt;maxFileSize&gt;10MB&lt;/maxFileSize&gt;
+            &lt;/timeBasedFileNamingAndTriggeringPolicy&gt;
+        &lt;/rollingPolicy&gt;
+    &lt;/appender&gt;
+
+    &lt;!-- on loggue à partir d'INFO vers le terminal et le fichier roulant --&gt;
+    &lt;root level="info"&gt;
+        &lt;appender-ref ref="RollingFile" /&gt;
+        &lt;appender-ref ref="Console" /&gt;
+    &lt;/root&gt;
+
+&lt;/configuration&gt;</code></pre>
+
+    <p>Les niveaux de log possibles sont TRACE, DEBUG, INFO, WARN, ERROR</p>
+
+    <p>Dans le code cela s'utilise, par exemple, comme ceci :</p>
+
+    <pre><code class="groovy">@RestController
+public class LoggingController {
+
+    Logger logger = LoggerFactory.getLogger(LoggingController.class);
+
+    @RequestMapping("/")
+    public String index() {
+        logger.trace("A TRACE Message");
+        logger.debug("A DEBUG Message");
+        logger.info("An INFO Message");
+        logger.warn("A WARN Message");
+        logger.error("An ERROR Message");
+
+        return "Howdy! Check out the Logs to see the output...";
+    }
+}</code></pre>
+
+    <p>➤ Rédémarrez votre application afin de constater la mise en forme des logs et l'écriture dans ./logs</p>
+
+    <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
+</div>
+<!-- presentation -->
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- highlight.js -->
+<script src="../../common/highlightjs/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- lightbox -->
+<script src="../../common/fancybox/dist/jquery.fancybox.min.js"></script>
+
+<script src="../../common/prez/prez.js"></script>
+
+</body>
+</html>

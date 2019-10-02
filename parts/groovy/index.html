@@ -25,13 +25,146 @@
 <div class="container ">
     <h1>Groovy</h1>
 
-    <p>Une base de java mais avec plus de flexibilité</p>
+    <p>Groovy est un langage alternatif pour la jvm</p>
 
-    <p>Superbe pour les tests</p>
+    <p>Il ressemble à du java mais ajoute beaucoup de souplesse</p>
 
-    <p>Constructor avec map</p>
+    <p>Cela en fait un language de premier choix, notamment pour les tests</p>
 
-    <p>spread operator pour les tests</p>
+    <p>Voici un rapide résumé. Toute la documentation est disponible sur <a href="http://www.groovy-lang.org/documentation.html" target="_blank">le site de groovy</a></p>
+
+    <h2>Import par défaut</h2>
+
+    <p>Les imports suivants sont en place par défaut</p>
+
+    <pre><code class="groovy">imports java.io.*
+import java.lang.*
+import java.math.BigDecimal
+import java.math.BigInteger
+import java.net.*
+import java.util.*
+import groovy.lang.*
+import groovy.util.*</code></pre>
+
+    <h2>Public par défaut</h2>
+
+    <p>Tout est public par défaut (au lieu du scope package)</p>
+
+    <pre><code class="groovy">class Person {
+    String name
+}</code></pre>
+
+    <h2>Pas de point virgule</h2>
+
+    <p>Les points virgules sont optionnels</p>
+
+    <h2>Return optionnel</h2>
+
+    <p>Par défaut, la dernière expression évaluée est retournée</p>
+
+    <pre><code class="groovy">String toString() { return "a server" }
+String toString() { "a server" }</code></pre>
+
+    <h2>Structures de données</h2>
+
+    <p>Pour les stuctures classique liste et map</p>
+
+    <pre><code>List vegetables = ['carrots', 'potatoes', 'beans']
+
+list[0] = 'pumpkins'
+
+Map jerry = [name: "Jerry", age: 42, city: "New York"]
+
+jerry[age] = 43
+jerry.age = 43</code></pre>
+
+    <h2>The Groovy Truth</h2>
+
+    <p>En groovy, les élements suivants sont faux :</p>
+
+    <ul>
+        <li>null</li>
+        <li>collection vide (list, map...)</li>
+        <li>les chaines vides</li>
+        <li>0</li>
+    </ul>
+
+    <p>ce qui simplifie l'écriture</p>
+
+    <pre><code class="groovy">def list = []
+
+if (list) {
+    println 'la liste n\'est pas vide'
+}</code></pre>
+
+    <h2>Constructeur avec une map</h2>
+
+    <p>Groovy ajoute un contructeur qui prend une map en paramètre</p>
+
+    <pre><code class="groovy">class Person {
+    String firstname
+    String lastname
+}
+
+def doug = new Person([firstname: 'Douglas', lastname: 'Adams'])
+def doug = new Person(firstname: 'Douglas', lastname: 'Adams')
+
+// équivalent à
+def doug = new Person()
+doug.firstname = 'Douglas'
+doug.lastname = 'Adams'</code></pre>
+
+    <h2>Interpolation des chaînes de caractères</h2>
+
+    <pre><code>String name = 'Jean Pierre'
+
+println "Salut $name"</code></pre>
+
+    <p>
+        Les simples quotes forment des chaînes de caratères (et non des char comme en java)<br>
+        Les doubles quotes forment des GString avec de l'interpolation
+    </p>
+
+    <h2>Equals</h2>
+
+    <p>Au lieu de .equals(), on peut utiliser ==, qui est null safe</p>
+
+    <pre><code class="groovy">String value1 = null
+String value2 = 'non null'
+
+value1 == value2 // false</code></pre>
+
+    <p>En réalité, groovy utilise la méthode compareTo(), ce qui permet aussi d'écrire</p>
+
+    <pre><code class="groovy">LocalDate date1 = LocalDate.parse('2019-10-10', 'yyyy-MM-dd')
+LocalDate date2 = LocalDate.parse('2019-10-11', 'yyyy-MM-dd')
+
+date1 < date2 // true
+</code></pre>
+
+    <h2>Safe navigation operator</h2>
+
+    <p>Il est possible de nagiguer dans les objets dans se soucier des nulls</p>
+
+    <pre><code class="groovy">company.contact?.address?.country</code></pre>
+
+    <h2>Elvis operator</h2>
+
+    <p>L'operateur ternaire suivant peut être simplifié</p>
+
+    <pre><code>def name = client.name != null ? client.name : 'défaut'</code></pre>
+
+    <p>par</p>
+
+    <pre><code class="groovy">def name = client.name ?: 'défaut'</code></pre>
+
+    <h2>Closures</h2>
+
+    <p>Une closure est un bloc de code exécutable</p>
+
+    <pre><code class="groovy">def plus = { int x, int y -> x + y }
+
+plus(1, 3) == 4 // true</code></pre>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>

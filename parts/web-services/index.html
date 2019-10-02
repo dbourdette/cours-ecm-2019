@@ -1,4 +1,4 @@
-<h1>Web services</h1><!doctype html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -47,70 +47,137 @@
                 </div>
             </section>
 
-            <section>
-                <p>Ce sont des services disponibles sur le réseau</p>
+            <section data-background="api.png">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
+                    <p>Ce sont des APIs disponibles en HTTP</p>
+                </div>
             </section>
 
-            <section>
-                <p>Historiquement, c'est SOAP (Simple Object Access Protocol) qui a été le premier support pour la démocratisation des web services</p>
+            <section data-background="network.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Il existe 2 types de web services</p>
+
+                    <ul>
+                        <li>RPC : remote procedure call</li>
+                        <li>REST : representational state transfer</li>
+                    </ul>                           
+                </div>
             </section>
 
-            <section>
-                <p>SOAP repose exclusivement sur le XML et peut fonctionnre par dessus plusieurs protocoles d'échange: HTTP, SMTP...</p>
+            <section data-background="call.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Le RPC c'est l'appel d'une méthode à distance</p>
+
+                    <pre>
+                        <code class="java">String sayHello(String name)</code>
+                    </pre>
+
+                    <p>Comme si elle était dans le même programme</p>
+                </div>
             </section>
 
-            <section>
-                <p>En pratique, SOAP est lourd et complexe.</p>
+            <section data-background="rest.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Le REST permet d'interagir des ressources</p>
+
+                    <pre>
+                        <code class="">GET https://mydomain.com/customers/raoul/accounts</code>
+                    </pre>
+
+                    <p>Une url correspond à une ressource</p>
+                </div>
             </section>
 
-            <section>
-                <p>Il est remplacé par des services plus légers</p>
+            <section data-background="crud.png">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Il y à 4 opérations pour faire du REST</p>
 
-                <ul>
-                    <li>uniquement HTTP</li>
-                    <li>le json est le format privilégié</li>
-                </ul>
-
-                <p>Une bonne connaissance du HTTP est donc essentielle</p>
+                    <ul>
+                        <li>GET : récupérer la ressource</li>
+                        <li>POST : ajouter une ressource</li>
+                        <li>PUT : modifier une ressource</li>
+                        <li>DELETE : supprimer une ressource</li>
+                    </ul>
+                    
+                    <p>C'est aussi le clasique CRUD des bases de données</p>
+                </div>
             </section>
 
-            <section>
-                <p>Il existe 2 types de services</p>
+            <section data-background="json.png">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Le format privilégié pour les web services est</p>
 
-                <ul>
-                    <li>RPC (comme SOAP)</li>
-                    <li>REST</li>
-                </ul>
+                    <pre><code class="json">{"employees":[
+    {"name":"Shyam", "email":"shyamjaiswal@gmail.com"},
+    {"name":"Bob", "email":"bob32@gmail.com"},
+    {"name":"Jai", "email":"jai87@gmail.com"}
+]}  </code></pre>
+
+                    <p>le JSON</p>
+                </div>
             </section>
 
-            <section>
-                <p>4 opérations du REST</p>
-
-                <ul>
-                    <li>POST</li>
-                    <li>PUT</li>
-                    <li>GET</li>
-                    <li>DELETE</li>
-                </ul>
+            <section data-background="groovy.png">
+                
             </section>
 
+            <section data-background="groovy2.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
+                    <p>C'est un language alternatif pour la jvm</p>
 
-
-            <section>
-                <p>les 4 verbes == CRUD</p>
+                    <p>Comme Kotlin, Scala et Clojure</p>
+                </div>
             </section>
 
-            <section>
-                <h2>Navigation dans les services REST</h2>
+            <section data-background="magic.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
+                    <p>Il permet de transformer</p>
 
-                <p>HATEOAS</p>
+                    <pre style="font-size: 16px"><code>public class Square {
+    private int width;
+    private int height;
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+}</code></pre>
+                </div>
             </section>
 
-            <section>
-                <h2>Sécurité</h2>
-                <p>
-                    Auth, CORS (exemple header http), OAuth
-                </p>
+            <section data-background="magic.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
+                    <p>En</p>
+
+                    <pre style="font-size: 16px"><code>class Square {
+    int width, height
+}</code></pre>
+
+                    <p>Sans perte de fonctionnalité</p>
+                </div>
+            </section>
+
+            <section data-background="magic.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
+                    <p>Exemple de structure de données (map, array)</p>
+                </div>
+            </section>
+
+            <section data-background="magic.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
+                    <p>Exemple d'algorithme</p>
+                </div>
             </section>
         </div>
     </div>

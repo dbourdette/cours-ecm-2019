@@ -25,33 +25,206 @@
 <div class="container ">
     <h1>La sécurité</h1>
 
-    <p>Nous avons ajouté de quoi lire et écrire dans notre base via l'interface HTTP.</p>
+    <p>Notre application permet de modifier les données en base via l'interface HTTP.</p>
 
     <p>C'est très pratique mais un peu trop ouvert à tout le monde...</p>
 
-    <p>Nous allons maintenant ajouter un peu de sécurité sur notre interface.</p>
+    <p>Comment sécuriser ces accès ?</p>
 
     <h2>Principes</h2>
 
-    <p>Authentication et Authorisation</p>
+    <p>La sécurité se divise toujours en 2 parties :</p>
 
-    <p>Secure channel https</p>
+    <ul>
+        <li><b>Authentication</b> : processus d'identification</li>
+        <li><b>Authorisation</b> : appliquer des restrictions d'accès</li>
+    </ul>
+
+    <p>
+        La partie Authentication peut être complexe et il est souvent pratique de la déléguer à un tier.<br>
+        Un <b>identity provider</b> joue ce rôle : gérer les identités.<br>
+        Par exemple : Google's OpenID Connect, Facebook Login...
+    </p>
+
+    <p>La partie Authorisation est gérée par notre application.</p>
+
+    <h3>HTTPS</h3>
+
+    <p>Pour transférer des données sensibles, le protocol HTTPS (HTTP + TLS) est obligatoire (et pas suffisant).</p>
+
+    <p>
+        Comme il est difficile de savoir à priori si il y aura des données sensibles échangées et
+        de toutes façons, afin de préserver la confidentialité, les navigateurs encouragent fortement le https.
+    </p>
+
+    <p>Pour héberger une application, il faudra donc obtenir et mettre en place un certificat.</p>
+
+    <p>Cela a un coût et il existe des solutions gratuites comme <a href="https://letsencrypt.org/" target="_blank">Let’s Encrypt</a></p>
 
     <h2>Spring security</h2>
 
-    <p>Ajout spring-security</p>
+    <p>Spring propose un framework afin de gérer la sécurité au sein des applications.</p>
 
-    <p>Principal et Authorities</p>
+    <p>➤ Ajoutez le starter security</p>
 
-    <h2>Test rapide en BASIC</h2>
+    <pre><code>implementation 'org.springframework.boot:spring-boot-starter-security'</code></pre>
 
-    <p>Auth BASIC</p>
+    <p>Notre application est désormais (un peu trop) sécurisée</p>
 
-    <p>https://www.baeldung.com/spring-boot-security-autoconfiguration</p>
+    <p>Au démarrage de l'application, on peut voir passer un log :</p>
 
-    <p>Mais en vrai pour les webservice : OAuth2 et Authentication: Bearer :...</p>
+    <pre><code>Using generated security password: c603f652-a458-46ec-acd7-c80c00a884fb</code></pre>
+
+    <p>Il est donc possible de se logguer avec le login 'user' et ce mot de passe.</p>
+
+    <p>Spring security a mis en place, sans configuration :</p>
+
+    <ul>
+        <li>Un filtre qui empêche d'accéder au page si on n'est pas authentifié</li>
+        <li>Un formulaire de login</li>
+        <li>Un page de logout (<a href="http://localhost:8080/logout" target="_blank">/logout</a>)</li>
+        <li>Un utilisateur</li>
+    </ul>
+
+    <p>Il est possible de définir notre utilisateur via les clés de configurations :</p>
+
+    <pre><code>spring.security.user.name=user
+spring.security.user.password=monpassword</code></pre>
+
+    <h2>Configuration</h2>
+
+    <p>Nous allons reprendre la main sur la configuration de spring security</p>
+
+    <p>➤ Ajoutez la classe SecurityConfiguration</p>
+
+    <pre><code class="groovy">@Configuration
+@EnableWebSecurity
+class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .inMemoryAuthentication()
+                .withUser("user")
+                .password("{noop}password")
+                .roles("USER")
+                .and()
+                .withUser("admin")
+                .password("{noop}admin")
+                .roles("USER", "ADMIN")
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic()
+    }
+}</code></pre>
+
+    <p>
+        Ce code crée 2 utilisateurs avec des rôles différents, puis protège tout le site en demandant d'être authentifié.<br>
+        La méthode de connexion proposée est le BASIC. Dans un navigateur, cela se traduit par une boite de dialogue qui demande un login et un mot de passe.
+    </p>
+
+    <a data-fancybox="gallery" href="basic.png">
+        <img src="basic.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>Le problème avec une authentication de type BASIC, c'est qu'on ne peut pas se déconnecter</p>
+
+    <p>Cela peut être utilise pour des tests ou une API, mais c'est généralement pas assez riche.</p>
+
+    <p>➤ Changer la configuration afin de récupérer le formulaire :</p>
+
+    <pre><code class="groovy">http
+        .authorizeRequests()
+        .anyRequest()
+        .authenticated()
+        .and()
+        .formLogin()
+        .and()
+        .logout()</code></pre>
+
+    <p>
+        Comme nous construisons une API, un formulaire n'est sans doute pas une bonne idée ici sur le long terme.
+        Mais cela va nous permettre de faire un peu plus de tests facilement.
+    </p>
+
+    <h2>Authorisations</h2>
+
+    <p>Une fois connecté, la réquête véhicule une information liée à l'identité de la personne : c'est le <code>Principal</code>.</p>
+
+    <p>
+        Un <code>Principal</code> possède une liste d'<code>Authority</code> : ce sont les permissions accordées à celui-ci.<br>
+        Il y a d'autres classes en jeu, mais on se limitera à cela pour le moment.
+    </p>
+
+    <p>Dans notre code, les roles (USER et ADMIN) des utilisateurs vont servir pour autoriser ou non l'accès à certaines ressources.</p>
+
+    <h3>Objectif</h3>
+
+    <p>Nous souhaitons avoir le comportement suivant :</p>
+
+    <ul>
+        <li>que la page d'index soit accessible à tout le monde</li>
+        <li>que tous les GET soient autorisés aux utilisateurs authentifiés</li>
+        <li>et que pour les autres méthodes (POST, PUT et DELETE) il fasse être ADMIN.</li>
+    </ul>
+
+    <h3>Configuration</h3>
+
+    <p>➤ Mettez en place la configuration suivante, et vérifier son bon fonctionnement</p>
+
+    <pre><code class="groovy">http
+        .antMatcher('/**')
+        .authorizeRequests()
+        .antMatchers('/').permitAll() // index pour tous
+        .antMatchers(HttpMethod.POST, "/login", "/logout").permitAll() // pouvoir se logguer
+        .antMatchers(HttpMethod.POST, '/**').hasRole('ADMIN')
+        .antMatchers(HttpMethod.PUT, '/**').hasRole('ADMIN')
+        .antMatchers(HttpMethod.DELETE, '/**').hasRole('ADMIN')
+        .anyRequest().authenticated() // être authentifié
+        .and()
+        .formLogin()
+        .and()
+        .logout()
+        .and()
+        .csrf().disable() // pas de csrf pour les API </code></pre>
+
+    <h3>Les tests</h3>
+
+    <p>Est ce que les test sur les <code>Controllers</code> passent encore ? Pourquoi ?</p>
+
+    <p>➤ Ajoutez la dépendance suivante</p>
+
+    <pre><code>testImplementation 'org.springframework.security:spring-security-test'</code></pre>
+
+    <p>Et corrigez les tests avec <code>@WithMockUser</code> (<a href="https://docs.spring.io/spring-security/site/docs/5.0.x/reference/html/test-method.html#test-method-withmockuser" target="_blank">documentation</a>)</p>
+
+    <h3>Annotations</h3>
+
+    <p>Il est aussi possible de sécuriser les méhtodes des <code>Controllers</code> au cas par cas</p>
+
+    <p>On peut utiliser l'annotation <code>@Secured</code></p>
+
+    <pre><code>@Secured("ROLE_ADMIN")</code></pre>
+
+    <p>ou bien <code>@PreAuthorize</code> et <code>@PostAuthorize</code></p>
+
+    <pre><code>@PreAuthorize("hasRole('ROLE_ADMIN')")</code></pre>
+
+    <p>Voir <a href="https://www.baeldung.com/spring-security-method-security" target="_blank">spring-security-method-security</a></p>
+
+    <p>plus finement</p>
 
     <h2>OAuth2</h2>
+
+    <p>stateless</p>
+
+    <p>Mais en vrai pour les webservice : OAuth2 et Authentication: Bearer :...</p>
 
     <p>OAuth dance diagram</p>
 
