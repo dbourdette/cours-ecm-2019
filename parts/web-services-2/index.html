@@ -43,38 +43,125 @@
         <div class="slides">
             <section data-background="web-services.jpg">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
-                    <h1>Web services 2</h1>
+                    <h1>Spring</h1>
                 </div>
             </section>
 
-            <section>
-                <p>4 opérations du REST</p>
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Nous avons utilisé 3 couches de spring</p>
 
-                <ul>
-                    <li>POST</li>
-                    <li>PUT</li>
-                    <li>GET</li>
-                    <li>DELETE</li>
-                </ul>
+                    <ul>
+                        <li>Spring framework</li>
+                        <li>Spring MVC</li>
+                        <li>Spring Boot</li>
+                    </ul>
+                </div>
             </section>
 
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>L'injection de dépendances</p>
 
+                    <p>On code les composants et le framework s'occupe de les relier entre eux</p>
 
-            <section>
-                <p>les 4 verbes == CRUD</p>
+                    <p>Cela facilite le développement par les tests.</p>
+                </div>
             </section>
 
-            <section>
-                <h2>Navigation dans les services REST</h2>
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Model View Controller</p>
 
-                <p>HATEOAS</p>
+                    <p>Pour des services REST, la vue est presque inexistante.</p>
+                </div>
             </section>
 
-            <section>
-                <h2>Sécurité</h2>
-                <p>
-                    Auth, CORS (exemple header http), OAuth
-                </p>
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Autoconfiguration avec Spring Boot</p>
+
+                    <p>
+                        Le framework détecte les librairies en place puis charge les bons
+                        composants avec une configuration par défaut
+                    </p>
+                </div>
+            </section>
+
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
+                    <h1>REST</h1>
+                </div>
+            </section>
+
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Le principe REST est centré sur les ressources</p>
+                </div>
+            </section>
+
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Richardson Maturity Model</p>
+
+                    <img src="overview.png" alt="richardson maturity model">
+
+                    <p style="margin: 0">
+                        <a href="https://martinfowler.com/articles/richardsonMaturityModel.html" target="_blank" style="font-size: 18px">https://martinfowler.com/articles/richardsonMaturityModel.html</a>
+                    </p>
+                </div>
+            </section>
+
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Niveau 0 : The Swamp of POX</p>
+
+                    <p>Du RPC avec du XML (Plain Old XML)</p>
+
+                    <p>Par exemple, SOAP ou XML-RPC</p>
+                </div>
+            </section>
+
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Niveau 1 : Les resources</p>
+
+                    <p>Le chemin de l'url correspond à un ressource avec laquelle on peut interagir</p>
+                </div>
+            </section>
+
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Niveau 2 : Les verbes</p>
+
+                    <p>
+                        Il faut utiliser le bon verbe HTTP :<br>
+                        GET, POST, PUT, DELETE.
+                    </p>
+
+                    <p>Les réponses doivent utiliser les bons code HTTP (200, 400...)</p>
+                </div>
+            </section>
+
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Niveau 3 : Hypermedia</p>
+
+                    <p>
+                        Les réponses du serveur offre<br>
+                        un moyen de naviguer entre les ressources
+                    </p>
+                </div>
+            </section>
+
+            <section data-background="web-services.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
+                    <p>Attention !</p>
+
+                    <p>REST est un guide afin de designer de meilleures APIs</p>
+
+                    <p>Il n'est pas nécessaire d'être puriste en toutes circonstances</p>
+                </div>
             </section>
         </div>
     </div>

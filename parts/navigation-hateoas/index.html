@@ -148,8 +148,7 @@ class NotFoundException extends RuntimeException {
     <h2>Spring HATEOAS</h2>
 
     <p>
-        Nous pourrions avancer sans aide extérieur pour débuter, mais comme nous allons vouloir mettre en place des liens dans notre json,
-        le mieux est d'aller chercher <code>spring-hateoas</code> dès à présent.
+        Pour gérer nos ressources et les liens entres elles, nous allons utiliser <code>spring-hateoas</code>.
     </p>
 
     <p>➤ Ajoutez la dépendance <b>spring-boot-starter-hateoas</b> au <code>build.gradle</code> (et pensez a rafraîchir votre projet dans intellij).</p>
@@ -327,9 +326,12 @@ resource.add(new Link("/hosts/$entity.id"))</code></pre>
     <div class="bd-callout bd-callout-warning">
         <h5>REST, HATEOAS et HAL</h5>
 
-        <p>Rien n'oblige à faire du REST et encore moins du HATEOAS avec du HAL.</p>
+        <p>Je trouve personnellement que HAL n'est pas très joli.</p>
 
-        <p>Cependant il existe peu de standards autour des web services. Connaitre ceux ci permet de ne pas réinventer la roue si possible.</p>
+        <p>
+            Le concept de naviguabilité est cependant excellent<br>
+            Il reste donc possible de mettre en place ses propres conventions.
+        </p>
     </div>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
