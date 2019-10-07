@@ -218,19 +218,104 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     <p>Voir <a href="https://www.baeldung.com/spring-security-method-security" target="_blank">spring-security-method-security</a></p>
 
-    <p>plus finement</p>
+    <h2>OpenID</h2>
 
-    <h2>OAuth2</h2>
+    <p>Gérer soit même les utilisateurs (logins et mots de passe) est une chose complexe.</p>
 
-    <p>stateless</p>
+    <p>
+        Il y a souvent une somme de services associés (changement / récupération de mot de passe...)
+        et des contraintes légales (<a href="https://www.cnil.fr/fr/rgpd-par-ou-commencer" target="_blank">RGPD</a> par exemple)
+    </p>
 
-    <p>Mais en vrai pour les webservice : OAuth2 et Authentication: Bearer :...</p>
+    <p>Pour gagner du temps, on peut donc se reposer sur un tiers qui gère les identités à notre place.</p>
 
-    <p>OAuth dance diagram</p>
+    <p>Nous allons utiliser <a href="https://developers.google.com/identity/protocols/OpenIDConnect">Google Identity Platform</a> qui respecte la spécification OpenID Connect</p>
 
-    <p>login avec google ou facebook ?</p>
+    <a data-fancybox="gallery" href="openid.png">
+        <img src="openid.png" alt="openid" class="img-thumbnail mx-auto d-block">
+    </a>
 
-    <p>JWT</p>
+    <p></p>
+
+    <p>OpenID est une surcouche (gestion de l'identité) de OAuth 2.0, pour qui spring security fournit un support.</p>
+
+    <h3>Configuration</h3>
+
+    <p>➤ Ajoutez les dépendances</p>
+
+    <pre><code class="groovy">implementation 'org.springframework.security:spring-security-oauth2-client'
+implementation 'org.springframework.security:spring-security-oauth2-jose'</code></pre>
+
+    <p>➤ Et la configuration suivante</p>
+
+    <pre><code class="groovy">spring.security.oauth2.client.registration.google.client-id=[your-client-id]
+spring.security.oauth2.client.registration.google.client-secret=[your-client-secret]
+</code></pre>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>YAML</h5>
+
+        <div>
+            Il est possible de spécifier la configuration en <code>.yaml</code>
+            plutôt qu'en <code>.properties</code>. Ce qui donnerait ici :
+            <br><br>
+            
+            <pre><code>spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: [your-client-id]
+            client-secret: [your-client-secret]</code></pre>
+
+            Vous pouvez le faire si vous le souhaitez, mais il faut aussi transformer le reste du fichier.
+        </div>
+    </div>
+
+    <p>
+        Pour mettre les bonnes valeurs de clientId et clientSecret il va falloir se rendre sur
+        la <a href="https://console.developers.google.com/?pli=1" target="_blank">console Google API</a>.
+    </p>
+
+    <p>➤ Créez votre projet et des identifiants via la console</p>
+
+    <ul>
+        <li>Dans Écran d'autorisation OAuth :
+            <ul>
+                <li>entrez un <b>Nom de l'application</b></li>
+            </ul>
+        </li>
+        <li>Dans Identifiants
+            <ul>
+                <li>Créez un <b>ID client OAuth</b></li>
+                <li>Pour le <b>Type d'application</b> : Web</li>
+                <li>Le nom n'est pas très important ici</li>
+                <li>Ajoutez aux <b>URI de redirection autorisés</b> : http://localhost:8080/login/oauth2/code/google</li>
+            </ul>
+        </li>
+    </ul>
+
+    <p>Vous devriez avoir maintenant un client id et un client secret</p>
+
+    <p>➤ Rentrez ces valeurs dans la configuration.</p>
+
+    <h3>Test du login</h3>
+
+    <p>perte des roles...</p>
+
+    <p>Page qui affiche les infos utilisateur</p>
+
+    <h3>Plus de configuration</h3>
+
+    <p>page de login</p>
+
+    <p>https://www.baeldung.com/spring-security-5-oauth2-login</p>
+    <p>https://dev.to/shyamala_u/spring-boot--spring-security-5--oauth2oidc-client---basics-4ibo</p>
+    <p>https://developer.okta.com/blog/2017/12/18/spring-security-5-oidc</p>
+    <p>https://www.baeldung.com/spring-security-openid-connect</p>
+
+    <p>encart JWT avec openid, en regardant les appels http ?</p>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>

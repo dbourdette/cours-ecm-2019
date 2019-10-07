@@ -54,6 +54,37 @@ import groovy.util.*</code></pre>
     String name
 }</code></pre>
 
+    <h2>Getters et Setters</h2>
+
+    <p>Au lieu d'utiliser les getters et setters, on peut faire comme si la propriété était accessible</p>
+
+    <pre><code class="groovy">Person person = new Person()
+
+// équivalents
+person.setName('Doug')
+person.name = 'Doug'
+
+// équivalents
+person.name == person.getName()
+</code></pre>
+
+    <h2>Constructeur avec une map</h2>
+
+    <p>Groovy ajoute un contructeur qui prend une map en paramètre</p>
+
+    <pre><code class="groovy">class Person {
+    String firstname
+    String lastname
+}
+
+def doug = new Person([firstname: 'Douglas', lastname: 'Adams'])
+def doug = new Person(firstname: 'Douglas', lastname: 'Adams')
+
+// équivalent à
+def doug = new Person()
+doug.firstname = 'Douglas'
+doug.lastname = 'Adams'</code></pre>
+
     <h2>Pas de point virgule</h2>
 
     <p>Les points virgules sont optionnels</p>
@@ -96,23 +127,6 @@ jerry.age = 43</code></pre>
 if (list) {
     println 'la liste n\'est pas vide'
 }</code></pre>
-
-    <h2>Constructeur avec une map</h2>
-
-    <p>Groovy ajoute un contructeur qui prend une map en paramètre</p>
-
-    <pre><code class="groovy">class Person {
-    String firstname
-    String lastname
-}
-
-def doug = new Person([firstname: 'Douglas', lastname: 'Adams'])
-def doug = new Person(firstname: 'Douglas', lastname: 'Adams')
-
-// équivalent à
-def doug = new Person()
-doug.firstname = 'Douglas'
-doug.lastname = 'Adams'</code></pre>
 
     <h2>Interpolation des chaînes de caractères</h2>
 

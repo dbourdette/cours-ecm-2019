@@ -304,6 +304,34 @@ public class LoggingController {
 
     <p>➤ Rédémarrez votre application afin de constater la mise en forme des logs et l'écriture dans ./logs</p>
 
+    <div class="bd-callout bd-callout-warning">
+        <h5>ELK</h5>
+
+        <div>
+            L'ensemble
+            <a href="https://www.elastic.co/fr/" target="_blank">Elastic Search</a>,
+            <a href="https://www.elastic.co/fr/products/logstash" target="_blank">Logstash</a> et
+            <a href="https://www.elastic.co/fr/products/kibana" target="_blank">Kibana</a>
+            forment la pile logicielle ELK.
+            <br><br>
+        </div>
+
+        <a data-fancybox="gallery" href="elk.png">
+            <img src="elk.png" alt="ELK" class="img-thumbnail mx-auto d-block">
+        </a>
+
+        <div>
+            <br>
+            Elle permet :
+            <ul>
+                <li>de parser les logs (logstash),</li>
+                <li>les ranger dans une base de recherche (elastic search)</li>
+                <li>et les afficher dans une interface web (kibana)</li>
+            </ul>
+            Les applications étant installées sur de nombreux serveurs, kibana permet de tout visualiser.
+        </div>
+    </div>
+
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>
 <!-- presentation -->
