@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../../common/highlightjs/styles/a11y-dark.css">
 
     <!-- lightbox -->
-    <link rel="stylesheet" href="../../common/fancybox/dist/jquery.fancybox.min.css" />
+    <link rel="stylesheet" href="../../common/fancybox/dist/jquery.fancybox.min.css"/>
 
     <!-- Custom CSS -->
     <link href="../../common/prez/style.css" rel="stylesheet" media="screen">
@@ -202,7 +202,9 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     <pre><code>testImplementation 'org.springframework.security:spring-security-test'</code></pre>
 
-    <p>Et corrigez les tests avec <code>@WithMockUser</code> (<a href="https://docs.spring.io/spring-security/site/docs/5.0.x/reference/html/test-method.html#test-method-withmockuser" target="_blank">documentation</a>)</p>
+    <p>Et corrigez les tests avec <code>@WithMockUser</code>
+        (<a href="https://docs.spring.io/spring-security/site/docs/5.0.x/reference/html/test-method.html#test-method-withmockuser" target="_blank">documentation</a>)
+    </p>
 
     <h3>Annotations</h3>
 
@@ -229,7 +231,8 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     <p>Pour gagner du temps, on peut donc se reposer sur un tiers qui gère les identités à notre place.</p>
 
-    <p>Nous allons utiliser <a href="https://developers.google.com/identity/protocols/OpenIDConnect">Google Identity Platform</a> qui respecte la spécification OpenID Connect</p>
+    <p>Nous allons utiliser <a href="https://developers.google.com/identity/protocols/OpenIDConnect">Google Identity Platform</a> qui respecte la spécification
+        OpenID Connect</p>
 
     <a data-fancybox="gallery" href="openid.png">
         <img src="openid.png" alt="openid" class="img-thumbnail mx-auto d-block">
@@ -259,7 +262,7 @@ spring.security.oauth2.client.registration.google.client-secret=[your-client-sec
             Il est possible de spécifier la configuration en <code>.yaml</code>
             plutôt qu'en <code>.properties</code>. Ce qui donnerait ici :
             <br><br>
-            
+
             <pre><code>spring:
   security:
     oauth2:
@@ -281,12 +284,12 @@ spring.security.oauth2.client.registration.google.client-secret=[your-client-sec
     <p>➤ Créez votre projet et des identifiants via la console</p>
 
     <ul>
-        <li>Dans Écran d'autorisation OAuth :
+        <li>Dans <b>Écran d'autorisation OAuth</b> :
             <ul>
                 <li>entrez un <b>Nom de l'application</b></li>
             </ul>
         </li>
-        <li>Dans Identifiants
+        <li>Dans <b>Identifiants</b>
             <ul>
                 <li>Créez un <b>ID client OAuth</b></li>
                 <li>Pour le <b>Type d'application</b> : Web</li>
@@ -302,20 +305,116 @@ spring.security.oauth2.client.registration.google.client-secret=[your-client-sec
 
     <h3>Test du login</h3>
 
-    <p>perte des roles...</p>
+    <p>➤ Ajoutez le controller suivant qui va nous permettre d'afficher nos informations</p>
 
-    <p>Page qui affiche les infos utilisateur</p>
+    <pre><code class="groovy">@RestController
+class MeController {
+    @GetMapping("/me")
+    OAuth2AuthenticationToken me(OAuth2AuthenticationToken currentUser) {
+        currentUser
+    }
+}</code></pre>
 
-    <h3>Plus de configuration</h3>
+    <p>➤ Et modifiez la config de sécurité afin d'ajouter une règle sur <code>/me</code></p>
 
-    <p>page de login</p>
+    <pre><code class="groovy">.antMatchers('/me').authenticated()</code></pre>
 
-    <p>https://www.baeldung.com/spring-security-5-oauth2-login</p>
-    <p>https://dev.to/shyamala_u/spring-boot--spring-security-5--oauth2oidc-client---basics-4ibo</p>
-    <p>https://developer.okta.com/blog/2017/12/18/spring-security-5-oidc</p>
-    <p>https://www.baeldung.com/spring-security-openid-connect</p>
+    <p>➤ Et remplacez <code>formLogin()</code> par <code>oauth2Login()</code></p>
 
-    <p>encart JWT avec openid, en regardant les appels http ?</p>
+    <p>➤ Redémarrez le serveur</p>
+
+    <p>
+        Si tout se passe bien, vous devriez avoir une proposition de login en allant sur
+        <a href="http://localhost:8080/me" target="_blank">http://localhost:8080/me</a>
+    </p>
+
+    <a data-fancybox="gallery" href="google-login.png">
+        <img src="google-login.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p></p>
+
+    <p>Après le login, votre profil complet devrait apparaître</p>
+
+    <p>
+        C'est un peu plus compliqué de se déconnecter car dès qu'on retourne sur <code>/me</code>
+        on est redirigé vers google qui ré autorise notre application à recevoir les informations.
+    </p>
+
+    <h3>JWT</h3>
+
+    <p>
+        Dans le json affiché sur <code>/me</code> il y a un champs <code>idToken</code>
+        avec un <code>tokenValue</code>. <br>
+        Le contenu de ce champs est un token JWT (Json Web Token).
+    </p>
+
+    <p>➤ Prenez son contenu et copiez le dans le champs <b>encoded</b> de <a href="https://jwt.io/" target="_blank">https://jwt.io/</a></p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>JWT</h5>
+
+        <div>
+            Un token JWT est composé de 3 parties (séparées par des points) :
+
+            <ul>
+                <li>un en tête,</li>
+                <li>le contenu,</li>
+                <li>la signature</li>
+            </ul>
+
+            Ce sont des données qui décrivent un client. <br>
+            La signature est un cryptage des 2 premières parties qui peut être vérifiée avec une clé publique.
+        </div>
+    </div>
+
+    <p>Ce token peut être utilisé dans un cookie ou un header http afin de véhiculer l'identité du client.</p>
+
+    <h3>Les rôles</h3>
+
+    <p>Avec cette technique, l'utilisateur à juste le <code>ROLE_USER</code></p>
+
+    <p>En l'état, il n'est donc plus posible d'accéder à nos endpoints où il faut être admin.</p>
+
+    <p>
+        Il faudrait mettre en place quelques composants supplémentaires afin de prendre l'identité transmise
+        et y ajouter nos roles. Cette surcouche devra être gérée de notre coté, ce n'est pas Google
+        qui nous apportera ceux ci. Un exemple possible est disponible <a href="https://www.devglan.com/spring-security/spring-oauth2-role-based-authorization" target="_blank">ici</a>.
+        <br>
+        Nous ne rentrerons pas dans les détails, ce serait un peu trop long.
+    </p>
+
+    <h3>Stateless</h3>
+
+    <p>Autre point embêtant, quand on se connecte via google, notre application crée un cookie <code>JSESSIONID</code></p>
+
+    <a data-fancybox="gallery" href="jsessionid.png">
+        <img src="jsessionid.png" alt="openid" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p></p>
+
+    <p>
+        C'est un cookie de session qui permet à notre serveur de savoir qui on est d'une requête à l'autre
+        (on ne repasse pas par Google à chaque requête).
+        <br>
+        Cela veut dire que ma session est spécifiquement liée à ce serveur.
+        Pour plein de raisons, ce n'est pas souhaitable.
+    </p>
+
+    <p>
+        Une possibilité est de garder le token JWT et de l'envoyer à chaque requête :
+        à chaque requête le serveur pourra valider l'identité du client.
+    </p>
+
+    <p>
+        Si la partie client utilise une technologie du type Angular ou React, alors il devient possible
+        de mettre ce token dans un header à chaque requête.
+    </p>
+
+    <p>Il existe de nombreux tutoriaux sur le web.</p>
+
+    <p>Coté serveur, il faudrait alors rajoutez les élements nécessaires afin de décoder ce token à chaque requête.</p>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>
