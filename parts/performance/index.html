@@ -19,35 +19,220 @@
     <!-- Custom CSS -->
     <link href="../../common/prez/style.css" rel="stylesheet" media="screen">
 
-    <title>Spring init</title>
+    <title>Performance</title>
 </head>
 <body>
 <div class="container ">
     <h1>La performance</h1>
 
+    <p>Dans tout ce qu'on a fait jusqu'à présent, on ne s'est pas soucié de la performance.</p>
+
     <p>Comment construire une application et une infrastructure performante ?</p>
 
-    <p>A ce jeu, la performance pure du code n'est souvent pas le facteur limitant.</p>
+    <p>
+        A ce jeu, l'optimisation pure du code n'est souvent pas le facteur limitant
+        d'ailleurs, le code se doit avant tout d'être maintenable).
+    </p>
 
-    <p>Le code se doit avant tout d'être maintenable.</p>
+    <p>Nous allons regarder différentes façons d'offrir un meilleur service.</p>
 
     <h2>Base de données</h2>
 
-    <p>index quelle que soit la base</p>
+    <p>Quelle que soit la base de données (SQL ou autre), les index jouent un rôle majeur.</p>
+
+    <p>
+        Un index est une structure de données qui permet de naviguer plus rapidement dans les enregistrements.
+        Cette structure prend de la place en plus des données.
+        Ces index doivent évidemment correspondre aux requêtes potentielles de l'application.
+    </p>
+
+    <a data-fancybox="gallery" href="mongo-index.png">
+        <img src="mongo-index.png" alt="ELK" class="img-thumbnail mx-auto d-block" style="height: 400px">
+    </a>
+
+    <p></p>
+
+    <p>Avec mongodb, les index sont un peu plus facile à définir car il n'y a pas de jointure.</p>
+
+    <p>Par exemple, pour créer l'index sur les scores :</p>
+
+    <pre><code class="javascript">db.collection.createIndex( { score: -1 } )</code></pre>
+
+    <p>Pour notre modèle simple et notre petit volume de données, cela n'est pas bien important.</p>
+
+    <p>Mais au bout de quelques dizaines de milliers d'entrées, la différence devient sensible.</p>
+
+    <p>Imaginons que nous ayons une collection avec des données de la forme</p>
+
+    <pre><code class="json">{
+    "channel": "M6",
+    "name": "Une pirate de coeur"
+    "date": ISODate("2019-10-08T23:30:00.000Z")
+}</code></pre>
+
+    <p>Et que je souhaite faire des requêtes du type</p>
+
+    <pre><code class="javascript">db.collection.find( {
+    channel: "M6",
+    date: {
+        $gte: ISODate("2019-10-07T23:30:00.000Z"),
+        $lt: ISODate("2019-10-09T23:30:00.000Z")
+    }
+})</code></pre>
+
+    <p>➤ Quel serait le bon index ?</p>
+
+    <pre><code class="javascript">db.collection.createIndex( { channel: 1 } )
+db.collection.createIndex( { date: 1 } )
+db.collection.createIndex( { channel: 1, date: 1 } )</code></pre>
+
+    <p>➤ Pourquoi ?</p>
 
     <h2>Headers</h2>
 
+    <p>Les headers de réponse permettent d'indiquer la limite de validité d'une réponse.</p>
+
+    <p>Ainsi le client aura une indication sur quand revenir chercher la resources</p>
+
+    <p>Les headers principaux sont les suivants</p>
+
+    <h3>Cache control</h3>
+
+    <p>Il permet de piloter la mise en cache cote client, par exemple</p>
+
+    <pre><code>Cache-Control: no-store
+Cache-Control: no-cache, no-store, must-revalidate
+Cache-Control: no-cache
+Cache-Control: private
+Cache-Control: public
+Cache-Control: max-age=31536000</code></pre>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>max-age</h5>
+
+        <p>La durée maximale admise pour le max-age est 1 an.</p>
+    </div>
+
+    <h3>ETag</h3>
+
+    <p>C'est un identifiant de version du contenu servi : si le contenu change, le ETag change</p>
+
+    <p>On peut voir cela comme une valeur de hash</p>
+
+    <pre><code>ETag: "33a64df551425fcc55e4d42a148795d9f25f89d4"</code></pre>
+
+    <p>Lors des requtêtes suivantes, le client pourra rajouter un header <code>If-None-Match</code></p>
+
+    <pre><code>If-None-Match: "33a64df551425fcc55e4d42a148795d9f25f89d4"</code></pre>
+
+    <p>
+        Si le ETag n'a pas changé, le serveur pourra répondre un code HTTP 304 (Not Modified)
+        sans renvoyer de contenu.
+    </p>
+
+    <h3>Vary</h3>
+
+    <p>Enfin <code>Vary</code> permet d'indiquer au client que la réponse varie selon certains headers de la requêtes</p>
+
+    <p>Par exemple</p>
+
+    <pre><code>Vary: User-Agent</code></pre>
+
+    <p>indique que la réponse est fonction du User-Agent, donc un client mobile et un client web n'aura pas la même réponse.</p>
+
+    <p>Ce header est utilisé en conjonction avec un cache externe, ce que l'on va voir par la suite.</p>
+
+    <h3>Avec spring</h3>
+
+    <p>
+        Actuellement sur <a href="http://localhost:8080/programs" target="_blank">http://localhost:8080/programs</a>
+        les headers de caching ont les valeurs suivantes :
+    </p>
+
+    <pre><code>Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Expires: 0
+Pragma: no-cache</code></pre>
+
+    <p>Pour faire court, spring (spring security en fait) dit : pas de cache.</p>
+
+    <p>➤ Avez vous une idée de pourquoi ?</p>
+
     <h2>Caching interne</h2>
-    
+
+    <p>L'application peut être soumise à une forte charge et peut avoir besoin de la même donnée pour tous les appels.</p>
+
+    <p>Ce peut être une base de données, un appel vers un sous service, un calcul coûteux ...</p>
+
+    <p>Il est possible de mettre en cache, au sein de l'application, un résultat intermédiaire.</p>
+
+    <p>Vu notre application, nous n'allons pas l'implémenter mais encore une fois, spring boot arrive avec une solution clés en main</p>
+
+    <pre><code>implementation 'org.springframework.boot:spring-boot-starter-cache'</code></pre>
+
+    <p>Il faut ensuite de rajouter un <code>@EnableCaching</code> sur notre <code>Application</code> pour activer le support.</p>
+
+    <p>Il suffit ensuite de marquer les endroits avec des <code>@Cacheable</code>, <code>@CacheEvict</code> et <code>@CachePut</code>.</p>
+
+    <p>Il y quelques compléxités supplémentaires mais une utilisation simple à la forme suivante :</p>
+
+    <pre><code>@Cacheable
+String getAddress(Customer customer) {...}</code></pre>
+
     <h2>Caching externe</h2>
 
-    <p>varnish et cdn</p>
+    <p>C'est la solution la plus simple afin de booster le temps de résponse d'une application.</p>
+
+    <a data-fancybox="gallery" href="caching.png">
+        <img src="caching.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p></p>
+
+    <p>Mais cela fonctionne sous conditions :</p>
+
+    <ul>
+        <li>Seuls les GET peuvent être cachés</li>
+        <li>Les headers de réponses sont primordiaux car ils pilotent l'activité du cache</li>
+        <li>Les resources sécurisées ne doivent pas être en cache</li>
+    </ul>
+
+    <p>
+        Il existe des solutions installables (comme <a href="https://varnish-cache.org/" target="_blank">Varnish</a>)
+        et beaucoup en mode CDN (comme <a href="https://www.fastly.com/" target="_blank">Fastly</a>).
+    </p>
+
+    <p>Encore une fois, vu la taille de notre application, un caching externe n'est pas nécessaire.</p>
 
     <h2>Redondance</h2>
 
-    <p>load balancing, scalabité horizontale, failover</p>
+    <p>Afin d'augmenter la tenue en charge, il est bien sûr possible de déployer notre application sur plusieurs serveurs.</p>
 
-    <p>stateless</p>
+    <a data-fancybox="gallery" href="load-balancing.png">
+        <img src="load-balancing.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p></p>
+
+    <p>Le load balancer répartit la charge équitablement entre les serveurs qui hébergent les applications.</p>
+
+    <p>
+        Si un serveur tombe, il sort du routage et cela peut être invisible pour un client.
+        On parle de <b>failover</b> et de <b>tolérance à la panne</b>
+    </p>
+
+    <p>
+        Pour bien répartir la charge, il est fortement utile que nos applications soient <b>stateless</b>.
+        Sinon, toutes les requêtes venant d'un utilisateur devront toujours arriver sur le même serveur.
+    </p>
+
+    <p>
+        Cette capacité à rajouter des serveurs pour augmenter la tenue en charge est appelée <b>scalabilité horizontale</b>
+        (vs la <b>scalabilité verticale</b> qui consiste à rajouter de la pussance aux serveurs existants).
+    </p>
+
+    <p>➤ Dans un tel environnement, comment imaginez vous gérer une mise à jour de l'application ?</p>
+
+    <p>➤ Comment gérer la mise à jour de la base de données ?</p>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>

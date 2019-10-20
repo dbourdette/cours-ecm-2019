@@ -41,13 +41,22 @@
 <body>
     <div class="reveal">
         <div class="slides">
-            <section data-background="web-services.jpg">
+            <section data-background="plan.jpg">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
-                    <h1>Spring</h1>
+                    <h1>Le plan</h1>
+
+                    <p>- Spring -</p>
+                    <p>- REST -</p>
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="spring.jpg">
+                <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
+                    <h2>Spring</h2>
+                </div>
+            </section>
+
+            <section data-background="pancakes.jpg">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
                     <p>Nous avons utilisé 3 couches de spring</p>
 
@@ -59,48 +68,51 @@
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="injection.jpg">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
-                    <p>L'injection de dépendances</p>
+                    <p>Spring framework : l'injection de dépendances</p>
 
-                    <p>On code les composants et le framework s'occupe de les relier entre eux</p>
+                    <p>On code les composants,<br>le framework s'occupe de les @Autowired entre eux</p>
 
                     <p>Cela facilite le développement par les tests.</p>
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="mvc.png">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
-                    <p>Model View Controller</p>
+                    <p>Spring MVC : Model View Controller</p>
 
-                    <p>Pour des services REST, la vue est presque inexistante.</p>
+                    <p>La partie web de spring</p>
+
+                    <p>Pour des services REST, la partie templating est absente.</p>
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="spring-boot.jpg">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
-                    <p>Autoconfiguration avec Spring Boot</p>
+                    <p>Spring Boot : Autoconfiguration</p>
 
                     <p>
-                        Le framework détecte les librairies en place puis charge les bons
-                        composants avec une configuration par défaut
+                        Le framework détecte les librairies en place,<br>
+                        charge les composants adaptés,<br>
+                        et les configure avec des valeurs par défaut
                     </p>
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="rest.jpg">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 10px 20px">
-                    <h1>REST</h1>
+                    <h2>REST</h2>
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="resources.jpg">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
                     <p>Le principe REST est centré sur les ressources</p>
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="maturity.png">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
                     <p>Richardson Maturity Model</p>
 
@@ -112,7 +124,7 @@
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="swamp.png">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
                     <p>Niveau 0 : The Swamp of POX</p>
 
@@ -122,15 +134,18 @@
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="url.jpg">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
-                    <p>Niveau 1 : Les resources</p>
+                    <p>Niveau 1 : Les ressources</p>
 
-                    <p>Le chemin de l'url correspond à un ressource avec laquelle on peut interagir</p>
+                    <p>
+                        Une URL correspond à une ressource<br>
+                        On peut interragir avec cette ressource sur cette URL
+                    </p>
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="verb.jpg">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
                     <p>Niveau 2 : Les verbes</p>
 
@@ -139,11 +154,11 @@
                         GET, POST, PUT, DELETE.
                     </p>
 
-                    <p>Les réponses doivent utiliser les bons code HTTP (200, 400...)</p>
+                    <p>Les réponses doivent utiliser les bons codes HTTP<br> (200, 400...)</p>
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
                     <p>Niveau 3 : Hypermedia</p>
 
@@ -154,7 +169,7 @@
                 </div>
             </section>
 
-            <section data-background="web-services.jpg">
+            <section data-background="">
                 <div style="background-color: rgba(0, 0, 0, 0.5); color: #fff; padding: 30px 20px 30px 20px">
                     <p>Attention !</p>
 

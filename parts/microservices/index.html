@@ -1,0 +1,354 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- font awesome -->
+    <link href="../../common/fontawesome-free-5.9.0-web/css/all.css" rel="stylesheet">
+
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="../../common/highlightjs/styles/a11y-dark.css">
+
+    <!-- lightbox -->
+    <link rel="stylesheet" href="../../common/fancybox/dist/jquery.fancybox.min.css"/>
+
+    <!-- Custom CSS -->
+    <link href="../../common/prez/style.css" rel="stylesheet" media="screen">
+
+    <title>Microservices</title>
+</head>
+<body>
+<div class="container ">
+    <h1>Microservices</h1>
+
+    <p>L'architecture en microservices est très à la mode. C'est très chic en soirée.</p>
+
+    <a data-fancybox="gallery" href="architecture.png">
+        <img src="architecture.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p></p>
+
+    <p>
+        Cependant, ce n'est pas la solution à tous les problèmes et ce n'est très certainement pas la bonne façon de débuter un projet. <br>
+    </p>
+
+    <p>
+        Cette architecture permet de répondre à des challenges qui surviennent lorsque l'on monte en charge :
+        traffic, codebase, nombre de développeurs...
+    </p>
+
+    <p>Netflix, Amazon, Ebay... ils ont tous commençé par une architecture simple, monolithique (d'un seul tenant).</p>
+
+    <h2>Quels sont les avantages ?</h2>
+
+    <p>Les avantages principaux sont les suivants :</p>
+
+    <ul>
+        <li>Testabilité et Maintenabilité</li>
+        <li>Déploiements indépendants</li>
+        <li>Evolutivité simplifiée des technologies (bases de données...)</li>
+        <li>Organisation en sous équipes fonctionnelles</li>
+    </ul>
+
+    <h2>Et les inconvénients ?</h2>
+
+    <p>Les microservices ne sont la solution à tous les problèmes :</p>
+
+    <ul>
+        <li>Plus longs à mettre en place</li>
+        <li>Plus difficiles à superviser</li>
+        <li>Demandent plus de ressources (VMs, RAM...)</li>
+    </ul>
+
+    <p>
+        L'architecture en microservices n'est pas un objectif en soi, mais bien un moyen de dépasser
+        une limite que l'on atteint lorsque le codebase croit.
+    </p>
+
+    <h2>Quelle est la taille d'un microservice ?</h2>
+
+    <p>Il n'y a pas de taille idéale ou standard pour un microservice.</p>
+
+    <a data-fancybox="gallery" href="size.png">
+        <img src="size.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p></p>
+
+    <p>Chaque microservice gère une sous partie du problème global.</p>
+
+    <p>Idéalement, ces parties sont indépendantes les unes des autres.</p>
+
+    <h2>Comment cela fonctionne ?</h2>
+
+    <p>Chaque application est déployée indépendamment.</p>
+
+    <p>Elle peut être exposée au public via une gateway (un point d'entrée depuis l'extérieur qui fait le routage).</p>
+
+    <p>Elles communiquent entre elles via l'interface http.</p>
+
+    <p>Chaque microservices peut avoir un système de persistance de données.</p>
+
+    <a data-fancybox="gallery" href="microservices.png">
+        <img src="microservices.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>source https://www.edureka.co/blog/microservices-tutorial-with-example</p>
+
+    <p>Chaque microservice est déployé plusieurs fois afin de permettre une tolérance à la panne.</p>
+
+    <h2>Edge microservices</h2>
+
+    <p>
+        Les edge microservices sont un type particulier de microservices :
+        ils permettent d'orchestrer les autres microservices.
+    </p>
+
+    <p>Par exemple, la gateway est la porte d'entrée depuis l'extérieur vers nos microservices.</p>
+
+    <p>La gateway est accessible via un nom de domaine, par exemple <code>api.modomain.fr</code>.</p>
+
+    <p>Les microservices que l'on souhaite exposer sont accessibles via un chemin, <code>/content</code> ou <code>/search</code>.</p>
+
+    <h2>Spring cloud</h2>
+
+    <p>Spring cloud est la partie spring pour les microservices.</p>
+
+    <p>Il propose, notamment, les parties suivantes :</p>
+
+    <ul>
+        <li>registre de l'ensemble des microservices disponibles (discovery)</li>
+        <li>routage des requêtes entrantes vers le bon microservice (gateway)</li>
+        <li>configuration : permet de configurer tous les microservices depuis un point central</li>
+        <li>appels entre les services (avec failover et load balancing)</li>
+        <li>traçabilité des appels au travers des microservices</li>
+    </ul>
+
+    <p>Plus sur <a href="https://spring.io/projects/spring-cloud" target="_blank">https://spring.io/projects/spring-cloud</a></p>
+
+    <p>Nous allons tester quelqu'unes de ces fonctionnalités.</p>
+
+    <h2>Discovery</h2>
+
+    <p>Nous allons mettre en place un service registry avec spring cloud et eureka (le service registry de netflix).</p>
+
+    <p>➤ Sur <a href="https://start.spring.io/" target="_blank">https://start.spring.io/</a> créez un projet avec la dépendance <code>Eureka Discovery Client</code></p>
+
+    <p>➤ Puis dans la configuration (<code>application.properties</code>) :</p>
+
+    <pre><code>server.port=8761
+
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+
+logging.level.com.netflix.eureka=OFF
+logging.level.com.netflix.discovery=OFF</code></pre>
+
+    <p>➤ Et sur l'<code>Application</code> :</p>
+
+    <pre><code>@EnableEurekaServer</code></pre>
+
+    <p>➤ Démarrez ensuite le service et allez sur <a href="http://localhost:8761/" target="_blank">http://localhost:8761/</a></p>
+
+    <p>Vous devriez avoir l'interface suivante :</p>
+
+    <a data-fancybox="gallery" href="eureka.png">
+        <img src="eureka.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p></p>
+    
+    <p>Pour le moment, aucune application n'est enregistrée.</p>
+
+    <h2>Notre application dans discovery</h2>
+
+    <p>➤ Dans le <code>build.gradle</code> de notre application, ajoutez</p>
+
+    <pre><code>ext {
+    set('springCloudVersion', "Greenwich.SR3")
+}</code></pre>
+
+    <p>➤ Et </p>
+
+    <pre><code>dependencyManagement {
+  imports {
+    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+  }
+}</code></pre>
+
+    <p>(C'est la gestion de dépendances pour spring cloud)</p>
+
+    <p>➤ Puis sur l'<code>Application</code> </p>
+
+    <pre><code>@EnableDiscoveryClient</code></pre>
+
+    <p>➤ Et enfin, afin d'avoir le bon nom de notre application, rajoutez dans l'<code>application.properties</code></p>
+
+    <pre><code>spring.application.name=cours-ecm</code></pre>
+
+    <p>➤ Après démarrage de l'application, vous devriez avoir l'application qui apparait dans <a href="http://localhost:8761/" target="_blank">discovery</a> :</p>
+
+    <a data-fancybox="gallery" href="eureka-2.png">
+        <img src="eureka-2.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <h2>Un deuxième microservice</h2>
+
+    <p>Pour le moment, notre service se sent un peu seul.</p>
+
+    <p>
+        ➤ Créez une nouvelle aplication <code>logs</code> depuis <a href="https://start.spring.io/" target="_blank">start.spring.io</a>
+        avec <code>Eureka Discovery Client</code> et <code>OpenFeign</code>
+    </p>
+
+    <p>➤ Dans l'<code>Application</code>, ajoutez :</p>
+
+    <pre><code>@EnableDiscoveryClient</code></pre>
+
+    <p>➤ et dans <code>application.properties</code></p>
+
+    <pre><code>spring.application.name=logs
+server.port=8762</code></pre>
+
+    <p>➤ Puis démarrez l'application. Nos 2 services sont désormais prets à communiquer.</p>
+
+    <a data-fancybox="gallery" href="eureka-3.png">
+        <img src="eureka-3.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <h2>La communication</h2>
+
+    <p>Nous avons actuellement 3 services :</p>
+
+    <ul>
+        <li><a href="http://localhost:8761/" target="_blank">Discovery</a></li>
+        <li><a href="http://localhost:8080/" target="_blank">Notre applications</a></li>
+        <li><a href="http://localhost:8762/" target="_blank">Les logs</a></li>
+    </ul>
+
+    <h3>Les logs</h3>
+
+    <p>➤ Coté service logs, ajoutez le <code>@RestController</code> suivant</p>
+
+    <pre><code>@RestController
+@RequestMapping('/logs')
+class LogController {
+    List&lt;Log&gt; logs = []
+
+    @GetMapping
+    List&lt;Log&gt; get() {
+        logs
+    }
+
+    @PostMapping
+    void post(@RequestBody Log log) {
+        logs.add(log)
+    }
+}</code></pre>
+
+    <p>➤ avec sa classe <code>Log</code></p>
+
+    <pre><code>class Log {
+    String text
+}</code></pre>
+
+    <p>➤ et redémarrez le service</p>
+
+    <h3>Le client feign</h3>
+
+    <p>➤ De l'autre coté, dans notre application, ajoutez la dépendance feign.</p>
+
+    <pre><code>implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'</code></pre>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Feign</h5>
+
+        <p>C'est une librairie développée par Netflix qui permet de simplifier les appels HTTP vers des APIs REST.</p>
+    </div>
+
+    <p>➤ Puis activez le support feign de spring :</p>
+
+    <pre><code>@EnableFeignClients</code></pre>
+
+    <p>➤ Ce qui nous permet de déclarer l'interface suivante :</p>
+
+    <pre><code>@FeignClient('logs')
+interface LogsClient {
+    @RequestMapping(method = RequestMethod.POST, value = "/logs")
+    void post(Log log);
+}</code></pre>
+
+    <p>(Il faut redéclarer la classe Log à coté de notre <code>LogsClient</code>)</p>
+
+    <p>Ce client va donc faire des appels vers le service 'logs' en utilisant les chemins indiqués.</p>
+
+    <h3>Appels</h3>
+
+    <p>➤ Injectez le <code>LogsClient</code> à différents endroits dans les controllers</p>
+
+    <pre><code>@Autowired
+    LogsClient logsClient</code></pre>
+
+    <p>➤ puis faites des appels du type :</p>
+
+    <pre><code>logsClient.post(new Log(text: 'Appel sur la home'))</code></pre>
+
+    <p>➤ Après quelques tests, vous devriez avoir quelques enregistrements sur <a href="http://localhost:8762/logs" target="_blank">http://localhost:8762/logs</a></p>
+
+    <a data-fancybox="gallery" href="logs.png">
+        <img src="logs.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p></p>
+
+    <p>Bien sûr, il ne serait pas raisonnable de stocker en mémoire, en production, tous les logs comme nous le faisons là.</p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Ribbon et Hystrix</h5>
+
+        <p>
+            Avec Spring et Feign, nous avons Ribbon gratuitement.
+            Ribbon permet de faire du load balancing, coté client, entre plusieurs instances du même microservice.
+            Cela active automatiquement le failover si un sous service devient indisponible.
+        </p>
+
+        <p>
+            Hystrix couvre ce qui se passe en cas d'erreur sur un appel.
+            Il permet de mettre en place un court circuit (Circuit Breaker)
+            afin de produire une réponse valide même si un sous système est défaillant.
+        </p>
+    </div>
+
+    <h2>Gateway</h2>
+
+
+
+    <h2>Et plus</h2>
+
+    admin, config...
+
+    <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
+</div>
+<!-- presentation -->
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- highlight.js -->
+<script src="../../common/highlightjs/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- lightbox -->
+<script src="../../common/fancybox/dist/jquery.fancybox.min.js"></script>
+
+<script src="../../common/prez/prez.js"></script>
+
+</body>
+</html>
