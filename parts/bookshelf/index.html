@@ -19,41 +19,64 @@
     <!-- Custom CSS -->
     <link href="../../common/prez/style.css" rel="stylesheet" media="screen">
 
-    <title>Le cloud</title>
+    <title>The Bookshelf</title>
 </head>
 <body>
 <div class="container ">
-    <h1>Le cloud</h1>
+    <h1>The bookshelf</h1>
 
-    <p>SAAS, PAAS...</p>
+    <p>Le but est de créer un nouvelle application</p>
 
-    <h2>Les acteurs du cloud</h2>
+    <h2>mongodb</h2>
 
-    <p>Amazon, Google, Microsoft</p>
+    <p>Installation de mongodb community https://www.mongodb.com/download-center/community</p>
 
-    <p>Mais aussi Heroku...</p>
+    <h2>The bookshelf</h2>
 
-    <h2>AWS</h2>
+    <p>Création d'un app bookshelf avec dépendance mongodb</p>
 
-    <p>Amazon est le leader de solutions pour le cloud</p>
+    <h2>Spécifications</h2>
 
-    <p>Son offre est très large https://aws.amazon.com/fr/</p>
+    <p>Gestion de livres et de commentaires</p>
 
-    <p>Nous allons utiliser AWS Elastic Beanstalk https://aws.amazon.com/fr/elasticbeanstalk/?hp=tile&so-exp=below</p>
+    <h3>Modèle de données</h3>
 
-    <h2>Création de l'environnement</h2>
+    <p>Livre : titre, auteur, isbn</p>
 
-    <p>Compte AWS et env java 8</p>
+    <p>Commentaires : date, isbn, texte</p>
 
-    <p>
-        https://www.baeldung.com/spring-boot-deploy-aws-beanstalk
-        https://developer.okta.com/blog/2019/08/07/deploy-a-spring-boot-app-with-aws-elastic-beanstalk
-        https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.environments.html
-    </p>
+    <h3>Remplir la base</h3>
 
-    <h2>12 factors</h2>
+    <p>Code pour remplir la base</p>
 
+    <h3>Chemins</h3>
 
+    <ul>
+        <li>/books : liste par ordre alphabétique de titre.</li>
+        <li>/books/[isbn] : un livre</li>
+        <li>/books/[isbn]/comments : tous les commentaires sur un livre par ordre chronologique</li>
+        <li>/books/[isbn]/comments/[id] : un commentaire sur un livre</li>
+        <li>/comments : liste par ordre chronologique.</li>
+        <li>/comments/[id] : un commentaire</li>
+    </ul>
+
+    <p>Ajout de livre et de commentaires</p>
+
+    <p>Mettez en place le modèle de données, les repositories et les controllers</p>
+
+    <h3>Fonctionnalités</h3>
+
+    <ul>
+        <li>/books : liste paginée par 50 (paramètres page=xxx)</li>
+        <li>/books : recherche par titre</li>
+        <li>/books/[isbn]/comments/[id] : que faire si l'id ne correspond pas a l'isbn ?</li>
+        <li>/comments : liste paginée par 50 (paramètres page=xxx)</li>
+        <li>Pouvoir ajouter un commentaire (POST)</li>
+        <li>Pouvoir ajouter un livre (POST)</li>
+        <li>Pouvoir modifier un livre (PUT)</li>
+        <li>Pouvoir supprimer un livre (DELETE). Il faut supprimer les commentaires qui en dépendent.</li>
+    </ul>
+    
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>
 <!-- presentation -->
