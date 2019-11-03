@@ -131,7 +131,7 @@
 
     <p>Plus sur <a href="https://spring.io/projects/spring-cloud" target="_blank">https://spring.io/projects/spring-cloud</a></p>
 
-    <p>Nous allons tester quelqu'unes de ces fonctionnalités.</p>
+    <p>Nous allons tester quelques unes de ces fonctionnalités.</p>
 
     <h2>Discovery</h2>
 
@@ -292,7 +292,7 @@ interface LogsClient {
     <p>➤ Injectez le <code>LogsClient</code> à différents endroits dans les controllers</p>
 
     <pre><code>@Autowired
-    LogsClient logsClient</code></pre>
+LogsClient logsClient</code></pre>
 
     <p>➤ puis faites des appels du type :</p>
 
@@ -326,11 +326,88 @@ interface LogsClient {
 
     <h2>Gateway</h2>
 
+    <p>La gateway est le point d'entrée de toutes nos APIs publiques.</p>
 
+    <a data-fancybox="gallery" href="gateway.png">
+        <img src="gateway.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
 
-    <h2>Et plus</h2>
+    <p></p>
 
-    admin, config...
+    <p>Elle permet d'avoir un nom de domaine unique tout en distribuant les requêtes vers chaque micro service.</p>
+
+    <p>➤ Sur <a href="https://start.spring.io/" target="_blank">https://start.spring.io/</a> créez un projet avec les dépendances <code>Gateway</code> et <code>Eureka Discovery Client</code></p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Zuul</h5>
+
+        <p>
+            la librairie Netflix pour faire une gateway s'appelle Zuul. <br>
+            Il est possible d'utiliser Zuul à la place de spring cloud gateway.
+        </p>
+    </div>
+
+    <p>➤ Puis dans la configuration (<code>application.properties</code>) :</p>
+
+    <pre><code>spring.application.name=gateway
+server.port=8763</code></pre>
+
+    <p>➤ Et sur l'<code>Application</code> :</p>
+
+    <pre><code>@EnableDiscoveryClient</code></pre>
+
+    <p>➤ Enfin, configurez les chemins dans la gateway en ajoutant le <code>Bean</code> suivant :</p>
+
+    <pre><code class="groovy">@Bean
+RouteLocator routes(RouteLocatorBuilder builder) {
+    return builder.routes()
+        .route('app', { r ->
+            r.path('/app/**')
+                    .filters { f -> f.rewritePath('/app/(?&lt;segment&gt;.*)', '/${segment}') }
+                    .uri('lb://cours-ecm')
+        })
+        .route('logs', { r ->
+            r.path('/logs/**')
+                    .uri('lb://logs')
+        })
+        .build()
+}</code></pre>
+
+    <p>➤ Démarrez ce dernier service, vous devriez pouvoir voir ceci :</p>
+
+    <a data-fancybox="gallery" href="eureka-gateway.png">
+        <img src="eureka-gateway.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>Et donc, depuis la gateway (port 8763), vous devriez pouvoir accéder aux autres services :</p>
+
+    <ul>
+        <li>les programmes <a href="http://localhost:8763/app/programs" target="_blank">http://localhost:8763/programs</a></li>
+        <li>les présentateurs <a href="http://localhost:8763/app/hosts" target="_blank">http://localhost:8763/hosts</a></li>
+        <li>les logs <a href="http://localhost:8763/logs" target="_blank">http://localhost:8763/logs</a></li>
+    </ul>
+
+    <p>Seule notre application et le service de logs sont exposés.</p>
+
+    <p>
+        Outre cette centralisation, spring cloud gateway permet aussi
+
+        <ul>
+            <li>de réécrire les chemins,</li>
+            <li>gérer certains aspects de la sécurité (requêtes cross domain, headers de sécurité)</li>
+            <li>et imposer des limites aux volumes d'appels.</li>
+        </ul>
+    </p>
+
+    <h2>Et plus encore</h2>
+
+    <p>Spring cloud propose encore d'autres services faciles à mettre en place, par exemple :</p>
+
+    <ul>
+        <li>admin : console de monitoring</li>
+        <li>config : centralisation de la configuration des application (dans un repo git)</li>
+        <li>sleuth : traçabilité des appels tout au long des microscervices</li>
+    </ul>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>
