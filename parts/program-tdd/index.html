@@ -147,14 +147,14 @@ class ProgramRepositoryTest {
 
     <p>Il n'y a qu'une seule base. Si tout le monde écrit en même temps, personne n'aura ce qu'il souhaite.</p>
 
-    <p>Il serait donc mieux que chacun ait sa propre base.</p>
+    <p>Nous allons faire en sorte que chacun ait sa propre base de test.</p>
 
     <div class="bd-callout bd-callout-warning">
         <h5>Embedded mongo</h5>
 
-        <p>Il serait possible de démarrer une base mongodb en local, à la volée.</p>
+        <p>Il est aussi possible de démarrer une base mongodb en local, à la volée.</p>
 
-        <p>Spring boot se chargerait alors de démarrer la base et l'arrêter après les tests.</p>
+        <p>Cette base est démarrée avant et stoppée après les tests.</p>
 
         <p>Voir l'exemple sur <a href="https://www.baeldung.com/spring-boot-embedded-mongodb" target="_blank">Spring Boot Integration Testing with Embedded MongoDB</a></p>
     </div>
@@ -164,8 +164,8 @@ class ProgramRepositoryTest {
     <p>Nous allons profiter de 2 atouts</p>
 
     <ul>
-        <li>Spring permet d'éxécuter les tests avec une configuration différente de l'application,</li>
-        <li>et mongo permet de créer des bases à la volée.</li>
+        <li>Spring permet d'éxécuter les tests avec une configuration différente de la configuration finale,</li>
+        <li>et mongo accepte de créer des bases à la volée.</li>
     </ul>
 
     <p>➤ Rajoutez l'annotation <code>@ActiveProfiles</code> à notre classe de test.</p>

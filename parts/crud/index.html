@@ -31,7 +31,7 @@
 
     <h2>Tester un Controller</h2>
 
-    <p>Tester un Controller est un tout petit peu plus compliqué que tester un service mais spring offre de bonnes facilités</p>
+    <p>Tester un Controller est un tout petit peu plus compliqué car il s'appuie sur le protocole HTTP.</p>
 
     <p>➤ Mettez en place le test suivant :</p>
 
@@ -82,7 +82,7 @@ class HostControllerTest {
     }
 }</code></pre>
 
-    <p>La complexité vient surtout de la nature de l'appel et des attentes (andExpect...)</p>
+    <p>L'écriture de l'appel et des attentes (andExpect...) est moins évidente que pour les tests précédents.</p>
 
     <p>➤ Vérifiez que ce test passe.</p>
 
