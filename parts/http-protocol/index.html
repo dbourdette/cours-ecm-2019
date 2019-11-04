@@ -25,22 +25,38 @@
 <div class="container ">
     <h1>Le protocole HTTP</h1>
 
-    <p>Il permet d'échanger des données avec des serveurs</p>
+    <p>Il permet de discuter des données avec des serveurs web</p>
 
     <p>Avec un navigateur web, il permet principalement de lire des pages web</p>
 
     <img src="request-response.png" alt="" class="img-thumbnail mx-auto d-block">
 
-    <p>Une page web contient de références vers des dizaines d'autres ressources (images, scripts, feuilles de style...)</p>
+    <p>Une page web contient des références vers des dizaines d'autres ressources (images, scripts, feuilles de style...)</p>
 
-    <h2>Une reqête HTTP</h2>
+    <h2>L'url</h2>
+
+    <p>L'url est composé comme suit : [protocol]://[domain]:[port]:[path]?[query]#[anchor]</p>
+
+    <p>Par exemple : https://fr.wikipedia.org/wiki/Uniform_Resource_Locator</p>
+
+    <p>Le port HTTP par défaut est 80 et 443 pour le HTTPS.</p>
+
+    <h3>HTTP/2</h3>
+
+    <p>HTTP/2 est une évolution majeure de HTTP.</p>
+
+    <p>Tout en restant compatible avec HTTP 1.1, il apporte (sous certaines conditions) une meilleure performance.</p>
+
+    <p>En pratique, les navigateurs ne supportent HTTP/2 qu'en HTTPS.</p>
+
+    <h2>Une requête HTTP</h2>
 
     <p>Une requête HTTP contient :</p>
 
     <ul>
-        <li>une ligne de requête : composé d'une <strong>méthode</strong>, le <strong>chemin</strong> et la version du protocole.</li>
-        <li>des <strong>en-têtes</strong> : des clés / valeurs donnant des indications supplémentaires.</li>
-        <li>un <strong>corps</strong> : des blocs de données supplémentaires utiles pour envoyer du contenu.</li>
+        <li>une ligne de requête : composé d'une <strong>méthode</strong>, le <strong>chemin</strong> (path) et la version du protocole.</li>
+        <li>des <strong>en-têtes</strong> (headers) : des clés / valeurs donnant des indications supplémentaires.</li>
+        <li>un <strong>corps</strong> (body) : des blocs de données supplémentaires utiles pour envoyer du contenu.</li>
     </ul>
 
     <pre>GET /actualites HTTP/1.1
@@ -54,7 +70,7 @@ Keep-Alive: 115
 Connection: keep-alive
 Referer: http://www.rtl.fr/</pre>
 
-    <p>La première ligne contient la méthode : c'est l'action demandée par le client sur la ressource</p>
+    <p>La première ligne du body contient la méthode : c'est l'action demandée par le client sur la ressource</p>
 
     <table class="table table-dark table-striped table-sm">
         <thead class="thead-dark">
@@ -105,9 +121,9 @@ Referer: http://www.rtl.fr/</pre>
         </tbody>
     </table>
 
-    <p>Seuls GET et POST sont possibles depuis un navigateur</p>
+    <p>Seuls GET et POST sont disponibles simplement lors de la navigation via un navigateur.</p>
 
-    <p>Les headers permettent d'ajouter de l'information sur la nature de la requête</p>
+    <p>Les headers permettent d'ajouter de l'information sur la nature de la requête.</p>
 
     <p>Voci quelques exemples</p>
 
@@ -143,7 +159,7 @@ Referer: http://www.rtl.fr/</pre>
         </tbody>
     </table>
 
-    <p>Cette liste est loin d'être figée</p>
+    <p>La liste est longue et surtout extensible.</p>
 
     <h2>Une réponse HTTP</h2>
 
@@ -151,8 +167,8 @@ Referer: http://www.rtl.fr/</pre>
 
     <ul>
         <li>une ligne de statut : la version du protocole, le <strong>code de retour</strong> avec son libellé associé</li>
-        <li>des <strong>en-têtes</strong> : des clés / valeurs donnant des indications supplémentaires</li>
-        <li>un corps : la ressource demandée</li>
+        <li>des <strong>en-têtes</strong> (headers) : clés / valeurs donnant des indications supplémentaires</li>
+        <li>un <strong>corps</strong> (body) : la ressource demandée</li>
     </ul>
 
     <pre>HTTP/1.1 200 OK
@@ -282,7 +298,7 @@ Connection: keep-alive
 
     <p>Le navigateur web est l'outil le plus courant pour faire du HTTP</p>
 
-    <p>Mais si il permet de visualiser les pages, il ne permet pas de facilement modeler des requêtes</p>
+    <p>Pratique pour naviguer dans des pages web, il ne permet pas de facilement modeler des requêtes</p>
 
     <h3>curl</h3>
 
@@ -331,7 +347,7 @@ class Hello {
         <p>Pensez à redémarrer le serveur</p>
     </div>
 
-    <pre><code class="terminal">$ curl -sI http://localhost:8080
+    <pre><code class="terminal">$ curl -s http://localhost:8080
 {"timestamp":"2019-06-14T06:58:34.357+0000","status":405,"error":"Method Not Allowed","message":"Request method 'GET' not supported","path":"/"}</code></pre>
 
     <p>➤ Il faut donc desormais faire un POST</p>
@@ -369,7 +385,7 @@ class Hello {
 
     <h3>json</h3>
 
-    <p>Très couramment on utilise du <a href="https://www.json.org/" target="_blank">json</a> comme format de données</p>
+    <p>Très couramment on utilise du <a href="https://www.json.org/" target="_blank">json</a> comme format d'échange données</p>
 
     <p>C'est un format assez simple à lire et écrire et surtout, il est compatible avec beaucoup de d'environnement</p>
 

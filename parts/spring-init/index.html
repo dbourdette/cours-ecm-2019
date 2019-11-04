@@ -27,16 +27,14 @@
 
     <p>Nous avons été capable de faire une toute petite application.</p>
 
-    <p>Spring boot permet de construire rapidement des applications plus complexes</p>
+    <p>Spring boot permet de construire des applications beaucoup plus complexes.</p>
 
-    <p>Cependant, il se focalise encore davantage sur les microservices dont nous reparlerons plus tard</p>
-
-    <p>Pour le moment, nous allons bootstraper une application un tout petit peu plus riche</p>
+    <p>Pour le moment, nous allons composer une application un tout petit peu plus riche.</p>
 
     <h2>Spring Initializr</h2>
 
     <p>
-        Le service <a href="https://start.spring.io/" target="_blank">start.spring.io</a> permet de bootstraper
+        Le service <a href="https://start.spring.io/" target="_blank">start.spring.io</a> permet de bootstrapper
         une application en choisissant parmis de nombreux modules (web, base de données, sécurité...)
     </p>
 
@@ -46,22 +44,26 @@
         <img src="spring-init.png" alt="" class="img-thumbnail mx-auto d-block">
     </a>
 
+    <p></p>
+
     <p>Nous avons donc un projet gradle + groovy + spring boot avec le module web. Pour le package et le nom du module, vous pouvez mettre ce que vous voulez.</p>
 
     <div class="bd-callout bd-callout-warning">
         <h5>Gradle</h5>
 
-        <p><a href="https://gradle.org/" target="_blank">Gradle</a> est un outil de build</p>
+        <p><a href="https://gradle.org/" target="_blank">Gradle</a> est un outil de build.</p>
 
-        <p>Il permet de gérer les dépendances (librairies) du projet et pilote la compilcation afin d'obtenir notre exécutable.</p>
+        <p>Il permet de gérer les dépendances du projet (librairies) et pilote la compilcation afin d'obtenir notre exécutable.</p>
 
-        <p>Afin de lancer le build, il suffit de taper <code>./gradlew build</code></p>
+        <p>Afin de lancer le build, il suffira de taper <code>./gradlew build</code></p>
+
+        <p>Le principal concurrent de grade est maven. Plus ancien, il est plus rigide et se configure à base de xml.</p>
     </div>
 
     <div class="bd-callout bd-callout-warning">
         <h5>Spring init</h5>
 
-        <p>Il est également possible de faire la même chose en ligne de commande</p>
+        <p>Il est également possible de faire la même chose en ligne de commande :</p>
 
         <pre><code class="console">$ spring init --dependencies=web,data-jpa my-project
 Using service at https://start.spring.io
@@ -79,21 +81,23 @@ Project extracted to '/Users/developer/example/my-project'
         <img src="layout.png" alt="" class="img-thumbnail mx-auto d-block">
     </a>
 
+    <p></p>
+
     <p>Les répertoires et fichiers visibles sont les suivants :</p>
 
     <ul>
-        <li><b>settings.gradle</b> : fichier optionnel dans le cas d'un projet simple, il permet de définir les répertoires avec les sous modules pour un project plus complexe.</li>
+        <li><b>settings.gradle</b> : fichier optionnel dans le cas d'un projet simple, il permet de définir les sous modules pour un project plus complexe</li>
         <li><b>gradle</b> : répertoire qui contient le binaire de l'outil de build</li>
-        <li><b>gradlew.bat</b> et gradlew : l'exécutable (wrapper) de gradle</li>
+        <li><b>gradlew.bat</b> et <b>gradlew</b> : l'exécutable (wrapper) de gradle</li>
         <li><b>src/main</b> : les sources</li>
         <li><b>src/main/groovy</b> : le code groovy</li>
-        <li><b>src/main/resources</b> : les fichiers statiques</li>
+        <li><b>src/main/resources</b> : les fichiers de ressources</li>
         <li><b>src/main/resources/application.properties</b> : le fichier de configuration</li>
         <li><b>src/main/resources/templates</b> : les templates afin de générer des pages</li>
         <li><b>src/main/resources/static</b> : les fichiers statiques (images, css, js...)</li>
         <li><b>src/test</b> : les sources de test</li>
         <li><b>src/test/groovy</b> : les tests en groovy</li>
-        <li><b>HELP.md</b> : une petite doc spring boot</li>
+        <li><b>HELP.md</b> : une petite doc spring boot en markdown</li>
         <li><b>.gitignore</b> : règles d'exclusion pour git</li>
     </ul>
 
@@ -105,7 +109,7 @@ Project extracted to '/Users/developer/example/my-project'
         <h5>Convention over configuration</h5>
 
         <p>
-            C'est un principe de construction de frameworks et librairie visant a diminuer, voire éliminer, le besoin d'écrire des configuration.
+            C'est un principe de construction de frameworks et librairie visant à diminuer, voire éliminer, le besoin d'écrire des configurations.
             En effet, si on décide que répertoire de source est <code>src</code>, plus besoin de le préciser.
         </p>
 
@@ -131,7 +135,7 @@ Project extracted to '/Users/developer/example/my-project'
 // Permet a spring boot de prendre la main sur la résolution des numéros de version des librairies
 apply plugin: 'io.spring.dependency-management'
 
-// les propriétés de mon projets
+// les propriétés de mon projet
 group = 'com.monsite'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
@@ -152,18 +156,21 @@ dependencies {
 }
 </code></pre>
 
-    <p>Au fil des besoins, on pourra donc rajouter des librairies dans la section <code>dependencies</code></p>
+    <p>Au fil des besoins, on devra donc rajouter des librairies dans la section <code>dependencies</code></p>
 
     <div class="bd-callout bd-callout-warning">
         <h5>Gradle wrapper</h5>
 
         <p>
             Les fichiers <b>gradlew</b>, <b>gradlew.bat</b> et le répertoire <b>gradle</b> constitue le wrapper.
-            Il permettent de lancer le build sans avoir à installer préalablement gradle.<br>
-            C’est pratique pour de l’intégration continue et sur sa machine : pas besoin d'installer gradle.
+            Il permettent de lancer le build sans avoir à installer préalablement gradle.
         </p>
 
         <img src="wrapper.png" alt="" class="img-thumbnail mx-auto d-block">
+
+        <p></p>
+
+        <p>C'est également particulièrement pratique pour de l'intégration continue.</p>
 
         <p>source <a href="https://docs.gradle.org/current/userguide/gradle_wrapper.html" target="_blank">https://docs.gradle.org/current/userguide/gradle_wrapper.html</a></p>
     </div>
@@ -200,7 +207,8 @@ BUILD SUCCESSFUL in 1m 35s
 
         <p>
             Il y a 3 dépendances dans notre projet mais gradle en a récupéré bien plus...<br>
-            Simplement parce nos dépendances ont elles aussi des dépendances. On dit que les dépendances sont transitives.
+            Simplement parce nos dépendances ont elles aussi des dépendances.<br>
+            On dit que les dépendances sont transitives.
         </p>
 
         <p>➤ Vous pouvez les voir en tapant <code>./gradlew dependencies</code></p>
@@ -309,11 +317,17 @@ build
 
     <img src="intellij.png" alt="" class="img-thumbnail mx-auto d-block">
 
+    <p></p>
+
     <p>➤ Configurez le projet gradle (en prenant soin de déselectionner <b>create separate module per source set</b>)</p>
+
+    <p>(Possible que les nouvelles versions d'intellij ne permettent plus cela... :/ )</p>
 
     <a data-fancybox="gallery" href="gradle-import.png">
         <img src="gradle-import.png" alt="" class="img-thumbnail mx-auto d-block">
     </a>
+
+    <p></p>
 
     <p>Intellij va re télécharger les dépendances et prendre un peu de temps pour indexer les fichiers du projet.</p>
 
@@ -325,7 +339,7 @@ build
 
     <h2>404</h2>
 
-    <p>On va commencer par mettre une 404 un peu plus accueillante</p>
+    <p>On va commencer par mettre une 404 un peu plus accueillante.</p>
 
     <p>
         Pour remplacer la 404, il suffit de mettre un fichier 404.html dans <code>src/main/resources/static/error</code><br>
@@ -358,8 +372,8 @@ build
         <h5>Hot swapping</h5>
 
         <p>
-            Pour mettre à jour cette page, vous dévez redemarrer à chaque fois le serveur.<br>
-            Cela est dû à la nature des applications java : optimisées pour la performance en production mais elle n'aiment pas trop le remplacement à chaud
+            Pour mettre à jour cette page, vous dévez redémarrer à chaque fois le serveur.<br>
+            Cela est dû à la nature des applications java : le code est compilé et chargé dans une vm mais elle n'aiment pas trop le remplacement à chaud
             (<a href="https://docs.spring.io/spring-boot/docs/current/reference/html/howto-hotswapping.html" target="_blank">Hot swapping</a>).
         </p>
 

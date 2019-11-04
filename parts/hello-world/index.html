@@ -27,7 +27,7 @@
 
     <p>Historiquement, mettre en place une application java / jee est long et fastidieux.</p>
 
-    <p>Le but de spring boot est de simplifier tout cela.</p>
+    <p>Un des buts de spring boot est de simplifier tout cela.</p>
 
     <p>Il devient même possible de faire tenir son application dans un tweet</p>
 
@@ -75,7 +75,7 @@ WARNING: All illegal access operations will be denied in a future release
 
     <img src="hello-world.png" alt="" class="img-thumbnail mx-auto d-block">
 
-    <h2>Les paramètres</h2>
+    <h2>Les paramètres (query parameters)</h2>
 
     <p>Un paramètre dans une url est placé après le <code>?</code>, par exemple <code>http://localhost:8080?name=Thierry</code></p>
 
@@ -91,7 +91,7 @@ class ThisWillActuallyRun {
 
     <p>➤ Relancez <code>spring run hello.groovy</code> afin de tester le fonctionnement du paramètre <code>name</code></p>
 
-    <h2>Le chemin</h2>
+    <h2>Le chemin (path)</h2>
 
     <p>Le chemin de l'url est comprise entre le nom de domaine et les paramètres</p>
 
@@ -117,11 +117,17 @@ class ThisWillActuallyRun {
     }
 }</code></pre>
 
+    <p>
+        La lecture de la requête et la génération de la réponse peuvent devenir
+        beaucoup plus riche mais nous allons faire simple pour le moment.
+    </p>
+
     <h2>La requête http</h2>
 
-    <p>L'url n'est qu'une partie de la requête http</p>
-
-    <p>Spring permet de venir lire tout ce que contient la requête et de générer la réponse</p>
+    <p>
+        L'url n'est qu'une partie de la requête HTTP mais c'est tout ce que nous pouvons
+        faire avec la barre de navigation de notre navigateur.
+    </p>
 
     <p>Nous allons regarder un peu plus en détails comment fonctionne ce protocole</p>
 
