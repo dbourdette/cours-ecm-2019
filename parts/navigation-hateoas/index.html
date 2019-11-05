@@ -25,7 +25,7 @@
 <div class="container ">
     <h1>Navigation dans les services REST</h1>
 
-    <p>Dans program, il y a un champs hosts qui représente la liste des présentateurs.</p>
+    <p>Dans <code>Program</code>, il y a un champs hosts qui représente la liste des présentateurs.</p>
 
     <p>Nous allons rajouter un <code>Controller</code> qui permet de venir lire les informations concernant un présentateur.</p>
 
@@ -53,7 +53,7 @@ class Host {
     // les méthodes findById et findAll sont déjà disponibles
 }</code></pre>
 
-    <p>➤ Écrivez les tests save(), findAll() et findById()</p>
+    <p>➤ Écrivez les tests pour les méthodes save(), findAll() et findById()</p>
 
     <pre><code class="groovy">@RunWith(SpringRunner)
 @SpringBootTest
@@ -123,9 +123,7 @@ class NotFoundException extends RuntimeException {
 
     <h2>Présentation</h2>
 
-    <p>Jusqu'à présent, notre <code>ProgramController</code> présente notre modèle de données <code>Program</code> de façon assez brute.</p>
-
-    <p>La liste des présentateurs est la liste de leurs ids.</p>
+    <p>Jusqu'à présent, notre <code>ProgramController</code> présente le champs hosts directement sous forme d'une liste d'ids.</p>
 
     <p>Nous allons plutôt y mettre le nom de ces personnes.</p>
 
@@ -164,6 +162,10 @@ class NotFoundException extends RuntimeException {
             <img src="hateoas.png" alt="" class="img-thumbnail mx-auto d-block">
         </a>
 
+        <p></p>
+
+        <p>En bref, HATEOAS indiquer qu'on peut naviguer de proche en proche entre les resources.</p>
+
         <p>source <a href="https://fr.wikipedia.org/wiki/HATEOAS">https://fr.wikipedia.org/wiki/HATEOAS</a></p>
     </div>
 
@@ -180,7 +182,7 @@ class CoursecmApplication {
     ...
 }</code></pre>
 
-    <p>Cela va activer tout le support pour ce que nous allons faire après.</p>
+    <p>Cela va activer les conversions adaptées au modèle <a href="http://stateless.co/hal_specification.html" target="_blank">HAL</a> (qui est une implémentation de HATEOAS).</p>
 
     <h3>Resources</h3>
 
@@ -243,11 +245,12 @@ class ProgramResourceAssembler extends ResourceAssemblerSupport&lt;Program, Prog
     HostResourceAssembler hostResourceAssembler
 
     ProgramResourceAssembler() {
-            super(ProgramController, ProgramResource)
+        super(ProgramController, ProgramResource)
     }
 
     @Override
     ProgramResource toResource(Program entity) {
+        // le findAll permet d'éliminer les valeurs null
         List&lt;Host&gt; hosts = entity.hosts.collect { hostRepository.findById(it).orElse(null) }.findAll()
 
         ProgramResource resource = instantiateResource(entity)
@@ -288,17 +291,31 @@ class ProgramController {
 
     <h3>Résultat</h3>
 
+    <div class="bd-callout bd-callout-warning">
+        <h5>Content negotiation</h5>
+
+        <p>C'est la mécanique qui permet à spring de savoir quel format utiliser pour le résultat (xml, json...)</p>
+
+        <p>Il existe différentes stratégies et configurations possibles.</p>
+
+        <p>Par défaut, le header de requête Accept permet de piloter le format de la réponse.</p>
+
+        <p>Dans notre exemple on utilise <code>produces = "application/json; charset=UTF-8"</code> pour forcer le format.</p>
+    </div>
+
     <p>Si tout va bien, le résultat devrait être le suivant sur <a href="http://localhost:8080/programs" target="_blank">http://localhost:8080/programs</a> :</p>
 
     <a data-fancybox="gallery" href="resources.png">
         <img src="resources.png" alt="" class="img-thumbnail mx-auto d-block">
     </a>
 
+    <p></p>
+
     <p>Les ids ont disparus et on ne voit que le fullname des présentateurs.</p>
 
     <p>On a par contre des propriétés <code>_embedded</code> et <code>programResourceList</code> à la racine du json.</p>
 
-    <p>Cette structure permet de gérer les données, les éléments embeddés et les liens. Voir <a href="http://stateless.co/hal_specification.html" target="_blank">hal_specification.html</a></p>
+    <p>Une ressource est donc composée de propriétés et de sous ressources (embedded) qui ont tous potentiellement des liens. Voir <a href="http://stateless.co/hal_specification.html" target="_blank">hal_specification.html</a></p>
 
     <a data-fancybox="gallery" href="hal.png">
         <img src="hal.png" alt="" class="img-thumbnail mx-auto d-block">
@@ -326,11 +343,11 @@ resource.add(new Link("/hosts/$entity.id"))</code></pre>
     <div class="bd-callout bd-callout-warning">
         <h5>REST, HATEOAS et HAL</h5>
 
-        <p>La mise en place de HATEOAS est assez lourde et les attributs _embedded et _links ne sont pas très seyants.</p>
+        <p>La mise en place de HAL est un peu lourde et les attributs _embedded et _links ne sont pas très seyants.</p>
 
-        <p>Cependant, les gains en structuration et en naviguabilité sont intéressants.</p>
+        <p>Cependant, les gains en structuration et en navigabilité sont intéressants.</p>
 
-        <p>En fonction du besoin, il est possible d'adopter tout ou partie de ce formalisme.</p>
+        <p>En fonction du besoin, il est possible d'adapter tout ou partie de ce formalisme.</p>
     </div>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>

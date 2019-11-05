@@ -161,7 +161,7 @@ spring.data.mongodb.database=program</code></pre>
 
     <p>On commence par le modèle de données.</p>
 
-    <p>➤ Créez la classe <code>Program</code> dans le package <code>com.monsite.coursecm.domain</code>.</p>
+    <p>➤ Créez la classe <code>Program</code> dans un sous package <code>domain</code>.</p>
 
     <pre><code class="groovy">package com.monsite.coursecm.domain
 
@@ -182,13 +182,13 @@ class Program {
 }</code></pre>
 
     <p>
-        La famille de librairies spring data (à laquelle appartient spring data mongo) permet de faire des requêtes aux base de données
+        La famille de librairies <a href="https://spring.io/projects/spring-data" target="_blank">spring data</a> (à laquelle appartient spring data mongo) permet de faire des requêtes aux base de données
         en définissant simplement une interface java.
     </p>
 
     <p>Comme nous voulons les programmes de la journée, il va suffire de définir une méthode qui permet de récupérer les programmes entre 2 dates.</p>
 
-    <p>➤ Créez l'interface <code>ProgramRepository</code> dans le package <code>com.monsite.coursecm.repository</code>.</p>
+    <p>➤ Créez l'interface <code>ProgramRepository</code> dans un sous package <code>repository</code>.</p>
 
     <pre><code class="groovy">package com.monsite.coursecm.repository
 
@@ -203,10 +203,11 @@ interface ProgramRepository extends MongoRepository&lt;Program, String&gt; {
     List&lt;Program&gt; findByToGreaterThanAndFromLessThan(LocalDateTime from, LocalDateTime to)
 }</code></pre>
 
-    <p>
-        Le nom de cette méthode est déjà bien long et il est difficile d'être certain qu'elle fait exactement ce qu'elle doit.
-        Nous reviendrons sur ce point un peu plus tard.
-    </p>
+    <p>C'est un nom un peu long mais la méthode fait ce qu'elle dit : find - by - to greater than - and - from less than.</p>
+
+    <p>Le <code>@Query</code> permet de spécifier la clause sort et donc de trier les résultats.</p>
+
+    <p><code>MongoRepository</code> apporte déjà beaucoup de méthodes : findById, save, delete...</p>
 
     <div class="bd-callout bd-callout-warning">
         <h5>Query Methods</h5>
@@ -214,7 +215,7 @@ interface ProgramRepository extends MongoRepository&lt;Program, String&gt; {
         <p>
             Les interfaces qui étendent MongoRepository ne sont pas la seule façon de travailler avec la base mongo.
             Il est possible de construire ses requêtes comme on ferait du SQL.
-            Cependant, pour des cas simples, c'est beaucoup plus facile à mettre en place.
+            Cependant, pour des cas simples, les repositories sont plus faciles à mettre en place.
         </p>
 
         <p>voir <a href="https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongodb.repositories.queries" target="_blank">https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mongodb.repositories.queries</a></p>
@@ -252,10 +253,16 @@ class ProgramController {
 
     <p>➤ et vérifier que cela fonctionne <a href="http://localhost:8080/programs" target="_blank">http://localhost:8080/programs</a></p>
 
+    <p>Quand un <code>Controller</code> renvoie un objet, il est convertit et serialisé en chaîne de charactères (généralement du json).</p>
+
+    <p>Pour convertir (depuis et vers) du json, spring utilise la librairie <a href="https://github.com/FasterXML/jackson" target="_blank">jackson</a>.</p>
+
+
+
     <div class="bd-callout bd-callout-warning">
         <h5>Affichage du JSON</h5>
 
-        <p>Pour visualiser du JSON dans chrome, je conseille de mettre un plugin afin qu'il soit bien formatté.</p>
+        <p>Pour visualiser du JSON dans chrome, je vous conseille de mettre un plugin afin qu'il soit bien formatté dans le navigateur.</p>
 
         <p>Par exemple <a href="https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa?hl=fr" target="_blank">JSON Formatter</a></p>
     </div>

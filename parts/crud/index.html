@@ -31,7 +31,7 @@
 
     <h2>Tester un Controller</h2>
 
-    <p>Tester un Controller est un tout petit peu plus compliqué car il s'appuie sur le protocole HTTP.</p>
+    <p>Tester un Controller est un tout petit peu plus compliqué car cela met en jeu le protocole HTTP.</p>
 
     <p>➤ Mettez en place le test suivant :</p>
 
@@ -148,7 +148,7 @@ MockHttpServletResponse:
 
     <h3>Implémentation</h3>
 
-    <p>Avec l'aide d'une classe HostForm</p>
+    <p>Avec l'aide d'une classe <code>HostForm</code></p>
 
     <pre><code class="groovy">class HostForm {
     String firstname
@@ -156,7 +156,7 @@ MockHttpServletResponse:
     String lastname
 }</code></pre>
     
-    <p>➤ Ajoutez la méthode update dans le <code>HostController</code> et faites passer le test</p>
+    <p>➤ Ajoutez et complétez la méthode update dans le <code>HostController</code> et faites passer le test</p>
 
     <pre><code class="groovy">void update(@PathVariable String id, @RequestBody HostForm form)</code></pre>
 
@@ -208,7 +208,7 @@ void 'put with missing lastname'() {
 
     <p>Comment gérer la suppression d'une personne alors qu'elle est référencée dans un programme ?</p>
 
-    <p>Peut être est elle présente dans un programme très ancien qui n'a plus d'importance mais peut on quand même la supprimée ?</p>
+    <p>Peut être est elle présente dans un programme très ancien qui n'a plus d'importance mais peut on quand même la supprimer ?</p>
 
     <p>➤ Comment gèreriez vous ce genre de situation ?</p>
 

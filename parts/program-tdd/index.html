@@ -59,7 +59,7 @@
 import static org.junit.Assert.*;
 import java.util.*;
 
-public class ArrayListTest { // le nom de la classe testée suffixée par Test
+public class ArrayListTest { // le nom de la classe testée est suffixée par Test
 
     private ArrayList list;
 
@@ -90,7 +90,7 @@ public class ArrayListTest { // le nom de la classe testée suffixée par Test
     <p>On commence par générer la classe de test pour <code>ProgramRepository</code></p>
 
     <p>
-        ➤ Créez la classe <code>com.monsite.coursecm.repository.ProgramRepository</code> dans src/main/test
+        ➤ Créez la classe <code>ProgramRepositoryTest</code> dans src/main/test, dans le même package que la classe testée
         (il est possible d'utiliser le raccourci atl entrée quand le curseur est sur le nom de la classe).
     </p>
 
@@ -113,7 +113,7 @@ class ProgramRepositoryTest {
 
     <h2>Un test spring boot</h2>
 
-    <p>jUnit est extensible. Avec Spring, il est possible de manipuler notre Repository.</p>
+    <p>jUnit est extensible via plugins. Avec Spring, il est possible d'obtenir une référence vers notre Repository.</p>
 
     <p>➤ Ajoutez le code suivant afin d'obtenir un premier test.</p>
 
@@ -139,13 +139,13 @@ class ProgramRepositoryTest {
 
     <h2>Base de test</h2>
 
-    <p>Afin de tester que la méthode fonctionne bien, il faudrait mettre la base dans un état connu.</p>
+    <p>Afin de tester que la méthode fonctionne bien, il faudrait vider la base et la remplir avec un jeu de test.</p>
 
-    <p>On pourrait alors savoir ce que doit retourner notre service.</p>
+    <p>On pourrait alors savoir ce que doit retourner notre repository.</p>
 
     <p>Oui mais...</p>
 
-    <p>Il n'y a qu'une seule base. Si tout le monde écrit en même temps, personne n'aura ce qu'il souhaite.</p>
+    <p>Il n'y a qu'une seule base. Si tout le monde écrit en même temps, on va se marcher dessus.</p>
 
     <p>Nous allons faire en sorte que chacun ait sa propre base de test.</p>
 
@@ -255,7 +255,7 @@ class ProgramRepositoryTest {
 }
 </code></pre>
 
-    <p>Les <code>assert</code> sont des <a href="https://www.groovy-lang.org/testing.html">power assert</a> groovy, assez explicites en cas d'erreur.</p>
+    <p>Les <code>assert</code> sont des <a href="https://www.groovy-lang.org/testing.html" target="_blank">power assert</a> groovy, assez explicites en cas d'erreur.</p>
 
     <p>Le code précédent devrait passer sans soucis.</p>
 
