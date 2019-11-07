@@ -25,7 +25,7 @@
 <div class="container ">
     <h1>La performance</h1>
 
-    <p>Dans tout ce qu'on a fait jusqu'à présent, on ne s'est pas soucié de la performance.</p>
+    <p>Dans tout ce que nous avons a fait jusqu'à présent, nous ne nous sommes pas soucié de la performance.</p>
 
     <p>Comment construire une application et une infrastructure performante ?</p>
 
@@ -33,6 +33,20 @@
         A ce jeu, l'optimisation pure du code n'est souvent pas le facteur limitant
         d'ailleurs, le code se doit avant tout d'être maintenable).
     </p>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>The Art of Computer Programming</h5>
+
+        <p>
+            The real problem is that programmers have spent far too much time worrying about
+            efficiency in the wrong places and at the wrong times; premature optimization
+            is the root of all evil (or at least most of it) in programming.
+        </p>
+
+        <div style="text-align: right">
+            <em>Donald Knuth</em>
+        </div>
+    </div>
 
     <p>Nous allons regarder différentes façons d'offrir un meilleur service.</p>
 
@@ -42,8 +56,8 @@
 
     <p>
         Un index est une structure de données qui permet de naviguer plus rapidement dans les enregistrements.
-        Cette structure prend de la place en plus des données.
-        Ces index doivent évidemment correspondre aux requêtes potentielles de l'application.
+        C'est une structure de données en plus du stockage des données elles mêmes.
+        Il faut anticiper la création des index afin de garder une application performante.
     </p>
 
     <a data-fancybox="gallery" href="mongo-index.png">
@@ -90,9 +104,9 @@ db.collection.createIndex( { channel: 1, date: 1 } )</code></pre>
 
     <h2>Headers</h2>
 
-    <p>Les headers de réponse permettent d'indiquer la limite de validité d'une réponse.</p>
+    <p>Une partie des headers permmettent d'optimiser la performance d'un service.</p>
 
-    <p>Ainsi le client aura une indication sur quand revenir chercher la resources</p>
+    <p>Il permet d'indiquer la portée d'une réponse.</p>
 
     <p>Les headers principaux sont les suivants</p>
 
@@ -138,7 +152,7 @@ Cache-Control: max-age=31536000</code></pre>
 
     <pre><code>Vary: User-Agent</code></pre>
 
-    <p>indique que la réponse est fonction du User-Agent, donc un client mobile et un client web n'aura pas la même réponse.</p>
+    <p>indique que la réponse est fonction du User-Agent, donc un client mobile et un client web potentiellement n'aura pas la même réponse.</p>
 
     <p>Ce header est utilisé en conjonction avec un cache externe, ce que l'on va voir par la suite.</p>
 
@@ -159,9 +173,12 @@ Pragma: no-cache</code></pre>
 
     <h2>Caching interne</h2>
 
-    <p>L'application peut être soumise à une forte charge et peut avoir besoin de la même donnée pour tous les appels.</p>
+    <p>
+        Un cache interne permet de répondre plus rapidement en évitant
+        l'éxécution d'une méhtode et en fournissant un résultat précédent.
+    </p>
 
-    <p>Ce peut être une base de données, un appel vers un sous service, un calcul coûteux ...</p>
+    <p>On peut ainsi diminuer la charge d'une base, d'un sous service ou tout simplement modérer un calcul coûteux.</p>
 
     <p>Il est possible de mettre en cache, au sein de l'application, un résultat intermédiaire.</p>
 
@@ -178,6 +195,11 @@ Pragma: no-cache</code></pre>
     <pre><code>@Cacheable
 String getAddress(Customer customer) {...}</code></pre>
 
+    <p>
+        Pendant le temps de mise en cache, à paramètres égaux, la réponse est donc toujours la même et
+        la méthode n'est pas éxécutée.
+    </p>
+
     <h2>Caching externe</h2>
 
     <p>C'est la solution la plus simple afin de booster le temps de résponse d'une application.</p>
@@ -192,7 +214,7 @@ String getAddress(Customer customer) {...}</code></pre>
 
     <ul>
         <li>Seuls les GET peuvent être cachés</li>
-        <li>Les headers de réponses sont primordiaux car ils pilotent l'activité du cache</li>
+        <li>Les headers de réponses sont primordiaux car ils pilotent l'activité du cache (Cache-Control)</li>
         <li>Les resources sécurisées ne doivent pas être en cache</li>
     </ul>
 
@@ -217,7 +239,7 @@ String getAddress(Customer customer) {...}</code></pre>
 
     <p>
         Si un serveur tombe, il sort du routage et cela peut être invisible pour un client.
-        On parle de <b>failover</b> et de <b>tolérance à la panne</b>
+        On parle de <b>failover</b> et de <b>tolérance à la panne.</b>
     </p>
 
     <p>
@@ -227,7 +249,7 @@ String getAddress(Customer customer) {...}</code></pre>
 
     <p>
         Cette capacité à rajouter des serveurs pour augmenter la tenue en charge est appelée <b>scalabilité horizontale</b>
-        (vs la <b>scalabilité verticale</b> qui consiste à rajouter de la pussance aux serveurs existants).
+        (vs la <b>scalabilité verticale</b> qui consiste à rajouter de la puissance aux serveurs existants).
     </p>
 
     <p>➤ Dans un tel environnement, comment imaginez vous gérer une mise à jour de l'application ?</p>

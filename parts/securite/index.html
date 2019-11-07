@@ -27,7 +27,7 @@
 
     <p>Notre application permet de modifier les données en base via l'interface HTTP.</p>
 
-    <p>C'est très pratique mais un peu trop ouvert à tout le monde...</p>
+    <p>Le problème actuellement est que tout le monde peut le faire.</p>
 
     <p>Comment sécuriser ces accès ?</p>
 
@@ -54,7 +54,7 @@
 
     <p>
         Comme il est difficile de savoir à priori si il y aura des données sensibles échangées et
-        de toutes façons, afin de préserver la confidentialité, les navigateurs encouragent fortement le https.
+        de toutes façons, afin de préserver la confidentialité, les navigateurs poussent fortement le https.
     </p>
 
     <p>Pour héberger une application, il faudra donc obtenir et mettre en place un certificat.</p>
@@ -69,15 +69,15 @@
 
     <pre><code>implementation 'org.springframework.boot:spring-boot-starter-security'</code></pre>
 
-    <p>Notre application est désormais (un peu trop) sécurisée</p>
+    <p>Notre application est désormais (un peu mal) sécurisée</p>
 
-    <p>Au démarrage de l'application, on peut voir passer un log :</p>
+    <p>Au démarrage de l'application, on peut voir passer un log du type :</p>
 
     <pre><code>Using generated security password: c603f652-a458-46ec-acd7-c80c00a884fb</code></pre>
 
     <p>Il est donc possible de se logguer avec le login 'user' et ce mot de passe.</p>
 
-    <p>Spring security a mis en place, sans configuration :</p>
+    <p>Spring security a mis en place, une configuration par défaut :</p>
 
     <ul>
         <li>Un filtre qui empêche d'accéder au page si on n'est pas authentifié</li>
@@ -102,10 +102,11 @@ spring.security.user.password=monpassword</code></pre>
 class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // 2 utilisateurs pour nos tests
         auth
                 .inMemoryAuthentication()
                 .withUser("user")
-                .password("{noop}password")
+                .password("{noop}password") // {noop} => mot de passe en clair
                 .roles("USER")
                 .and()
                 .withUser("admin")
@@ -135,7 +136,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     <p>Le problème avec une authentication de type BASIC, c'est qu'on ne peut pas se déconnecter</p>
 
-    <p>Cela peut être utilise pour des tests ou une API, mais c'est généralement pas assez riche.</p>
+    <p>Cela peut être utilise pour des tests ou une API, mais c'est généralement embêtant.</p>
 
     <p>➤ Changer la configuration afin de récupérer le formulaire :</p>
 
@@ -150,7 +151,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     <p>
         Comme nous construisons une API, un formulaire n'est sans doute pas une bonne idée ici sur le long terme.
-        Mais cela va nous permettre de faire un peu plus de tests facilement.
+        Mais cela va nous permettre d'avancer dans nos tests.
     </p>
 
     <h2>Authorisations</h2>
@@ -162,7 +163,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         Il y a d'autres classes en jeu, mais on se limitera à cela pour le moment.
     </p>
 
-    <p>Dans notre code, les roles (USER et ADMIN) des utilisateurs vont servir pour autoriser ou non l'accès à certaines ressources.</p>
+    <p>Dans notre code, les rôles (USER et ADMIN) des utilisateurs vont servir pour autoriser ou non l'accès à certaines ressources.</p>
 
     <h3>Objectif</h3>
 
@@ -240,6 +241,11 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     <p></p>
 
+    <p>
+        Ce protocole permet de passer la main au provider d'identité pour l'authentification puis,
+        de reprendre la main, dans notre service, avec un utilisateur autentifié (cet échange est appelé oauth dance).
+    </p>
+
     <p>OpenID est une surcouche (gestion de l'identité) de OAuth 2.0, pour qui spring security fournit un support.</p>
 
     <h3>Configuration</h3>
@@ -277,7 +283,7 @@ spring.security.oauth2.client.registration.google.client-secret=[your-client-sec
     </div>
 
     <p>
-        Pour mettre les bonnes valeurs de clientId et clientSecret il va falloir se rendre sur
+        Pour mettre les bonnes valeurs de [your-client-id] et [your-client-secret] il va falloir se rendre sur
         la <a href="https://console.developers.google.com/?pli=1" target="_blank">console Google API</a>.
     </p>
 
@@ -370,9 +376,11 @@ class MeController {
 
     <p>Ce token peut être utilisé dans un cookie ou un header http afin de véhiculer l'identité du client.</p>
 
+    <p>Ce type de token est de plus en plus utilisé dans les apps de type angular ou react.</p>
+
     <h3>Les rôles</h3>
 
-    <p>Avec cette technique, l'utilisateur à juste le <code>ROLE_USER</code></p>
+    <p>Avec cette technique, l'utilisateur a juste le <code>ROLE_USER</code></p>
 
     <p>En l'état, il n'est donc plus posible d'accéder à nos endpoints où il faut être admin.</p>
 
@@ -395,12 +403,14 @@ class MeController {
     <p></p>
 
     <p>
-        C'est un cookie de session qui permet à notre serveur de savoir qui on est d'une requête à l'autre
+        C'est un cookie de session qui permet à notre serveur de conserver un lien vers notre identité tout au long de nos requêtes
         (on ne repasse pas par Google à chaque requête).
         <br>
         Cela veut dire que ma session est spécifiquement liée à ce serveur.
         Pour plein de raisons, ce n'est pas souhaitable.
     </p>
+
+    <p>➤ A votre avis pouquoi ?</p>
 
     <p>
         Une possibilité est de garder le token JWT et de l'envoyer à chaque requête :

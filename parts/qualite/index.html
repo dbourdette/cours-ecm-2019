@@ -19,17 +19,48 @@
     <!-- Custom CSS -->
     <link href="../../common/prez/style.css" rel="stylesheet" media="screen">
 
-    <title>Monitoring</title>
+    <title>Qualité</title>
 </head>
 <body>
 <div class="container ">
-    <h1>Monitoring</h1>
+    <h1>Qualité</h1>
 
-    <p>Avec encore quelques jours devant nous, il n'est pas impossible que notre applicaton finisse par grossir et devenir utile.</p>
+    <p>Avec encore quelques jours / semaines / mois / années devant nous, il n'est pas impossible que notre applicaton finisse par grossir et devenir utile.</p>
 
     <p>Elle finira en production où elle commencera une deuxième vie, loin de nous... vraiment ?</p>
 
-    <h2>Continuous</h2>
+    <p>En tant que développeurs, nous sommes responsables de la qualité de notre logiciel.</p>
+
+    <p>Une fois en production, le fonctionnement de l'application est aussi notre responsabilité.</p>
+
+    <h2>Agilité</h2>
+
+    <p>L'agilité couvre un large spectre mais aussi des choses très concrètes pour le code.</p>
+
+    <p>On peut citer :</p>
+
+    <ul>
+        <li>Le développement par les tests</li>
+        <li>Le refactoring</li>
+        <li>Le pair programming</li>
+        <li>L'intégration continue</li>
+    </ul>
+
+    <p>Ces techniques sont issues de méthodes agiles (surtout l'Extreme Programming)</p>
+
+    <a data-fancybox="gallery" href="agile-manifesto.png">
+        <img src="agile-manifesto.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p></p>
+
+    <p>
+        On peut rajouter aussi le manifeste pour le
+        <a href="http://manifesto.softwarecraftsmanship.org/" target="_blank">Software craftsmanship</a>
+        et les <a href="https://www.agilealliance.org/agile101/12-principles-behind-the-agile-manifesto/" target="_blank">12 Principles Behind the Agile Manifesto</a>
+    </p>
+
+    <h2>En continue</h2>
 
     <p>Le cycle de construction et de livraison de logiciel évolue constamment.</p>
 
@@ -87,9 +118,15 @@
 
     <p>En livrant un travail de qualité, les développeurs simplifient le travail des ops.</p>
 
-    <h2>Actuators</h2>
+    <h2>Monitoring</h2>
 
     <p>Le monitoring vise à connaitre, en permanence, l'état de fonctionnement des applications.</p>
+
+    <p>Ainsi, on peut les surveiller et réagir au plus vite quand on constate un dysfonctionnement.</p>
+
+    <p>En amélioration continue (<a href="https://fr.wikipedia.org/wiki/Kaizen" target="_blank">kaizen</a>), on améliore même ce qui n'est pas cassé.</p>
+
+    <h3>Actuators</h3>
 
     <p>Une première approche consiste à interroger l'application elle même sur son état.</p>
 
@@ -207,7 +244,7 @@ class RandomHealthIndicator implements HealthIndicator {
 
     <p>Pour la suite, vous pouvez supprimer ce composant.</p>
 
-    <h2>javamelody</h2>
+    <h3>javamelody</h3>
 
     <p><a href="https://github.com/javamelody/javamelody/wiki" target="_blank">javamelody</a> est un outil qui permet de visualiser les métriques de l'application.</p>
 
@@ -233,7 +270,7 @@ class RandomHealthIndicator implements HealthIndicator {
         <pre><code>spring.autoconfigure.exclude=net.bull.javamelody.JavaMelodyAutoConfiguration</code></pre>
     </div>
 
-    <h2>Logging</h2>
+    <h3>Logging</h3>
 
     <p>Une autre facette du monitoring concerne les logs.</p>
 
