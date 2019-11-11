@@ -25,34 +25,293 @@
 <div class="container ">
     <h1>Le cloud</h1>
 
-    <p>SAAS, PAAS...</p>
+    <p>Les applications spring boot s'installent assez facilement dans le cloud.</p>
 
     <h2>Les acteurs du cloud</h2>
 
-    <p>Amazon, Google, Microsoft</p>
+    <p>Il y a de nombreux acteurs pour déployer des applications dans le cloud.</p>
 
-    <p>Mais aussi Heroku...</p>
+    <p>Les principaux sont Amazon (AWS), Microsoft (Azure) et Google (Google Cloud Platform)</p>
+
+    <p>Amazon est très clairement le leader dans ce domaine.</p>
 
     <h2>AWS</h2>
 
-    <p>Amazon est le leader de solutions pour le cloud</p>
+    <p>Son offre est très large <a href="https://aws.amazon.com/fr/" target="_blank">https://aws.amazon.com/fr/</a></p>
 
-    <p>Son offre est très large https://aws.amazon.com/fr/</p>
+    <a data-fancybox="gallery" href="aws.png">
+        <img src="aws.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
 
-    <p>Nous allons utiliser AWS Elastic Beanstalk https://aws.amazon.com/fr/elasticbeanstalk/?hp=tile&so-exp=below</p>
+    <p></p>
 
-    <h2>Création de l'environnement</h2>
+    <p>La partie PAAS (Plateforme As A Service) est AWS <a href="https://aws.amazon.com/fr/elasticbeanstalk/" target="_blank">Beanstalk</a></p>
 
-    <p>Compte AWS et env java 8</p>
+    <p>Malheureusement, il faut une carte de crédit afin de créer un compte et faire un test.</p>
+
+    <p>Nous allons donc nous tourner vers une offre plus accessible pour un TP.</p>
+
+    <p>Si vous souhaitez faire un test sur AWS, voici 2 guides (parmi d'autres) :</p>
+
+    <ul>
+        <li><a href="https://www.baeldung.com/spring-boot-deploy-aws-beanstalk" target="_blank">Deploy a Spring Boot Application to AWS Beanstalk</a></li>
+        <li><a href="https://developer.okta.com/blog/2019/08/07/deploy-a-spring-boot-app-with-aws-elastic-beanstalk" target="_blank">Easy Spring Boot Deployment with AWS Elastic Beanstalk</a></li>
+    </ul>
+
+    <h2>Heroku</h2>
 
     <p>
-        https://www.baeldung.com/spring-boot-deploy-aws-beanstalk
-        https://developer.okta.com/blog/2019/08/07/deploy-a-spring-boot-app-with-aws-elastic-beanstalk
-        https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.environments.html
+        <a href="https://www.heroku.com/" target="_blank">Heroku</a> est une solution PAAS depuis plus de 10 ans
+        initialement lancée pour héberger des applications en Ruby.
     </p>
 
-    <h2>12 factors</h2>
+    <p>Aujourd'hui, Heroku support Ruby, Java, PHP, Python, Node, Go, Scala and Clojure</p>
 
+    <h3>Signup</h3>
+
+    <p>➤ Créez vous un compte sur <a href="https://signup.heroku.com/" target="_blank">heroku</a></p>
+
+    <h3>CLI</h3>
+
+    <p>➤Installez le <a href="https://devcenter.heroku.com/articles/heroku-cli" target="_blank">CLI</a> (command line interface) de Heroku</p>
+
+    <p>➤ Verifiez l'installation</p>
+
+    <pre><code class="console">$ heroku --version
+heroku/7.35.0 darwin-x64 node-v12.13.0</code></pre>
+
+    <p>➤ Puis logguez vous</p>
+
+    <pre><code class="console">$ heroku login
+heroku: Press any key to open up the browser to login or q to exit:
+Opening browser to https://cli-auth.heroku.com/auth/browser/c8854711-f674-4bf1-b715-8343cc9342ee
+Logging in... done
+Logged in as email@example.org</code></pre>
+
+    <h3>Hello cloud app</h3>
+
+    <p>➤ Créez une app spring boot qui dit bonjour sur <code>/</code></p>
+
+    <h3>Repo git</h3>
+
+    <p>Heroku utilise un repository git afin de stocker les versions de l'application.</p>
+
+    <p>➤ Dans votre répertoire projet, initialisez un projet git</p>
+
+    <pre><code class="console">$ git init
+Initialized empty Git repository in /Users/dbourdette/projects-ecm/cloud-demo/.git/</code></pre>
+
+    <p>➤ Pour le moment, tous les fichiers sont untracked</p>
+
+    <pre><code class="console">$ git status
+On branch master
+
+Initial commit
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)<div style="color: red">
+	.gitignore
+	build.gradle
+	gradle/
+	gradlew
+	gradlew.bat
+	settings.gradle
+	src/</div>
+nothing added to commit but untracked files present (use "git add" to track)</code></pre>
+
+    <p>➤ Ajoutez tout et faites un premier commit</p>
+
+    <pre><code class="console">$ git add .
+warning: CRLF will be replaced by LF in gradlew.bat.
+The file will have its original line endings in your working directory.</code></pre>
+
+    <pre><code class="console">$ git commit -m "initial commit"
+[master (root-commit) a7b01dd] initial commit
+ 11 files changed, 355 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 build.gradle
+ create mode 100644 gradle/wrapper/gradle-wrapper.jar
+ create mode 100644 gradle/wrapper/gradle-wrapper.properties
+ create mode 100755 gradlew
+ create mode 100644 gradlew.bat
+ create mode 100644 settings.gradle
+ create mode 100644 src/main/groovy/fr/ecm/cours/cloud/clouddemo/CloudDemoApplication.groovy
+ create mode 100644 src/main/groovy/fr/ecm/cours/cloud/clouddemo/IndexController.groovy
+ create mode 100644 src/main/resources/application.properties
+ create mode 100644 src/test/groovy/fr/ecm/cours/cloud/clouddemo/CloudDemoApplicationTests.groovy</code></pre>
+
+    <div class="bd-callout bd-callout-warning">
+        <h5>Avec gradle</h5>
+
+        <p>Il existe aussi un <a href="https://github.com/heroku/heroku-gradle" target="_blank">plugin gradle pour heroku</a>.</p>
+
+        <p>Mais nous allons utiliser la méthode standard git.</p>
+    </div>
+
+    <h3>Création de l'application</h3>
+
+    <p>➤ Toujours dans le répertoire du projet, créez l'app sur heroku</p>
+
+    <pre><code class="console">$ heroku create --region eu
+Creating app... done, ⬢ powerful-citadel-13916, region is eu
+https://powerful-citadel-13916.herokuapp.com/ | https://git.heroku.com/powerful-citadel-13916.git</code></pre>
+
+    <p>Le CLI a choisi un nom d'application et branché le repository git distant</p>
+
+    <pre><code class="console">$ git remote -v
+heroku	https://git.heroku.com/powerful-citadel-13916.git (fetch)
+heroku	https://git.heroku.com/powerful-citadel-13916.git (push)</code></pre>
+
+    <p>Vous pouvez renommer l'application via la commande <a href="https://devcenter.heroku.com/articles/renaming-apps" target="_blank">heroku apps:rename</a></p>
+
+    <h3>Déploiement</h3>
+
+    <p>➤ Poussez l'application directement sur la branche distante master</p>
+
+    <pre><code class="console">$ git push heroku master
+Counting objects: 31, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (17/17), done.
+Writing objects: 100% (31/31), 54.73 KiB | 0 bytes/s, done.
+Total 31 (delta 0), reused 0 (delta 0)
+remote: Compressing source files... done.
+remote: Building source:
+remote:
+remote: -----> Gradle app detected
+remote: -----> Spring Boot detected
+remote: -----> Installing JDK 1.8... done
+remote: -----> Building Gradle app...
+remote: -----> executing ./gradlew build -x test
+remote:        Downloading https://services.gradle.org/distributions/gradle-5.6.4-bin.zip
+remote:        .........................................................................................
+remote:        > Task :compileJava NO-SOURCE
+remote:        > Task :compileGroovy
+remote:        > Task :processResources
+remote:        > Task :classes
+remote:        > Task :bootJar
+remote:        > Task :jar SKIPPED
+remote:        > Task :assemble
+remote:        > Task :check
+remote:        > Task :build
+remote:
+remote:        BUILD SUCCESSFUL in 32s
+remote:        3 actionable tasks: 3 executed
+remote: -----> Discovering process types
+remote:        Procfile declares types     -> (none)
+remote:        Default types for buildpack -> web
+remote:
+remote: -----> Compressing...
+remote:        Done: 69.7M
+remote: -----> Launching...
+remote:        Released v3
+remote:        https://powerful-citadel-13916.herokuapp.com/ deployed to Heroku
+remote:
+remote: Verifying deploy... done.
+To https://git.heroku.com/powerful-citadel-13916.git
+ * [new branch]      master -> master</code></pre>
+
+    <p>➤ L'application devrait être disponible</p>
+
+    <pre><code class="console">$ heroku open</code></pre>
+
+    <p>➤ Et les logs également</p>
+
+    <pre><code class="console">$ heroku logs --tail</code></pre>
+
+    <h3>Configuration</h3>
+
+    <p>Il est possible de configurer l'application de différentes façons :</p>
+
+    <ul>
+        <li>Un fichier system.properties pour configurer la version de java</li>
+        <li>Un fichier Procfile pour configurer le lancement du process</li>
+        <li>Des variables d'environnement pour configurer notre app</li>
+    </ul>
+
+    <p>Le CLI permet d'administrer notre application :</p>
+
+    <pre><code class="console">$ heroku help
+CLI to interact with Heroku
+
+VERSION
+  heroku/7.35.0 darwin-x64 node-v12.13.0
+
+USAGE
+  $ heroku [COMMAND]
+
+COMMANDS
+  access          manage user access to apps
+  addons          tools and services for developing, extending, and operating your app
+  apps            manage apps on Heroku
+  auth            check 2fa status
+  authorizations  OAuth authorizations
+  autocomplete    display autocomplete installation instructions
+  base
+  buildpacks      scripts used to compile apps
+  certs           a topic for the ssl plugin
+  ci              run an application test suite on Heroku
+  clients         OAuth clients on the platform
+  config          environment variables of apps
+  container       Use containers to build and deploy Heroku apps
+  domains         custom domains for apps
+  drains          forward logs to syslog or HTTPS
+  features        add/remove app features
+  git             manage local git repository for app
+  help            display help for heroku
+  keys            add/remove account ssh keys
+  labs            add/remove experimental features
+  local           run Heroku app locally
+  logs            display recent log output
+  maintenance     enable/disable access to app
+  members         manage organization members
+  notifications   display notifications
+  orgs            manage organizations
+  pg              manage postgresql databases
+  pipelines       manage pipelines
+  plugins         list installed plugins
+  ps              Client tools for Heroku Exec
+  psql            open a psql shell to the database
+  redis           manage heroku redis instances
+  regions         list available regions for deployment
+  releases        display the releases for an app
+  reviewapps      manage reviewapps in pipelines
+  run             run a one-off process inside a Heroku dyno
+  sessions        OAuth sessions
+  spaces          manage heroku private spaces
+  status          status of the Heroku platform
+  teams           manage teams
+  update          update the Heroku CLI
+  webhooks        list webhooks on an app</code></pre>
+
+    <p>On peut par exemple ajouter une base postgres ou bien augmenter le nombre de serveurs pour notre application.</p>
+
+    <p>Pour faire de la production, il faudrait bien sûr augmenter la capacité et commencer à payer.</p>
+
+    <h2>12 Factor App</h2>
+
+    <p>Les 12 Facteurs (<a href="https://12factor.net" target="_blank">Twelve Factor</a>) sont 12 règles afin de construire des applications cloud ready.</p>
+
+    <p>Elles ont été établies par Adam Wiggins (un co fondateur de Heroku) en 2011</p>
+
+    <a data-fancybox="gallery" href="12-factors.png">
+        <img src="12-factors.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
+
+    <p>Elles sont fondatrices de la mentalité de découpage en microservices.</p>
+
+    <h2>Kubernetes</h2>
+
+    <p>Ce que nous avons fait est très bien pour débuter.</p>
+
+    <p>Cependant pour piloter des centaines de serveurs, il est utile de faire appel à des outils plus puissants.</p>
+
+    <p><a href="https://kubernetes.io" target="_blank">Kubernetes</a> est un orchestrateur : il permet de piloter le déploiement de conteneurs.</p>
+
+    <p>En pratique, ce sont souvent des conteneurs <a href="https://www.docker.com/" target="_blank">Docker</a>.</p>
+
+    <p>Les applicatons spring boot (comme n'importe quelle autre type d'application) doit donc être packagée en image Docker.</p>
+
+    <p>Ce modèle offre une uniformisaton du modèle de déploiement et de contrôle des applications.</p>
 
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>

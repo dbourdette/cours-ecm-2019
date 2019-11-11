@@ -42,17 +42,17 @@
         traffic, codebase, nombre de développeurs...
     </p>
 
-    <p>Netflix, Amazon, Ebay... ils ont tous commençé par une architecture simple, monolithique (d'un seul tenant).</p>
+    <p>Netflix, Amazon, Ebay... ils ont tous commençé par une architecture simple, d'un seul tenant (monolithique).</p>
 
     <h2>Quels sont les avantages ?</h2>
 
-    <p>Les avantages principaux sont les suivants :</p>
+    <p>Les principaux avantages de diviser en microservices sont les suivants :</p>
 
     <ul>
+        <li>Organisation en sous équipes fonctionnelles</li>
+        <li>Indépendance technologique de chaque service (bases de données, language...)</li>
         <li>Testabilité et Maintenabilité</li>
         <li>Déploiements indépendants</li>
-        <li>Evolutivité simplifiée des technologies (bases de données...)</li>
-        <li>Organisation en sous équipes fonctionnelles</li>
     </ul>
 
     <h2>Et les inconvénients ?</h2>
@@ -88,11 +88,11 @@
 
     <p>Chaque application est déployée indépendamment.</p>
 
-    <p>Elle peut être exposée au public via une gateway (un point d'entrée depuis l'extérieur qui fait le routage).</p>
+    <p>Elle peut être exposée au public via une gateway (un point d'entrée unique depuis l'extérieur qui fait le dispatch des requêtes).</p>
 
     <p>Elles communiquent entre elles via l'interface http.</p>
 
-    <p>Chaque microservices peut avoir un système de persistance de données.</p>
+    <p>Chaque microservices peut avoir un système de persistance de données adaptée à son besoin.</p>
 
     <a data-fancybox="gallery" href="microservices.png">
         <img src="microservices.png" alt="" class="img-thumbnail mx-auto d-block">
@@ -115,21 +115,25 @@
 
     <p>Les microservices que l'on souhaite exposer sont accessibles via un chemin, <code>/content</code> ou <code>/search</code>.</p>
 
+    <p>Ces edge microservices n'ont pas de valeur métier à proprement parler. Ils aident les autres services.</p>
+
     <h2>Spring cloud</h2>
 
     <p>Spring cloud est la partie spring pour les microservices.</p>
 
-    <p>Il propose, notamment, les parties suivantes :</p>
+    <p>Il propose notamment :</p>
 
     <ul>
-        <li>registre de l'ensemble des microservices disponibles (discovery)</li>
-        <li>routage des requêtes entrantes vers le bon microservice (gateway)</li>
-        <li>configuration : permet de configurer tous les microservices depuis un point central</li>
-        <li>appels entre les services (avec failover et load balancing)</li>
+        <li>un service discovery : un annuaire des services</li>
+        <li>un service gateway : routage des requêtes entrantes vers le bon microservice</li>
+        <li>un service configuration : permet de configurer tous les microservices depuis un point central</li>
+        <li>une librairie pour gérer les appels entre les services (avec failover et load balancing)</li>
         <li>traçabilité des appels au travers des microservices</li>
     </ul>
 
     <p>Plus sur <a href="https://spring.io/projects/spring-cloud" target="_blank">https://spring.io/projects/spring-cloud</a></p>
+
+    <p>En réalité, le framework spring est un intégration. Il s'appuie sur des librairies existantes telles que les libs open source de netflix.</p>
 
     <p>Nous allons tester quelques unes de ces fonctionnalités.</p>
 
@@ -137,9 +141,9 @@
 
     <p>Nous allons mettre en place un service registry avec spring cloud et eureka (le service registry de netflix).</p>
 
-    <p>➤ Sur <a href="https://start.spring.io/" target="_blank">https://start.spring.io/</a> créez un projet avec la dépendance <code>Eureka Discovery Client</code></p>
+    <p>➤ Sur <a href="https://start.spring.io/" target="_blank">https://start.spring.io/</a> créez un projet avec la dépendance <code>Eureka Server</code></p>
 
-    <p>➤ Puis dans la configuration (<code>application.properties</code>) :</p>
+    <p>➤ Puis dans la configuration (<code>application.properties</code>) de ce service :</p>
 
     <pre><code>server.port=8761
 
@@ -181,6 +185,10 @@ logging.level.com.netflix.discovery=OFF</code></pre>
   }
 }</code></pre>
 
+    <p>➤ Et</p>
+
+    <pre><code>implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'</code></pre>
+
     <p>(C'est la gestion de dépendances pour spring cloud)</p>
 
     <p>➤ Puis sur l'<code>Application</code> </p>
@@ -196,6 +204,8 @@ logging.level.com.netflix.discovery=OFF</code></pre>
     <a data-fancybox="gallery" href="eureka-2.png">
         <img src="eureka-2.png" alt="" class="img-thumbnail mx-auto d-block">
     </a>
+
+    <p>Notre application s'est enregistrée auprès du service discovery.</p>
 
     <h2>Un deuxième microservice</h2>
 
@@ -221,7 +231,7 @@ server.port=8762</code></pre>
         <img src="eureka-3.png" alt="" class="img-thumbnail mx-auto d-block">
     </a>
 
-    <h2>La communication</h2>
+    <h2>La communication entre nos 2 services</h2>
 
     <p>Nous avons actuellement 3 services :</p>
 
@@ -287,6 +297,8 @@ interface LogsClient {
 
     <p>Ce client va donc faire des appels vers le service 'logs' en utilisant les chemins indiqués.</p>
 
+    <p>Pourtant, notre projet ne sait pas, à priori, sur quelle machine ou quel port tourne le service de logs.</p>
+
     <h3>Appels</h3>
 
     <p>➤ Injectez le <code>LogsClient</code> à différents endroits dans les controllers</p>
@@ -313,7 +325,8 @@ LogsClient logsClient</code></pre>
 
         <p>
             Avec Spring et Feign, nous avons Ribbon gratuitement.
-            Ribbon permet de faire du load balancing, coté client, entre plusieurs instances du même microservice.
+            Ribbon permet de faire du load balancing, coté client, entre plusieurs instances du même microservice
+            (3 instances du service logs, par exemple).
             Cela active automatiquement le failover si un sous service devient indisponible.
         </p>
 
@@ -387,7 +400,7 @@ RouteLocator routes(RouteLocatorBuilder builder) {
         <li>les logs <a href="http://localhost:8763/logs" target="_blank">http://localhost:8763/logs</a></li>
     </ul>
 
-    <p>Seule notre application et le service de logs sont exposés.</p>
+    <p>Seule notre application et le service de logs sont exposés (et la gateway bien sûr).</p>
 
     <p>
         Outre cette centralisation, spring cloud gateway permet aussi
@@ -404,7 +417,7 @@ RouteLocator routes(RouteLocatorBuilder builder) {
     <p>Spring cloud propose encore d'autres services faciles à mettre en place, par exemple :</p>
 
     <ul>
-        <li>admin : console de monitoring</li>
+        <li>admin : une console de monitoring</li>
         <li>config : centralisation de la configuration des application (dans un repo git)</li>
         <li>sleuth : traçabilité des appels tout au long des microscervices</li>
     </ul>
