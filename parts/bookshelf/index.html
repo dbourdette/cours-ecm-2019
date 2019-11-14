@@ -27,29 +27,31 @@
 
     <p>Le but est de créer un nouvelle application</p>
 
-    <h2>mongodb</h2>
+    <h2>Mongodb</h2>
 
-    <p>Installation de mongodb community https://www.mongodb.com/download-center/community</p>
+    <p>Pour aller plus vite, nous avons utilisé une base mongo dans le cloud.</p>
 
-    <h2>The bookshelf</h2>
+    <p>Ici, nous allons installer la base en local.</p>
 
-    <p>Création d'un app bookshelf avec dépendance mongodb</p>
+    <p>➤ Installez mongodb <a href="https://www.mongodb.com/download-center/community" target="_blank">community</a></p>
 
-    <h2>Spécifications</h2>
+    <h2>Le projet</h2>
 
-    <p>Gestion de livres et de commentaires</p>
+    <p>Le but est de créer une app <b>Bookshelf</b> pour la gestion de livres.</p>
 
-    <h3>Modèle de données</h3>
+    <h3>Spécifications</h3>
 
-    <p>Livre : titre, auteur, isbn</p>
+    <p>Le modèle de données est constitué de livres et de commentaires</p>
 
-    <p>Commentaires : date, isbn, texte</p>
+    <a data-fancybox="gallery" href="domain.png">
+        <img src="domain.png" alt="" class="img-thumbnail mx-auto d-block">
+    </a>
 
-    <h3>Remplir la base</h3>
+    <p></p>
 
-    <p>Code pour remplir la base</p>
+    <p>Les services doivent permettre de lire en base.</p>
 
-    <h3>Chemins</h3>
+    <p>Voici une première liste de services souhaités :</p>
 
     <ul>
         <li>/books : liste par ordre alphabétique de titre.</li>
@@ -57,25 +59,37 @@
         <li>/books/[isbn]/comments : tous les commentaires sur un livre par ordre chronologique</li>
         <li>/books/[isbn]/comments/[id] : un commentaire sur un livre</li>
         <li>/comments : liste par ordre chronologique.</li>
-        <li>/comments/[id] : un commentaire</li>
     </ul>
 
-    <p>Ajout de livre et de commentaires</p>
+    <h2>Spring boot</h2>
 
-    <p>Mettez en place le modèle de données, les repositories et les controllers</p>
+    <p>➤ Initialisez un projet spring boot avec les dépendances nécessaires.</p>
 
-    <h3>Fonctionnalités</h3>
+    <p>➤ Configurez la connexion à la base.</p>
+
+    <p>➤ Créez le modèle de données, les repositories...</p>
+
+    <p>➤ Ajoutez un service /reset afin de vider et remplir la base avec un jeu de données</p>
+
+    <p>➤ Ajoutez les services sur les controllers un par un en passant par des tests</p>
+
+    <h2>Fonctionnalités additionnelles</h2>
+
+    <p>➤ Ajoutez les fonctionnalités suivantes</p>
 
     <ul>
-        <li>/books : liste paginée par 50 (paramètres page=xxx)</li>
+        <li>/books : liste paginée par 10 (paramètres page=xxx)</li>
         <li>/books : recherche par titre</li>
         <li>/books/[isbn]/comments/[id] : que faire si l'id ne correspond pas a l'isbn ?</li>
-        <li>/comments : liste paginée par 50 (paramètres page=xxx)</li>
+        <li>/comments : liste paginée par 10 (paramètres page=xxx)</li>
         <li>Pouvoir ajouter un commentaire (POST)</li>
         <li>Pouvoir ajouter un livre (POST)</li>
         <li>Pouvoir modifier un livre (PUT)</li>
         <li>Pouvoir supprimer un livre (DELETE). Il faut supprimer les commentaires qui en dépendent.</li>
+        <li>Ajoutez la navigation entre les livres et les commentaires</li>
     </ul>
+
+    <p>➤ Peut on imaginer d'autres services ?</p>
     
     <a href="../../index.html" class="home"><i class="fas fa-home"></i> home</a>
 </div>
