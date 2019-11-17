@@ -291,13 +291,30 @@ COMMANDS
 
     <p>Les 12 Facteurs (<a href="https://12factor.net" target="_blank">Twelve Factor</a>) sont 12 règles afin de construire des applications cloud ready.</p>
 
-    <p>Elles ont été établies par Adam Wiggins (un co fondateur de Heroku) en 2011</p>
+    <p>Elles ont été établies par Adam Wiggins (co fondateur de Heroku) en 2011</p>
 
     <a data-fancybox="gallery" href="12-factors.png">
         <img src="12-factors.png" alt="" class="img-thumbnail mx-auto d-block">
     </a>
 
-    <p>Elles sont fondatrices de la mentalité de découpage en microservices.</p>
+    <p></p>
+    
+    <ol>
+        <li>un dépôt de code par application pour servir tous les déploiements</li>
+        <li>l'application déclare ses dépendances et se déploie avec</li>
+        <li>la configuration est externalisée du code</li>
+        <li>l'accès aux resources externes (bases...) est configurable</li>
+        <li>la construction, le stoquage des versions et l'exécution sont 3 phases distinctes</li>
+        <li>les processus sont sans état afin de pouvoir scaler</li>
+        <li>l'application expose ses services via les ports réseau</li>
+        <li>la montée en charge se fait en déployant l'application plusieurs fois</li>
+        <li>l'application doit démarrer rapidement et pouvoir s'arrêter gracieusement</li>
+        <li>il faut réduire les différences entre les différents environnements (dev, integ, prod...)</li>
+        <li>les logs doivent être écrits dans la sortie standard (ou flux équivalent)</li>
+        <li>les opérations de maintenance doivent être exécutées par des applications comme les autres</li>
+    </ol>
+
+    <p>Les microservices puisent leur identité et leur force de ces règles.</p>
 
     <h2>Kubernetes</h2>
 
