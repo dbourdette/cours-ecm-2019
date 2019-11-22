@@ -75,7 +75,7 @@ class HostControllerTest {
 
         hostRepository.save(host) // sauver la donnée de test
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/hosts/$host.id")
+        mockMvc.perform(MockMvcRequestBuilders.get("/hosts/$host.id"))
             .andExpect(MockMvcResultMatchers.status().isOk()) // code HTTP 200
             .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.jsonPath('$.firstname', CoreMatchers.is("Kareen"))) // test du contenu
